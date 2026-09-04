@@ -92,7 +92,7 @@ app.get(['/books', '/api/books'], async (req, res) => {
 
 async function start() {
   try {
-    await mongoose.connect(uri);
+    await connectDatabase();
     console.log('MongoDB connected');
 
     app.listen(PORT, () => {
@@ -104,5 +104,20 @@ async function start() {
   }
 }
 
+async function connectDatabase() {
+  if (!uri) {
+    throw new Error('MONGO_URL is not configured');
+  }
 
-start();
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
+
+  await mongoose.connect(uri);
+}
+
+if (require.main === module) {
+  start();
+}
+
+module.exports = { app, connectDatabase };
