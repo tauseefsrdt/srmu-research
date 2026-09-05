@@ -15,7 +15,7 @@ function Navbar({ onSearchToggle }) {
 
   const navLinks = [
     // { name: 'Home', path: '/' },
-    { name: "Research Publications", path: "/indexed", icon: Bookmark },
+    { name: "Research Publications", path: "/research", icon: Bookmark },
     { name: "Patents", path: "/patents", icon: FileText },
     { name: "Books & Chapters", path: "/books", icon: BookOpen },
     // { name: "Departments", path: "/departments", icon: Building2 },
@@ -63,7 +63,7 @@ function Navbar({ onSearchToggle }) {
               <span>Search…</span>
             </button>
           )}
-          <Link to="/papers" className="btn-primary nav-cta">
+          <Link to="/research" className="btn-primary nav-cta">
             Explore research
           </Link>
         </div>

@@ -9,7 +9,7 @@ import SearchModal from './components/SearchModal';
 
 import HomePage from './pages/HomePage';
 import Patents from './pages/Patents';
-import IndexedPage from './pages/Research';
+import Research from './pages/Research';
 import BooksPage from './pages/BooksPage';
 import Aboutpage from './landing_page/aboutpage/Aboutpage';
 
@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage onSearchOpen={() => setIsSearchOpen(true)} />} />
           <Route path="/patents" element={<Patents />} />
-          <Route path="/indexed" element={<IndexedPage />} />
+          <Route path="/research" element={<Research />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/about" element={<Aboutpage />} />
         </Routes>
