@@ -373,7 +373,7 @@ function HomePage({ onSearchOpen }) {
             </div>
             <div style={styles.person}>
               <img
-                src="Images\pooja-B1uI8fBS.webp"
+                src="Images\pooja_Agrawal.png"
                 alt="Er. Pooja Agarwal"
                 style={styles.personImage}
               />
