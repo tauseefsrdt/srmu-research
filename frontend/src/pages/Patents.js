@@ -11,6 +11,7 @@ function PapersPage() {
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState([]);
 
+  
   // Filters — always read live from URL
   const search = searchParams.get('search') || '';
   const selectedDept = searchParams.get('department') || 'All';
