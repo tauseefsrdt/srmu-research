@@ -6,7 +6,6 @@ function IndexedPage() {
   const [papers, setPapers] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-
   // Filters
   const [search, setSearch] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');

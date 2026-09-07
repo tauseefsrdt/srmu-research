@@ -13,7 +13,6 @@ import Research from './pages/Research';
 import BooksPage from './pages/BooksPage';
 import Aboutpage from './landing_page/aboutpage/Aboutpage';
 
-
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
