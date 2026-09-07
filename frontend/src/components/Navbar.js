@@ -22,6 +22,7 @@ function Navbar({ onSearchToggle }) {
     { name: "About", path: "/about" },
   ];
 
+  
   const isActive = (path) => location.pathname === path;
 
   return (

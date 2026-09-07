@@ -26,6 +26,7 @@ function PapersPage() {
     }
     setSearchParams(next, { replace: true });
   };
+  
 
   const resetFilters = () => setSearchParams({}, { replace: true });
 
