@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bookmark, Calendar, User, Building, ExternalLink, Loader2 } from 'lucide-react';
 import { ResearchPaper } from '../types';
+import { Link } from 'react-router-dom';
 
 interface PublicationCardProps {
   paper: ResearchPaper;
@@ -40,9 +41,9 @@ function PublicationCard({ paper }: PublicationCardProps) {
           {paper.year || 'Year unavailable'}
         </span>
         {paper.doi ? (
-          <a href={paper.doi} target="_blank" rel="noopener noreferrer" className="btn-ghost">
+          <Link to={`${paper.doi}`} target="_blank" rel="noopener noreferrer" className="btn-ghost">
             View <ExternalLink />
-          </a>
+          </Link>
         ) : (
           <span>ID: {paper.id}</span>
         )}
