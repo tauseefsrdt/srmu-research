@@ -24,7 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage onSearchOpen={() => setIsSearchOpen(true)} />} />
           <Route path="/patents" element={<Patents />} />
+          <Route path="/papers" element={<Patents />} />
           <Route path="/research" element={<Research />} />
+          <Route path="/indexed" element={<Research />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/about" element={<Aboutpage />} />
         </Routes>
@@ -37,7 +39,9 @@ function App() {
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 root.render(
   <React.StrictMode>
     <BrowserRouter>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { BookOpen, User, Building, Hash } from 'lucide-react';
+import { Book } from '../types';
 
-function BookCard({ book }) {
+interface BookCardProps {
+  book: Book;
+}
+
+function BookCard({ book }: BookCardProps) {
   if (!book) return null;
 
   return (

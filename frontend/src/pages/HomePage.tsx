@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -8,18 +8,8 @@ import {
 import Topography from "../Effects/Topography";
 import ElectricBorder from "../Effects/Electric_Border";
 import MorphSlider from "../Effects/Morph-Slider";
-
-/*
- * Render backend URL
- *
- * Local development:
- * If REACT_APP_API_URL is not available, the app will use
- * the current domain.
- *
- * Vercel:
- * Add REACT_APP_API_URL in Vercel Environment Variables.
- */
-const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+import { getStats, getFeatured, getDepartments } from "../data/researchService";
+import { Stats, FeaturedRecords, Department } from "../types";
 
 const sliderItems = [
   {
@@ -34,22 +24,26 @@ const sliderItems = [
   },
 ];
 
-function HomePage({ onSearchOpen }) {
-  const [viewportWidth, setViewportWidth] = useState(
+interface HomePageProps {
+  onSearchOpen?: () => void;
+}
+
+function HomePage({ onSearchOpen }: HomePageProps) {
+  const [viewportWidth, setViewportWidth] = useState<number>(
     () => window.innerWidth
   );
 
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState<Stats | null>(null);
 
   // These setters are used by the API calls.
   // The returned values are currently not displayed on this page.
-  const [, setFeatured] = useState({
+  const [, setFeatured] = useState<FeaturedRecords>({
     papers: [],
     indexed: [],
     books: [],
   });
 
-  const [, setDepartments] = useState([]);
+  const [, setDepartments] = useState<Department[]>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -112,7 +106,7 @@ function HomePage({ onSearchOpen }) {
   const isTablet =
     viewportWidth > 800 && viewportWidth <= 1100;
 
-  const styles = {
+  const styles: Record<string, any> = {
     page: {
       position: "relative",
       isolation: "isolate",
@@ -433,40 +427,22 @@ function HomePage({ onSearchOpen }) {
   }, []);
 
   /* ----------------------------------
-     API Data
+     Data Loading (Frontend-Only)
   ---------------------------------- */
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [statsRes, featRes, deptRes] =
-          await Promise.all([
-            fetch(`${API_BASE_URL}/api/stats`),
-            fetch(`${API_BASE_URL}/api/featured`),
-            fetch(`${API_BASE_URL}/api/departments`),
-          ]);
+    try {
+      const statsData = getStats();
+      const featData = getFeatured();
+      const deptData = getDepartments();
 
-        if (statsRes.ok) {
-          setStats(await statsRes.json());
-        }
-
-        if (featRes.ok) {
-          setFeatured(await featRes.json());
-        }
-
-        if (deptRes.ok) {
-          setDepartments(await deptRes.json());
-        }
-      } catch (err) {
-        console.error(
-          "Failed to load home page data:",
-          err
-        );
-      } finally {
-        setLoading(false);
-      }
+      setStats(statsData);
+      setFeatured(featData);
+      setDepartments(deptData);
+    } catch (err) {
+      console.error("Failed to load home page data:", err);
+    } finally {
+      setLoading(false);
     }
-
-    fetchData();
   }, []);
 
   /* ----------------------------------
@@ -690,7 +666,7 @@ function HomePage({ onSearchOpen }) {
             </button>
 
             <Link
-              to="/papers"
+              to="/patents"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -1057,7 +1033,7 @@ function HomePage({ onSearchOpen }) {
           </div>
 
           <Link
-            to="/papers"
+            to="/patents"
             style={{
               display: "inline-flex",
               alignItems: "center",

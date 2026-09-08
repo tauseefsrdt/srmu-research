@@ -1,7 +1,12 @@
 import React from 'react';
 import { Bookmark, Calendar, User, Building, ExternalLink, Loader2 } from 'lucide-react';
+import { ResearchPaper } from '../types';
 
-function PublicationCard({ paper }) {
+interface PublicationCardProps {
+  paper: ResearchPaper;
+}
+
+function PublicationCard({ paper }: PublicationCardProps) {
 
   return (
     <article className="card-mint research-card">
@@ -46,7 +51,13 @@ function PublicationCard({ paper }) {
   );
 }
 
-function ResearchCard({ papers, count, loading }) {
+interface ResearchCardProps {
+  papers: ResearchPaper[];
+  count: number;
+  loading: boolean;
+}
+
+function ResearchCard({ papers, count, loading }: ResearchCardProps) {
   return (
     <>
       <div className="flex items-center justify-between text-xs text-zinc-400 px-1">

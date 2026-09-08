@@ -28,8 +28,8 @@ function Footer() {
             <div className="eyebrow" style={{ fontSize: 12 }}>Explore</div>
             <div className="flex flex-col gap-2.5">
               {[
-                { label: 'Research Publications', to: '/indexed' },
-                { label: 'Patents', to: '/papers' },
+                { label: 'Research Publications', to: '/research' },
+                { label: 'Patents', to: '/patents' },
                 { label: 'Books & Chapters', to: '/books' },
                 { label: 'About', to: '/about' },
               ].map(l => (

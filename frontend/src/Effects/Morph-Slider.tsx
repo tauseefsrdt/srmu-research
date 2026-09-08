@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Renderer, Triangle, Program, Mesh, Texture } from 'ogl';
 import { gsap } from 'gsap';

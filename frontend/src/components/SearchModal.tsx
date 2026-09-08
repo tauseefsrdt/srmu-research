@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, FileText, Bookmark, BookOpen, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { searchResearch } from '../data/researchService';
+import { SearchResults } from '../types';
 
-function SearchModal({ isOpen, onClose }) {
+interface SearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState({ papers: [], indexed: [], books: [], total: 0 });
+  const [results, setResults] = useState<SearchResults>({ papers: [], indexed: [], books: [], total: 0 });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -13,20 +20,17 @@ function SearchModal({ isOpen, onClose }) {
       return;
     }
 
-    const timer = setTimeout(async () => {
-      setLoading(true);
+    setLoading(true);
+    const timer = setTimeout(() => {
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-        if (res.ok) {
-          const data = await res.json();
-          setResults(data);
-        }
+        const data = searchResearch(query);
+        setResults(data);
       } catch (err) {
         console.error('Search error:', err);
       } finally {
         setLoading(false);
       }
-    }, 300);
+    }, 150);
 
     return () => clearTimeout(timer);
   }, [query]);
@@ -83,7 +87,7 @@ function SearchModal({ isOpen, onClose }) {
                     {results.papers.map((paper) => (
                       <Link
                         key={paper.id}
-                        to="/papers"
+                        to="/patents"
                         onClick={onClose}
                         className="block p-3 rounded-xl bg-zinc-950/60 hover:bg-red-950/30 border border-zinc-900 hover:border-red-600/40 transition-all group"
                       >
@@ -106,7 +110,7 @@ function SearchModal({ isOpen, onClose }) {
                     {results.indexed.map((item) => (
                       <Link
                         key={item.id}
-                        to="/indexed"
+                        to="/research"
                         onClick={onClose}
                         className="block p-3 rounded-xl bg-zinc-950/60 hover:bg-rose-950/30 border border-zinc-900 hover:border-rose-600/40 transition-all group"
                       >

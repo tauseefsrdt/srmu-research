@@ -1,57 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark, Search, RefreshCw } from 'lucide-react';
 import ResearchCard from '../components/ResearchCard';
+import { getResearchPapers, getDepartments } from '../data/researchService';
+import { ResearchPaper, Department } from '../types';
 
 function IndexedPage() {
-  const [papers, setPapers] = useState([]);
+  const [papers, setPapers] = useState<ResearchPaper[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   // Filters
   const [search, setSearch] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedYear, setSelectedYear] = useState('');
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   useEffect(() => {
-    fetch('/api/departments')
-      .then(res => res.json())
-      .then(data => setDepartments(data))
-      .catch(console.error);
+    try {
+      setDepartments(getDepartments());
+    } catch (err) {
+      console.error('Error getting departments:', err);
+    }
   }, []);
 
   useEffect(() => {
-    async function fetchIndexed() {
-      setLoading(true);
-      try {
-        const query = new URLSearchParams();
-        if (search) query.append('search', search);
-        if (selectedDept && selectedDept !== 'All') query.append('department', selectedDept);
-        if (selectedYear) query.append('year', selectedYear);
-
-        const res = await fetch(`/api/researchPapers?${query.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          setPapers((data.papers || []).map((paper) => ({
-            ...paper,
-            id: paper._id || paper.srNo,
-            authors: paper.authorName,
-            departmentKey: paper.department,
-            journal: paper.journalName,
-            year: paper.yearOfPublication,
-            abstract: paper.issnNumber,
-            doi: paper.ugcRecognitionLink,
-          })));
-          setCount(data.count || 0);
-        }
-      } catch (err) {
-        console.error('Error fetching indexed journals:', err);
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      const data = getResearchPapers({ search, department: selectedDept, year: selectedYear });
+      setPapers(data.papers || []);
+      setCount(data.count || 0);
+    } catch (err) {
+      console.error('Error fetching indexed journals:', err);
+    } finally {
+      setLoading(false);
     }
-
-    const timer = setTimeout(fetchIndexed, 300);
-    return () => clearTimeout(timer);
   }, [search, selectedDept, selectedYear]);
 
   const resetFilters = () => {

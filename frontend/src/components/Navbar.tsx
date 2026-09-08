@@ -9,7 +9,11 @@ import {
   X,
 } from "lucide-react";
 
-function Navbar({ onSearchToggle }) {
+interface NavbarProps {
+  onSearchToggle?: () => void;
+}
+
+function Navbar({ onSearchToggle }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 

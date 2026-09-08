@@ -1,7 +1,12 @@
 import React from 'react';
 import { Calendar, User, Building, Quote, ExternalLink, Award } from 'lucide-react';
+import { Patent } from '../types';
 
-function PaperCard({ paper }) {
+interface PaperCardProps {
+  paper: Patent | any;
+}
+
+function PaperCard({ paper }: PaperCardProps) {
   if (!paper) return null;
 
   const isPatent = Boolean(paper.patenterName || paper.patentNumber || paper.yearOfAward);

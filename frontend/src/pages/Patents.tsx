@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FileText, Search, RefreshCw, Loader2 } from 'lucide-react';
 import PaperCard from '../components/patentsCard';
+import { getPatents, getDepartments } from '../data/researchService';
+import { Patent, Department } from '../types';
 
 function PapersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [papers, setPapers] = useState([]);
+  const [papers, setPapers] = useState<Patent[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   
   // Filters — always read live from URL
@@ -32,42 +34,24 @@ function PapersPage() {
   const resetFilters = () => setSearchParams({}, { replace: true });
 
   useEffect(() => {
-    fetch('/api/departments')
-      .then(res => res.json())
-      .then(data => setDepartments(data))
-      .catch(console.error);
+    try {
+      setDepartments(getDepartments());
+    } catch (err) {
+      console.error('Error getting departments:', err);
+    }
   }, []);
 
   useEffect(() => {
-    async function fetchPapers() {
-      setLoading(true);
-      try {
-        const query = new URLSearchParams();
-        if (search) query.append('search', search);
-        if (selectedDept && selectedDept !== 'All') query.append('department', selectedDept);
-        if (selectedYear) query.append('year', selectedYear);
-
-        const res = await fetch(`/api/patents?${query.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          setPapers((data.patents || []).map((patent) => ({
-            ...patent,
-            id: patent._id || patent.srNo,
-            authors: patent.patenterName,
-            year: patent.yearOfAward,
-            abstract: patent.patentNumber,
-          })));
-          setCount(data.count || 0);
-        }
-      } catch (err) {
-        console.error('Error fetching papers:', err);
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      const data = getPatents({ search, department: selectedDept, year: selectedYear });
+      setPapers(data.patents || []);
+      setCount(data.count || 0);
+    } catch (err) {
+      console.error('Error fetching papers:', err);
+    } finally {
+      setLoading(false);
     }
-
-    const timer = setTimeout(fetchPapers, 300);
-    return () => clearTimeout(timer);
   }, [search, selectedDept, selectedYear]);
 
   const hasFilters = search || selectedDept !== 'All' || selectedYear;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 
@@ -147,7 +148,7 @@ const CTRL_INDICES = [
   [-1, -3, 8, 9]
 ];
 
-const Topography = ({
+const Topography: React.FC<any> = ({
   lowColor = '#5227FF',
   midColor = '#FF9FFC',
   highColor = '#FFFFFF',

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Search, RefreshCw, Loader2 } from 'lucide-react';
 import BookCard from '../components/BookCard';
+import { getBooks } from '../data/researchService';
+import { Book } from '../types';
 
 function BooksPage() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -12,37 +14,16 @@ function BooksPage() {
   const [selectedYear, setSelectedYear] = useState('');
 
   useEffect(() => {
-    async function fetchBooks() {
-      setLoading(true);
-      try {
-        const query = new URLSearchParams();
-        if (search) query.append('search', search);
-        if (selectedYear) query.append('year', selectedYear);
-
-        const res = await fetch(`/api/books?${query.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          setBooks((data.books || []).map((book) => ({
-            ...book,
-            id: book._id || book.slNo,
-            title: book.paperTitle || book.bookOrChapterTitle || 'Untitled book or chapter',
-            authors: book.teacherName,
-            year: book.yearOfPublication,
-            publisher: book.publisherName,
-            abstract: book.bookOrChapterTitle,
-            isbn: book.isbnIssn,
-          })));
-          setCount(data.count || 0);
-        }
-      } catch (err) {
-        console.error('Error fetching books:', err);
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      const data = getBooks({ search, year: selectedYear });
+      setBooks(data.books || []);
+      setCount(data.count || 0);
+    } catch (err) {
+      console.error('Error fetching books:', err);
+    } finally {
+      setLoading(false);
     }
-
-    const timer = setTimeout(fetchBooks, 300);
-    return () => clearTimeout(timer);
   }, [search, selectedYear]);
 
   const resetFilters = () => {

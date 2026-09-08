@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef, useCallback } from 'react';
 
 function hexToRgba(hex, alpha = 1) {
@@ -16,15 +17,17 @@ function hexToRgba(hex, alpha = 1) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-const ElectricBorder = ({
+const ElectricBorder: React.FC<any> = ({
   children,
   color = '#5227FF',
   speed = 1,
   chaos = 0.12,
   borderRadius = 24,
+  thickness,
   className,
-  style
-}) => {
+  style,
+  ...rest
+}: any) => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const animationRef = useRef(null);
