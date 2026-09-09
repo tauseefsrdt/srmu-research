@@ -34,19 +34,16 @@ const patronsList = [
     name: "Er. Pankaj Agarwal",
     role: "CHANCELLOR",
     image: "Images/pankaj-DsE5rnwQ.webp",
-    highlight: true,
   },
   {
     name: "Er. Pooja Agarwal",
     role: "PRO CHANCELLOR",
     image: "Images/pooja_Agrawal.png",
-    highlight: true,
   },
   {
     name: "Prof. (Dr.) Vijay Tiwari",
     role: "VICE CHANCELLOR",
     image: "Images/vijaytiwari-DtLhXa4L.webp",
-    highlight: false,
   },
 ];
 
@@ -65,6 +62,63 @@ const coPatronsList = [
     name: "Prof. (Dr.) Alkesh Agrawal",
     role: "DEPUTY DIRECTOR (RESEARCH)",
     image: "Images/Alkesh_Agrawal.webp",
+  },
+];
+
+const institutes = [
+  {
+    src: "Images/c1.webp",
+    title: "Institute of Technology",
+    text: "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
+    department: "5 DEPARTMENTS",
+  },
+  {
+    src: "Images/c2.jpg",
+    title: "Institute of Biosciences and Technology",
+    text: "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
+    department: "2 DEPARTMENTS",
+  },
+  {
+    src: "Images/c3.webp",
+    title: "Institute of Management, Commerce and Economics",
+    text: "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
+    department: "2 DEPARTMENTS",
+  },
+  {
+    src: "Images/c4.jpg",
+    title: "Institute of Media Studies",
+    text: "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
+    department: "1 DEPARTMENT",
+  },
+  {
+    src: "Images/c5.webp",
+    title: "Institute of Natural Sciences and Humanities",
+    text: "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
+    department: "4 DEPARTMENTS",
+  },
+  {
+    src: "Images/c6.webp",
+    title: "Institute of Pharmaceutical Sciences",
+    text: "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
+    department: "1 DEPARTMENT",
+  },
+  {
+    src: "Images/c7.webp",
+    title: "Institute of Agricultural Sciences and Technology",
+    text: "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
+    department: "1 DEPARTMENT",
+  },
+  {
+    src: "Images/c8.avif",
+    title: "Institute of Legal Studies",
+    text: "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
+    department: "1 DEPARTMENT",
+  },
+  {
+    src: "Images/c9.webp",
+    title: "Institute of Pharmacy",
+    text: "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
+    department: "1 DEPARTMENT",
   },
 ];
 
@@ -90,6 +144,21 @@ function HomePage({ onSearchOpen }: HomePageProps) {
   const [loading, setLoading] = useState(true);
   const [activeProfile] = useState("message");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Counter numerical values for GSAP counting animation
+  const countRefs = useRef({
+    indexed: 0,
+    papers: 0,
+    books: 0,
+    researchers: 0,
+  });
+
+  const [displayCounts, setDisplayCounts] = useState({
+    indexed: 0,
+    papers: 0,
+    books: 0,
+    researchers: 0,
+  });
 
   const profileData = [
     {
@@ -174,7 +243,15 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      setDisplayCounts({
+        indexed: stats?.totalIndexed || 195,
+        papers: stats?.totalPapers || 47,
+        books: stats?.totalBooks || 68,
+        researchers: stats?.totalResearchers || 437,
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       // Hero Entrance Animation
@@ -213,25 +290,49 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           "-=0.6"
         );
 
-      // Stats Strip ScrollTrigger
+      // Stats Strip ScrollTrigger with Animated Number Counters
       if (statsRef.current) {
-        gsap.fromTo(
-          ".stat-item-reveal",
-          { y: 30, opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: statsRef.current,
-              start: "top 85%",
-              once: true,
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.out",
-            clearProps: "all",
-          }
-        );
+        const targetIndexed = stats?.totalIndexed || 195;
+        const targetPapers = stats?.totalPapers || 47;
+        const targetBooks = stats?.totalBooks || 68;
+        const targetResearchers = stats?.totalResearchers || 437;
+
+        ScrollTrigger.create({
+          trigger: statsRef.current,
+          start: "top 85%",
+          once: true,
+          onEnter: () => {
+            gsap.fromTo(
+              ".stat-item-reveal",
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+                clearProps: "all",
+              }
+            );
+
+            gsap.to(countRefs.current, {
+              indexed: targetIndexed,
+              papers: targetPapers,
+              books: targetBooks,
+              researchers: targetResearchers,
+              duration: 2,
+              ease: "power2.out",
+              onUpdate: () => {
+                setDisplayCounts({
+                  indexed: Math.round(countRefs.current.indexed),
+                  papers: Math.round(countRefs.current.papers),
+                  books: Math.round(countRefs.current.books),
+                  researchers: Math.round(countRefs.current.researchers),
+                });
+              },
+            });
+          },
+        });
       }
 
       // Patrons ScrollTrigger
@@ -299,7 +400,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [loading]);
+  }, [loading, stats]);
 
   if (loading) {
     return (
@@ -310,82 +411,11 @@ function HomePage({ onSearchOpen }: HomePageProps) {
     );
   }
 
-  const institutes = [
-    {
-      src: "Images/c1.webp",
-      title: "Institute of Technology",
-      text: "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
-      department: "5 DEPARTMENTS",
-    },
-    {
-      src: "Images/c2.jpg",
-      title: "Institute of Biosciences and Technology",
-      text: "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
-      department: "2 DEPARTMENTS",
-    },
-    {
-      src: "Images/c3.webp",
-      title: "Institute of Management, Commerce and Economics",
-      text: "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
-      department: "2 DEPARTMENTS",
-    },
-    {
-      src: "Images/c4.jpg",
-      title: "Institute of Media Studies",
-      text: "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
-      department: "1 DEPARTMENT",
-    },
-    {
-      src: "Images/c5.webp",
-      title: "Institute of Natural Sciences and Humanities",
-      text: "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
-      department: "4 DEPARTMENTS",
-    },
-    {
-      src: "Images/c6.webp",
-      title: "Institute of Pharmaceutical Sciences",
-      text: "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
-      department: "1 DEPARTMENT",
-    },
-    {
-      src: "Images/c7.webp",
-      title: "Institute of Agricultural Sciences and Technology",
-      text: "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
-      department: "1 DEPARTMENT",
-    },
-    {
-      src: "Images/c8.avif",
-      title: "Institute of Legal Studies",
-      text: "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
-      department: "1 DEPARTMENT",
-    },
-    {
-      src: "Images/c9.webp",
-      title: "Institute of Pharmacy",
-      text: "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
-      department: "1 DEPARTMENT",
-    },
-  ];
-
   return (
     <div ref={containerRef} className="home-page-container relative overflow-x-hidden">
 
       {/* ── HERO SECTION ─────────────────────────────────── */}
       <section ref={heroRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-12 sm:pt-14 sm:pb-16 relative">
-
-        {/* Background Building & Decorative Watermarks */}
-        <div className="absolute -top-6 right-2 sm:right-6 lg:right-8 w-[340px] sm:w-[420px] lg:w-[480px] opacity-40 pointer-events-none z-0 select-none">
-          <img
-            src="https://srmu.ac.in/assets/about-hero-D9xX7t0N.png"
-            alt="SRMU Building"
-            className="w-full h-auto object-contain"
-            onError={(e) => {
-              (e.currentTarget as HTMLElement).style.display = 'none';
-            }}
-          />
-        </div>
-
-
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
@@ -498,65 +528,66 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         </div>
       </section>
 
-      {/* ── STATISTICS STRIP (4 Columns with Circular Icons) ── */}
-      <section ref={statsRef} className="max-w-[1100px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 sm:p-7 rounded-3xl bg-white shadow-lg border border-slate-100">
+      {/* ── STATISTICS STRIP (With Animated GSAP Counters) ── */}
+      <section ref={statsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl shadow-xl border border-slate-200/90 relative overflow-hidden">
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#FFB703]/50 to-transparent" />
 
           {/* Stat 1 */}
-          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start">
-            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
-              <FileText className="w-5 h-5 text-[#FFB703]" />
+          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 group justify-center sm:justify-start">
+            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+              <FileText className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
-                {stats?.totalIndexed || 195}
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+                {displayCounts.indexed}
               </span>
-              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Research Publications
               </span>
             </div>
           </div>
 
           {/* Stat 2 */}
-          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
-            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
-              <Lightbulb className="w-5 h-5 text-[#FFB703]" />
+          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+              <Lightbulb className="w-6 h-6 text-[#FFB703]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
-                {stats?.totalPapers || 47}
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+                {displayCounts.papers}
               </span>
-              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Patents
               </span>
             </div>
           </div>
 
           {/* Stat 3 */}
-          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
-            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
-              <BookOpen className="w-5 h-5 text-[#FFB703]" />
+          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+              <BookOpen className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
-                {stats?.totalBooks || 68}
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+                {displayCounts.books}
               </span>
-              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Books &amp; Chapters
               </span>
             </div>
           </div>
 
           {/* Stat 4 */}
-          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
-            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
-              <Users className="w-5 h-5 text-[#FFB703]" />
+          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+              <Users className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
-                {stats?.totalResearchers || 437}+
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+                {displayCounts.researchers}+
               </span>
-              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
                 Researchers
               </span>
             </div>
@@ -565,125 +596,86 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         </div>
       </section>
 
-      {/* ── PATRONS & LEADERSHIP SECTION ──────────────────────── */}
-      <section ref={patronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8 relative">
+      {/* ── PATRONS SECTION ──────────────────────────────── */}
+      <section ref={patronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6 relative">
 
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-5 h-[2px] bg-[#FFB703]" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
-              LEADERSHIP &amp; GOVERNANCE
-            </span>
-            <span className="w-5 h-[2px] bg-[#FFB703]" />
-          </div>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#0F172A] mb-3">
-            University <span className="text-[#0A4A8F]">Patrons</span>
+        {/* Centered Heading with lines */}
+        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
+          <div className="flex-1 h-[1px] bg-slate-200" />
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+            Patrons
           </h2>
-          <p className="text-sm text-slate-500 leading-relaxed">
-            Distinguished visionary leadership fostering academic excellence, innovation, and global research standards.
-          </p>
+          <div className="flex-1 h-[1px] bg-slate-200" />
         </div>
 
-        {/* Patrons Grid (3 Cards) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
+        {/* Patrons Grid (Cards with Circular Images) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {patronsList.map((patron) => (
             <div
               key={patron.name}
-              className="patron-card-reveal group relative p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center overflow-hidden"
+              className="patron-card-reveal group p-7 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
             >
-              {/* Top Accent Strip */}
+              {/* Top Accent Strip on Hover */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Background ambient radial glow */}
-              <div className="absolute -top-16 -right-16 w-32 h-32 bg-[#FFB703]/15 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
 
-              {/* Avatar Frame with metallic gradient ring */}
-              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+              {/* Circular Avatar with Gradient Ring */}
+              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F]/30 via-[#FFB703]/60 to-[#0A4A8F]/30 shadow-md group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                 <img
                   src={patron.image}
                   alt={patron.name}
-                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-white shadow-inner block"
+                  className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner block"
                 />
               </div>
 
-              {/* Role Pill Badge */}
-              <span
-                className={`inline-block px-3.5 py-1 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-2.5 ${
-                  patron.highlight
-                    ? "bg-[#FFF8E7] text-[#B8860B] border border-[#FFB703]/40"
-                    : "bg-[#0A4A8F]/10 text-[#0A4A8F] border border-[#0A4A8F]/20"
-                }`}
-              >
-                {patron.role}
-              </span>
-
-              {/* Name */}
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1 leading-snug">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1.5 leading-snug">
                 {patron.name}
               </h3>
 
-              {/* Subtitle */}
-              <p className="font-mono text-[11px] text-slate-400 uppercase tracking-wider">
-                Shri Ramswaroop Memorial University
+              <p className="font-mono text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                {patron.role}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── CO-PATRONS & RESEARCH DIRECTORATE SECTION ─────────── */}
-      <section ref={coPatronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-2 pb-16 relative">
+      {/* ── CO-PATRONS SECTION ───────────────────────────── */}
+      <section ref={coPatronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-16 relative">
 
-        {/* Section Sub-header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <span className="w-4 h-[2px] bg-[#FFB703]" />
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
-              RESEARCH DIRECTORATE
-            </span>
-            <span className="w-4 h-[2px] bg-[#FFB703]" />
-          </div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
-            Co <span className="text-[#0A4A8F]">Patrons</span>
+        {/* Centered Heading with lines */}
+        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
+          <div className="flex-1 h-[1px] bg-slate-200" />
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+            Co Patrons
           </h2>
+          <div className="flex-1 h-[1px] bg-slate-200" />
         </div>
 
-        {/* Co-Patrons Grid (3 Cards) */}
+        {/* Co-Patrons Grid (Cards with Circular Images) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {coPatronsList.map((coPatron) => (
             <div
               key={coPatron.name}
-              className="copatron-card-reveal group relative p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center overflow-hidden"
+              className="copatron-card-reveal group p-7 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
             >
-              {/* Top Accent Strip */}
+              {/* Top Accent Strip on Hover */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-              {/* Background ambient radial glow */}
-              <div className="absolute -top-16 -right-16 w-32 h-32 bg-[#0A4A8F]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
-
-              {/* Avatar Frame */}
-              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+              {/* Circular Avatar with Gradient Ring */}
+              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F]/30 via-[#FFB703]/60 to-[#0A4A8F]/30 shadow-md group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                 <img
                   src={coPatron.image}
                   alt={coPatron.name}
-                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-white shadow-inner block"
+                  className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner block"
                 />
               </div>
 
-              {/* Role Pill Badge */}
-              <span className="inline-block px-3.5 py-1 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase bg-[#0A4A8F]/10 text-[#0A4A8F] border border-[#0A4A8F]/20 mb-2.5">
-                {coPatron.role}
-              </span>
-
-              {/* Name */}
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1 leading-snug">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1.5 leading-snug">
                 {coPatron.name}
               </h3>
 
-              {/* Subtitle */}
-              <p className="font-mono text-[11px] text-slate-400 uppercase tracking-wider">
-                Shri Ramswaroop Memorial University
+              <p className="font-mono text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                {coPatron.role}
               </p>
             </div>
           ))}
@@ -691,7 +683,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       </section>
 
       {/* ── INSTITUTES SECTION ("RECENT NOTES") ─────────── */}
-      <section ref={institutesRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 pb-20">
+      <section ref={institutesRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-20">
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-3">
@@ -724,14 +716,17 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {institutes.map((card) => (
             <div key={card.title} className="institute-card-reveal">
-              <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#0A4A8F]/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col justify-between h-full">
+              <div className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between h-full relative overflow-hidden">
+                {/* Top Accent Strip on Hover */}
+                <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                 <div>
                   {/* Image container */}
-                  <div className="overflow-hidden rounded-xl mb-4 aspect-[16/10] bg-slate-100 shadow-inner">
+                  <div className="overflow-hidden rounded-2xl mb-4 aspect-[16/10] bg-slate-100 shadow-inner">
                     <img
                       src={card.src}
                       alt={card.title}
-                      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
 
@@ -749,7 +744,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F]">
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-md bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
                     {card.department}
                   </span>
                   <span className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-[#0A4A8F] transition-colors font-medium">
