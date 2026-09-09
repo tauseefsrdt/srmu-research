@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Search,
+  FileText,
+  Lightbulb,
+  BookOpen,
+  Users,
+  GraduationCap,
+  Sparkles,
 } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import Topography from "../Effects/Topography";
-import ElectricBorder from "../Effects/Electric_Border";
 import MorphSlider from "../Effects/Morph-Slider";
 import { getStats, getFeatured, getDepartments } from "../data/researchService";
 import { Stats, FeaturedRecords, Department } from "../types";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const sliderItems = [
   {
@@ -29,27 +37,22 @@ interface HomePageProps {
 }
 
 function HomePage({ onSearchOpen }: HomePageProps) {
-  const [viewportWidth, setViewportWidth] = useState<number>(
-    () => window.innerWidth
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const patronsRef = useRef<HTMLDivElement>(null);
+  const coPatronsRef = useRef<HTMLDivElement>(null);
+  const institutesRef = useRef<HTMLDivElement>(null);
 
   const [stats, setStats] = useState<Stats | null>(null);
-
-  // These setters are used by the API calls.
-  // The returned values are currently not displayed on this page.
   const [, setFeatured] = useState<FeaturedRecords>({
     papers: [],
     indexed: [],
     books: [],
   });
-
   const [, setDepartments] = useState<Department[]>([]);
-
   const [loading, setLoading] = useState(true);
-
-  // Only the value is currently required.
   const [activeProfile] = useState("message");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const profileData = [
@@ -61,7 +64,6 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       image: "Images/CEO-1.jpg",
       excerpt:
         "At Shri Ramswaroop Memorial University (SRMU) Barabanki, we believe that research and innovation are fundamental drivers of academic excellence, technological advancement, and societal progress.",
-
       fullContent: [
         <h1
           key="welcome"
@@ -69,365 +71,30 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         >
           Welcomes you all!
         </h1>,
-
         "At Shri Ramswaroop Memorial University (SRMU) Barabanki, we believe that research and innovation are fundamental drivers of academic excellence, technological advancement, and societal progress. Our commitment is to cultivate a dynamic research ecosystem that empowers students, faculty members, and research scholars to transform ideas into impactful solutions.",
-
         "The University has established state-of-the-art research and innovation facilities, including the AI Center of Excellence, Virtual Instrumentation Laboratory, Cadence Design Laboratory, PCB design Lab, Centre of Excellence (EV Lab), and the Innovation & Incubation Hub, which provide a robust platform for experimentation, product development, entrepreneurship, and interdisciplinary research. These facilities enable our researchers to engage with emerging technologies and address real-world challenges through innovative approaches.",
-
         "A distinctive feature of SRMU's research framework is its emphasis on Experiment-Based Research. By integrating research-oriented projects into the learning process, we encourage researchers to develop critical thinking, problem-solving abilities, teamwork, and innovation skills. This approach bridges the gap between theoretical knowledge and practical application, preparing researchers to excel in both industry and academia.",
-
         "The R&C cell actively promotes quality publications, industry collaborations, intellectual property creation, and startup incubation. R&C cell continuously strives to strengthen partnerships with academic institutions, research organizations, government agencies, and industry leaders to create opportunities for knowledge exchange and collaborative innovative research.",
-
         "As we move forward in an era defined by rapid technological transformation, our focus remains on nurturing a culture of inquiry, creativity, ethical research practices, and entrepreneurial thinking. R&C Cell encourages research scholars and faculty members to explore new frontiers of knowledge and contribute meaningfully to national development and global progress.",
-
         "R&C Cell invites you to explore the diverse research opportunities available at SRMU, Barabanki and become part of a community dedicated to excellence, innovation, and lifelong learning.",
-
         "Together, let us create knowledge, inspire innovation, and shape a better future.",
-
         <h1
           key="research-cell"
           className="text-2xl font-bold text-charcoal-navy"
         >
           Research and Consultancy Cell
         </h1>,
-
         "Shri Ramswaroop Memorial University, Barabanki",
       ],
     },
   ];
 
   const activeProfileData =
-    profileData.find(
-      (profile) => profile.key === activeProfile
-    ) || profileData[0];
-
-  const isMobile = viewportWidth <= 800;
-  const isSmallMobile = viewportWidth <= 480;
-  const isTablet =
-    viewportWidth > 800 && viewportWidth <= 1100;
-
-  const styles: Record<string, any> = {
-    page: {
-      position: "relative",
-      isolation: "isolate",
-      overflow: "hidden",
-      background: "var(--color-paper-white)",
-    },
-
-    background: {
-      position: "absolute",
-      inset: 0,
-      zIndex: -1,
-      pointerEvents: "none",
-      opacity: 0.5,
-      width: "100%",
-      height: "100%",
-    },
-
-    width: {
-      width: isMobile
-        ? "calc(100% - 36px)"
-        : "min(var(--page-max), calc(100% - 48px))",
-      marginInline: "auto",
-    },
-
-    hero: {
-      minHeight: isMobile ? 0 : 540,
-      display: "grid",
-      gridTemplateColumns: isMobile
-        ? "1fr"
-        : isTablet
-        ? "minmax(0, 1fr) minmax(300px, .8fr)"
-        : "minmax(0, 1.05fr) minmax(360px, .95fr)",
-      alignItems: "center",
-      gap: isMobile
-        ? isSmallMobile
-          ? 26
-          : 34
-        : isTablet
-        ? 24
-        : 5,
-      padding: isMobile
-        ? "30px 0 38px"
-        : "10px 0 48px",
-    },
-
-    heroCopy: {
-      minWidth: 0,
-    },
-
-    title: {
-      maxWidth: 650,
-      fontFamily: "var(--font-serif)",
-      lineHeight: 1.12,
-      fontSize: isSmallMobile ? 32 : 36,
-      fontWeight: 700,
-      letterSpacing: "-0.025em",
-      color: "#111827",
-    },
-
-    lede: {
-      maxWidth: 550,
-      margin: "0 0 30px",
-      fontSize: isMobile || isTablet ? 16 : 18,
-      lineHeight: 1.55,
-      color: "var(--color-slate)",
-    },
-
-    heroVisual: {
-      minWidth: 0,
-      display: "grid",
-      placeItems: "center",
-      width: "100%",
-      paddingLeft: isMobile ? 0 : 12,
-      paddingRight: isMobile ? 0 : 12,
-      marginLeft: isMobile ? 0 : 8,
-    },
-
-    stackFrame: {
-      width: `min(100%, ${
-        isSmallMobile
-          ? 280
-          : isMobile
-          ? 320
-          : isTablet
-          ? 320
-          : 380
-      }px)`,
-
-      height: isSmallMobile
-        ? 350
-        : isMobile
-        ? 400
-        : isTablet
-        ? 400
-        : 480,
-
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "0 auto",
-      padding: isSmallMobile ? "0 0px" : "0 8px",
-    },
-
-    actions: {
-      display: "flex",
-      gap: 12,
-      flexWrap: "wrap",
-      marginBottom: 24,
-      flexDirection: isSmallMobile ? "column" : "row",
-      alignItems: isSmallMobile ? "stretch" : "initial",
-    },
-
-    statStrip: {
-      display: "flex",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: isMobile
-        ? "flex-start"
-        : "space-around",
-      gap: 20,
-      padding: isSmallMobile
-        ? "22px 16px"
-        : "22px 24px",
-      borderBlock:
-        "1px solid var(--color-mint-mist)",
-      background: "rgba(255,255,255,.35)",
-      flexWrap: isMobile ? "wrap" : "nowrap",
-    },
-
-    stat: {
-      display: "flex",
-      flexDirection: isMobile ? "column" : "row",
-      alignItems: isMobile ? "center" : "baseline",
-      gap: 10,
-      width: isMobile
-        ? isSmallMobile
-          ? "100%"
-          : "calc(50% - 10px)"
-        : "auto",
-      textAlign: "center",
-      fontFamily: "var(--font-mono)",
-    },
-
-    statValue: {
-      color: "var(--color-deep-teal)",
-      fontSize: isSmallMobile ? 20 : 23,
-      fontWeight: 600,
-    },
-
-    statLabel: {
-      color: "var(--color-charcoal-navy)",
-      fontSize: isSmallMobile ? 10 : 11,
-      letterSpacing: ".05em",
-    },
-
-    divider: {
-      display: isMobile ? "none" : "block",
-      width: 1,
-      height: 24,
-      background: "var(--color-mint-mist)",
-    },
-
-    peopleSection: {
-      marginTop: 50,
-    },
-
-    sectionTitle: {
-      margin: 0,
-      textAlign: "center",
-      fontFamily: "var(--font-serif)",
-      fontSize: 36,
-      fontWeight: 700,
-      letterSpacing: "-0.025em",
-    },
-
-    peopleContainer: {
-      maxWidth: 1200,
-      margin: "64px auto 0",
-      paddingInline: 12,
-    },
-
-    peopleGrid: {
-      display: "grid",
-      gridTemplateColumns:
-        "repeat(3, minmax(0, 1fr))",
-      gap: isMobile
-        ? "24px 14px"
-        : "32px 16px",
-      marginTop: 50,
-    },
-
-    person: {
-      color: "#6b7280",
-      textAlign: "center",
-    },
-
-    personImage: {
-      display: "block",
-      width: isSmallMobile
-        ? 140
-        : isMobile
-        ? 160
-        : 224,
-      height: isSmallMobile
-        ? 140
-        : isMobile
-        ? 160
-        : 224,
-      objectFit: "cover",
-      borderRadius: "50%",
-      marginInline: "auto",
-    },
-
-    personName: {
-      margin: "8px 0 0",
-      fontSize: 16,
-      fontWeight: 500,
-    },
-
-    personRole: {
-      margin: 0,
-      fontSize: 14,
-    },
-
-    section: {
-      paddingTop: 96,
-    },
-
-    heading: {
-      display: isMobile ? "block" : "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 40,
-      marginBottom: 24,
-    },
-
-    headingTitle: {
-      margin: "13px 0 0",
-      color: "var(--color-charcoal-navy)",
-      fontFamily: "var(--font-serif)",
-      fontSize: isMobile ? 35 : 38,
-      fontWeight: 400,
-      lineHeight: 1.12,
-    },
-
-    publicationGrid: {
-      display: "grid",
-      gridTemplateColumns: isMobile
-        ? "1fr"
-        : "repeat(3, 1fr)",
-      gap: 20,
-    },
-
-    departmentsBand: {
-      marginTop: 96,
-      padding: "72px 0 88px",
-      background: "var(--color-blush-sand)",
-      borderTop:
-        "1px solid var(--color-dusty-rose)",
-    },
-
-    departmentList: {
-      display: "grid",
-      gridTemplateColumns: isMobile
-        ? "1fr"
-        : "repeat(4, 1fr)",
-      gap: 12,
-    },
-
-    departmentLink: {
-      minHeight: 150,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      padding: 20,
-      color: "var(--color-charcoal-navy)",
-      background: "rgba(242,248,247,.55)",
-      border:
-        "1px solid var(--color-dusty-rose)",
-      borderRadius: "var(--radius-card)",
-      textDecoration: "none",
-    },
-
-    departmentMark: {
-      color: "var(--color-deep-teal)",
-      font: "25px var(--font-serif)",
-    },
-
-    departmentName: {
-      display: "block",
-      font: "19px/1.25 var(--font-serif)",
-    },
-
-    departmentCount: {
-      display: "block",
-      marginTop: 7,
-      color: "var(--color-slate)",
-      fontSize: 12,
-    },
-  };
+    profileData.find((profile) => profile.key === activeProfile) ||
+    profileData[0];
 
   /* ----------------------------------
-     Window Resize
-  ---------------------------------- */
-  useEffect(() => {
-    const updateViewportWidth = () =>
-      setViewportWidth(window.innerWidth);
-
-    window.addEventListener(
-      "resize",
-      updateViewportWidth
-    );
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        updateViewportWidth
-      );
-  }, []);
-
-  /* ----------------------------------
-     Data Loading (Frontend-Only)
+     Data Loading
   ---------------------------------- */
   useEffect(() => {
     try {
@@ -451,292 +118,656 @@ function HomePage({ onSearchOpen }: HomePageProps) {
   useEffect(() => {
     if (!isModalOpen) return;
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsModalOpen(false);
       }
     };
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
-
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isModalOpen]);
 
   /* ----------------------------------
-     Loading
+     GSAP Animations Setup
   ---------------------------------- */
+  useEffect(() => {
+    if (loading || !containerRef.current) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Hero Entrance Animation
+      const heroTl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () => {
+          gsap.set(
+            ".hero-badge-reveal, .hero-title-reveal, .hero-message-reveal, .hero-slider-reveal",
+            { clearProps: "all" }
+          );
+        },
+      });
+
+      heroTl
+        .fromTo(
+          ".hero-badge-reveal",
+          { y: -20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, delay: 0.1 }
+        )
+        .fromTo(
+          ".hero-title-reveal",
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          "-=0.4"
+        )
+        .fromTo(
+          ".hero-message-reveal",
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          "-=0.45"
+        )
+        .fromTo(
+          ".hero-slider-reveal",
+          { scale: 0.94, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.9 },
+          "-=0.6"
+        );
+
+      // Stats Strip ScrollTrigger
+      if (statsRef.current) {
+        gsap.fromTo(
+          ".stat-item-reveal",
+          { y: 30, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 85%",
+              once: true,
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out",
+            clearProps: "all",
+          }
+        );
+      }
+
+      // Patrons ScrollTrigger
+      if (patronsRef.current) {
+        gsap.fromTo(
+          ".patron-card-reveal",
+          { y: 35, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: patronsRef.current,
+              start: "top 80%",
+              once: true,
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: "power2.out",
+            clearProps: "all",
+          }
+        );
+      }
+
+      // Co Patrons ScrollTrigger
+      if (coPatronsRef.current) {
+        gsap.fromTo(
+          ".copatron-card-reveal",
+          { y: 35, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: coPatronsRef.current,
+              start: "top 80%",
+              once: true,
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: "power2.out",
+            clearProps: "all",
+          }
+        );
+      }
+
+      // Institutes ScrollTrigger
+      if (institutesRef.current) {
+        gsap.fromTo(
+          ".institute-card-reveal",
+          { y: 35, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: institutesRef.current,
+              start: "top 78%",
+              once: true,
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power2.out",
+            clearProps: "all",
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [loading]);
+
   if (loading) {
     return (
-      <div
-        style={{
-          minHeight: "60vh",
-          display: "grid",
-          placeContent: "center",
-          gap: 12,
-          color: "var(--color-pine-shadow)",
-          fontFamily: "var(--font-mono)",
-          fontSize: 12,
-          letterSpacing: ".05em",
-          textTransform: "uppercase",
-        }}
-      >
-        <span
-          style={{
-            width: 10,
-            height: 10,
-            margin: "auto",
-            display: "block",
-            borderRadius: "50%",
-            background: "var(--color-deep-teal)",
-          }}
-        />
-
+      <div className="loading-state">
+        <span className="loading-dot" />
         Loading the research archive
       </div>
     );
   }
 
+  const institutes = [
+    {
+      src: "Images/c1.webp",
+      title: "Institute of Technology",
+      text: "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
+      department: "5 DEPARTMENTS",
+    },
+    {
+      src: "Images/c2.jpg",
+      title: "Institute of Biosciences and Technology",
+      text: "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
+      department: "2 DEPARTMENTS",
+    },
+    {
+      src: "Images/c3.webp",
+      title: "Institute of Management, Commerce and Economics",
+      text: "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
+      department: "2 DEPARTMENTS",
+    },
+    {
+      src: "Images/c4.jpg",
+      title: "Institute of Media Studies",
+      text: "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
+      department: "1 DEPARTMENT",
+    },
+    {
+      src: "Images/c5.webp",
+      title: "Institute of Natural Sciences and Humanities",
+      text: "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
+      department: "4 DEPARTMENTS",
+    },
+    {
+      src: "Images/c6.webp",
+      title: "Institute of Pharmaceutical Sciences",
+      text: "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
+      department: "1 DEPARTMENT",
+    },
+    {
+      src: "Images/c7.webp",
+      title: "Institute of Agricultural Sciences and Technology",
+      text: "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
+      department: "1 DEPARTMENT",
+    },
+    {
+      src: "Images/c8.avif",
+      title: "Institute of Legal Studies",
+      text: "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
+      department: "1 DEPARTMENT",
+    },
+    {
+      src: "Images/c9.webp",
+      title: "Institute of Pharmacy",
+      text: "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
+      department: "1 DEPARTMENT",
+    },
+  ];
+
   return (
-    <div style={styles.page}>
+    <div ref={containerRef} className="home-page-container relative overflow-x-hidden">
 
-      {/* Background */}
-      <div
-        aria-hidden="true"
-        style={styles.background}
-      >
-        <Topography
-          lowColor="#5227FF"
-          midColor="#FF9FFC"
-          highColor="#FFFFFF"
-          speed={0.35}
-          morphAmount={3}
-          morphSpeed={0.05}
-          bands={2}
-          thickness={0.01}
-          scale={2}
-          pixelSize={1}
-          glow={0.5}
-          colorMode="elevation"
-          contrast={3}
-          brightness={1}
-          fillBands={false}
-          opacity={0.35}
-          grain
-          grainIntensity={0.05}
-          mouseInteraction
-          mouseRadius={0.3}
-          mouseStrength={0.4}
-        />
-      </div>
+      {/* ── HERO SECTION ─────────────────────────────────── */}
+      <section ref={heroRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-12 sm:pt-14 sm:pb-16 relative">
 
-      {/* Hero */}
-      <div
-        style={{
-          ...styles.hero,
-          ...styles.width,
-        }}
-      >
-        <div style={styles.heroCopy}>
-
-          <p
-            style={{
-              margin: 0,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              fontFamily: "var(--font-mono)",
-              fontSize: 13,
-              fontWeight: 600,
-              letterSpacing: ".059em",
-              textTransform: "uppercase",
-              color: "var(--color-pine-shadow)",
+        {/* Background Building & Decorative Watermarks */}
+        <div className="absolute -top-6 right-2 sm:right-6 lg:right-8 w-[340px] sm:w-[420px] lg:w-[480px] opacity-40 pointer-events-none z-0 select-none">
+          <img
+            src="https://srmu.ac.in/assets/about-hero-D9xX7t0N.png"
+            alt="SRMU Building"
+            className="w-full h-auto object-contain"
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = 'none';
             }}
-          >
-            <span
-              style={{
-                width: 7,
-                height: 7,
-                flex: "0 0 auto",
-                display: "inline-block",
-                borderRadius: "50%",
-                background: "var(--color-sage)",
-              }}
-            />
+          />
+        </div>
 
-            Message
-          </p>
+        {/* Right Top Motto Badge */}
+        <div className="hidden lg:flex absolute top-2 right-6 flex-col items-end pointer-events-none select-none z-10">
+          <span className="font-serif italic text-lg lg:text-xl text-[#0A4A8F] font-bold tracking-tight">
+            Research
+          </span>
+          <span className="font-serif italic text-lg lg:text-xl text-[#FFB703] font-bold tracking-tight">
+            For A Brighter
+          </span>
+          <span className="font-serif italic text-lg lg:text-xl text-[#0A4A8F] font-bold tracking-tight">
+            Tomorrow
+          </span>
+        </div>
 
-          <br />
+        {/* Left Faint Watermark Callout */}
+        <div className="hidden xl:block absolute -left-16 top-40 font-serif italic text-slate-300 text-base leading-relaxed select-none pointer-events-none z-0">
+          Ideas<br />
+          Research<br />
+          People<br />
+          Change
+        </div>
 
-          <div style={styles.title}>
-            The Research and Consultancy <br />
-            Cell{" "}
-            <em
-              style={{
-                color: "var(--color-deep-teal)",
-                fontStyle: "italic",
-              }}
-            >
-              (R&amp;C)
-            </em>
-          </div>
+        {/* Right Faint Watermark Callout */}
+        <div className="hidden xl:block absolute -right-16 bottom-8 font-mono text-[10px] uppercase tracking-widest text-slate-300 select-none pointer-events-none text-right z-0">
+          INNOVATION<br />
+          COLLABORATION<br />
+          IMPACT
+        </div>
 
-          <br />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          <p
-            style={{
-              ...styles.lede,
-              ...styles.statStrip,
-              width: "100%",
-            }}
-          >
-            At Shri Ramswaroop Memorial University
-            (SRMU) Barabanki, we believe that research
-            and innovation are fundamental drivers of
-            academic excellence, technological
-            advancement, and societal progress. Our
-            commitment is to cultivate a dynamic research
-            ecosystem that empowers students, faculty
-            members, and research scholars to transform
-            ideas into impactful solutions.
+          {/* Left Column: Hero Copy & Message */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left">
 
-            The University has established state-of-the-art
-            research and innovation facilities, including
-            the AI Center of Excellence, Virtual
-            Instrumentation Laboratory, Cadence Design
-            Laboratory, PCB design Lab, Centre of
-            Excellence (EV Lab), and the Innovation &
-            Incubation Hub, which provide a robust platform
-            for experimentation, product development,
-            entrepreneurship, and interdisciplinary research.
+            {/* Eyebrow badge */}
+            <div className="hero-badge-reveal inline-flex items-center gap-2 mb-3">
+              <span className="w-5 h-[2px] bg-[#FFB703]" />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+                MESSAGE
+              </span>
+            </div>
 
+            {/* Title */}
+            <h1 className="hero-title-reveal font-serif text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight text-[#0F172A] leading-[1.12] mb-5">
+              The Research and <br />
+              Consultancy Cell <br />
+              <span className="text-[#0A4A8F]">
+                (R&amp;C)
+              </span>
+            </h1>
+
+            {/* Message Box */}
+            <div className="hero-message-reveal w-full p-6 sm:p-7 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm mb-5">
+              <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed m-0 mb-4">
+                At Shri Ramswaroop Memorial University (SRMU) Barabanki, we believe that research
+                and innovation are fundamental drivers of academic excellence, technological
+                advancement, and societal progress. Our commitment is to cultivate a dynamic research
+                ecosystem that empowers students, faculty members, and research scholars to transform
+                ideas into impactful solutions.
+              </p>
+              <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed m-0">
+                The University has established state-of-the-art research and innovation facilities, including
+                the AI Center of Excellence, Virtual Instrumentation Laboratory, Cadence Design
+                Laboratory, PCB design Lab, Centre of Excellence (EV Lab), and the Innovation &amp;
+                Incubation Hub, which provide a robust platform for experimentation, product development,
+                entrepreneurship, and interdisciplinary research.
+              </p>
+            </div>
+
+            {/* Solid Navy Pill Button */}
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              style={{
-                marginTop: 0,
-                padding: 0,
-                border: 0,
-                background: "transparent",
-                color: "var(--color-deep-teal)",
-                fontWeight: 700,
-                fontSize: 14,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-              }}
+              className="hero-badge-reveal inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-medium text-sm transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer hover:-translate-y-0.5"
             >
-              VIEW MORE →
+              <span>VIEW MORE</span>
+              <ArrowRight size={14} />
             </button>
-          </p>
-
-          <div style={styles.actions}>
-
-            <button
-              onClick={onSearchOpen}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: isSmallMobile
-                  ? "center"
-                  : "initial",
-                gap: 8,
-                background:
-                  "var(--color-deep-teal)",
-                color: "#fff",
-                fontFamily: "var(--font-sans)",
-                fontSize: 14,
-                fontWeight: 500,
-                padding: "12px 24px",
-                border: 0,
-                borderRadius:
-                  "var(--radius-btn)",
-                cursor: "pointer",
-              }}
-            >
-              <Search size={17} />
-              Search the archive
-            </button>
-
-            <Link
-              to="/patents"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: isSmallMobile
-                  ? "center"
-                  : "initial",
-                gap: 8,
-                background: "transparent",
-                color:
-                  "var(--color-pine-shadow)",
-                fontFamily: "var(--font-sans)",
-                fontSize: 14,
-                fontWeight: 500,
-                padding: "11px 23px",
-                border:
-                  "1px solid var(--color-pine-shadow)",
-                borderRadius:
-                  "var(--radius-btn)",
-                textDecoration: "none",
-              }}
-            >
-              Browse publications
-              <ArrowRight size={16} />
-            </Link>
-
           </div>
-        </div>
 
-        {/* Morph Slider */}
-        <div
-          className="relative w-full min-w-0 mb-0 mt-20 grid place-items-center px-0 md:px-0"
-          style={{
-            alignSelf: "stretch",
-          }}
-        >
-          <div
-            className="w-full h-full mt-20"
-            style={{
-              width: "min(46vw, 860px)",
-              marginRight: 0,
-            }}
-          >
-            <div
-              className="relative w-full aspect-[16/9] mt-20 py-0"
-            >
-              <MorphSlider
-                items={sliderItems}
-                transition="melt"
-                intensity={0.4}
-                aberration={0.35}
-                drift={0.55}
-                autoplay
-                overlayColor="rgba(28, 93, 95, 0.12)"
-                duration={0.9}
-                ease="power2.inOut"
-                scale={2.3}
-                autoplayDelay={4}
-                loop
-                radius={29}
-                fit="cover"
-                showCaptions
-                showControls
-                showIndicators
-              />
+          {/* Right Column: Morph Slider in white frame */}
+          <div className="lg:col-span-5 hero-slider-reveal flex flex-col items-center justify-start w-full lg:pt-4">
+            <div className="w-full max-w-[500px] rounded-3xl overflow-hidden shadow-2xl border border-white bg-white p-3 backdrop-blur-xl relative">
+              <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden relative shadow-inner bg-zinc-900">
+                <MorphSlider
+                  items={sliderItems}
+                  transition="melt"
+                  intensity={0.4}
+                  aberration={0.35}
+                  drift={0.55}
+                  autoplay
+                  overlayColor="rgba(10, 74, 143, 0.15)"
+                  duration={0.9}
+                  ease="power2.inOut"
+                  scale={2.3}
+                  autoplayDelay={4}
+                  loop
+                  radius={18}
+                  fit="cover"
+                  showCaptions
+                  showControls
+                  showIndicators
+                />
+              </div>
+
+              {/* Slider Pagination Indicator Mockup */}
+              <div className="pt-3 pb-1 flex items-center justify-center gap-1.5">
+                <span className="w-6 h-1 rounded-full bg-[#FFB703]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* View More Modal */}
+        </div>
+      </section>
+
+      {/* ── STATISTICS STRIP (4 Columns with Circular Icons) ── */}
+      <section ref={statsRef} className="max-w-[1100px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 sm:p-7 rounded-3xl bg-white shadow-lg border border-slate-100">
+
+          {/* Stat 1 */}
+          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start">
+            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
+              <FileText className="w-5 h-5 text-[#FFB703]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
+                {stats?.totalIndexed || 195}
+              </span>
+              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                Research Publications
+              </span>
+            </div>
+          </div>
+
+          {/* Stat 2 */}
+          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
+            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
+              <Lightbulb className="w-5 h-5 text-[#FFB703]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
+                {stats?.totalPapers || 47}
+              </span>
+              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                Patents
+              </span>
+            </div>
+          </div>
+
+          {/* Stat 3 */}
+          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
+            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
+              <BookOpen className="w-5 h-5 text-[#FFB703]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
+                {stats?.totalBooks || 68}
+              </span>
+              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                Books &amp; Chapters
+              </span>
+            </div>
+          </div>
+
+          {/* Stat 4 */}
+          <div className="stat-item-reveal flex items-center gap-3.5 p-2 justify-center sm:justify-start border-l border-slate-100">
+            <div className="w-12 h-12 rounded-full bg-[#FFF8E7] flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5 text-[#FFB703]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono text-2xl sm:text-3xl font-bold text-[#0A4A8F] leading-tight">
+                {stats?.totalResearchers || 437}+
+              </span>
+              <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-wider">
+                Researchers
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── PATRONS SECTION ──────────────────────────────── */}
+      <section ref={patronsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6 relative">
+
+        {/* Left Decorative Watermark Callout */}
+        <div className="hidden xl:block absolute -left-16 top-16 text-left select-none pointer-events-none">
+          <GraduationCap className="w-8 h-8 text-slate-300 mb-2" />
+          <p className="font-serif italic text-slate-400 text-sm leading-snug">
+            Knowledge<br />
+            Today<br />
+            A Better<br />
+            Tomorrow
+          </p>
+          <div className="w-6 h-[2px] bg-[#FFB703] mt-2" />
+        </div>
+
+        {/* Right Decorative Watermark Callout */}
+        <div className="hidden xl:block absolute -right-16 top-20 text-right select-none pointer-events-none">
+          <p className="font-serif text-slate-400 text-sm leading-snug">
+            Research<br />
+            Transforms<br />
+            Possibilities<br />
+            into Progress
+          </p>
+          <div className="w-6 h-[2px] bg-[#FFB703] mt-2 ml-auto" />
+        </div>
+
+        {/* Centered Heading with lines */}
+        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
+          <div className="flex-1 h-[1px] bg-slate-200" />
+          <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#0F172A] tracking-tight">
+            Patrons
+          </h2>
+          <div className="flex-1 h-[1px] bg-slate-200" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
+          {/* Patron 1 */}
+          <div className="patron-card-reveal flex flex-col items-center text-center group">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/pankaj-DsE5rnwQ.webp"
+                alt="Er. Pankaj Agarwal"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Er. Pankaj Agarwal
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              CHANCELLOR
+            </p>
+          </div>
+
+          {/* Patron 2 */}
+          <div className="patron-card-reveal flex flex-col items-center text-center group">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/pooja_Agrawal.png"
+                alt="Er. Pooja Agarwal"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Er. Pooja Agarwal
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              PRO CHANCELLOR
+            </p>
+          </div>
+
+          {/* Patron 3 */}
+          <div className="patron-card-reveal flex flex-col items-center text-center group sm:col-span-2 md:col-span-1">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/vijaytiwari-DtLhXa4L.webp"
+                alt="Prof. (Dr.) Vijay Tiwari"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Prof. (Dr.) Vijay Tiwari
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              VICE CHANCELLOR
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CO-PATRONS SECTION ───────────────────────────── */}
+      <section ref={coPatronsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 pb-16 relative">
+
+        {/* Right Lower Callout */}
+        <div className="hidden xl:block absolute -right-16 bottom-10 text-right select-none pointer-events-none font-serif italic text-slate-400 text-xs">
+          Discover<br />
+          Innovate<br />
+          Collaborate
+        </div>
+
+        {/* Centered Heading with lines */}
+        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
+          <div className="flex-1 h-[1px] bg-slate-200" />
+          <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#0F172A] tracking-tight">
+            Co Patrons
+          </h2>
+          <div className="flex-1 h-[1px] bg-slate-200" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
+          {/* Co Patron 1 */}
+          <div className="copatron-card-reveal flex flex-col items-center text-center group">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/Hemendra-NSaxOOgS.webp"
+                alt="Prof. (Dr.) Hemendra Sharma"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Prof. (Dr.) Hemendra Sharma
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              REGISTRAR
+            </p>
+          </div>
+
+          {/* Co Patron 2 */}
+          <div className="copatron-card-reveal flex flex-col items-center text-center group">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/Nabeel-Ahmad.jpeg"
+                alt="Prof. (Dr.) Nabeel Ahmad"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Prof. (Dr.) Nabeel Ahmad
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              DIRECTOR (RESEARCH)
+            </p>
+          </div>
+
+          {/* Co Patron 3 */}
+          <div className="copatron-card-reveal flex flex-col items-center text-center group sm:col-span-2 md:col-span-1">
+            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <img
+                src="Images/Alkesh_Agrawal.webp"
+                alt="Prof. (Dr.) Alkesh Agrawal"
+                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
+              />
+            </div>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
+              Prof. (Dr.) Alkesh Agrawal
+            </h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              DEPUTY DIRECTOR (RESEARCH)
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── INSTITUTES SECTION ("RECENT NOTES") ─────────── */}
+      <section ref={institutesRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 pb-20">
+
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-3">
+          <div>
+            <div className="inline-flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-[#FFB703]" />
+              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#0C2F44]">
+                RECENT NOTES
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-8 bg-[#FFB703] rounded-full hidden sm:block" />
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#0F172A] leading-tight font-bold">
+                Research Publication / Patents /{" "}
+                <span className="text-[#0A4A8F]">Books &amp; Chapters from...</span>
+              </h2>
+            </div>
+          </div>
+
+          <Link
+            to="/patents"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0A4A8F] hover:text-[#0C5CA8] transition-colors shrink-0 group"
+          >
+            <span>View all papers</span>
+            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Institute Cards Grid (3x3) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {institutes.map((card) => (
+            <div key={card.title} className="institute-card-reveal">
+              <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#0A4A8F]/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col justify-between h-full">
+                <div>
+                  {/* Image container */}
+                  <div className="overflow-hidden rounded-xl mb-4 aspect-[16/10] bg-slate-100 shadow-inner">
+                    <img
+                      src={card.src}
+                      alt={card.title}
+                      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+
+                  <div className="font-mono text-[11px] uppercase tracking-wider text-[#0A4A8F] font-bold mb-1">
+                    SRMU
+                  </div>
+
+                  <h3 className="font-serif text-lg text-[#0F172A] leading-snug mb-2 font-bold group-hover:text-[#0A4A8F] transition-colors">
+                    {card.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                    {card.text}
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F]">
+                    {card.department}
+                  </span>
+                  <span className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-[#0A4A8F] transition-colors font-medium">
+                    Explore <ArrowRight size={12} />
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── VIEW MORE MODAL ──────────────────────────────── */}
       {isModalOpen && (
         <div
           className="view-more-overlay"
@@ -747,629 +778,34 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         >
           <div
             className="view-more-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               className="view-more-close"
               aria-label="Close modal"
-              onClick={() =>
-                setIsModalOpen(false)
-              }
+              onClick={() => setIsModalOpen(false)}
             >
               ✕
             </button>
 
             <div className="view-more-header">
-              <h3 id="view-more-title">
-                {activeProfileData.title}
-              </h3>
-
-              <p>
-                {activeProfileData.designation}
-              </p>
+              <h3 id="view-more-title">{activeProfileData.title}</h3>
+              <p>{activeProfileData.designation}</p>
             </div>
 
             <div className="view-more-body">
-              {activeProfileData.fullContent.map(
-                (paragraph, index) => (
-                  <p
-                    key={`${activeProfileData.key}-${index}`}
-                  >
-                    {paragraph}
-                  </p>
+              {activeProfileData.fullContent.map((paragraph, index) =>
+                typeof paragraph === "string" ? (
+                  <p key={`${activeProfileData.key}-${index}`}>{paragraph}</p>
+                ) : (
+                  <div key={`${activeProfileData.key}-${index}`}>{paragraph}</div>
                 )
               )}
             </div>
           </div>
         </div>
       )}
-
-      {/* Statistics */}
-      <section
-        style={{
-          ...styles.statStrip,
-          ...styles.width,
-        }}
-      >
-        <div style={styles.stat}>
-          <strong style={styles.statValue}>
-            {stats?.totalIndexed || 0}
-          </strong>
-
-          <span style={styles.statLabel}>
-            Research Publications
-          </span>
-        </div>
-
-        <i style={styles.divider} />
-
-        <div style={styles.stat}>
-          <strong style={styles.statValue}>
-            {stats?.totalPapers || 0}
-          </strong>
-
-          <span style={styles.statLabel}>
-            PATENTS
-          </span>
-        </div>
-
-        <i style={styles.divider} />
-
-        <div style={styles.stat}>
-          <strong style={styles.statValue}>
-            {stats?.totalBooks || 0}
-          </strong>
-
-          <span style={styles.statLabel}>
-            BOOKS &amp; CHAPTERS
-          </span>
-        </div>
-
-        <i style={styles.divider} />
-
-        <div style={styles.stat}>
-          <strong style={styles.statValue}>
-            {stats?.totalResearchers || 0}+
-          </strong>
-
-          <span style={styles.statLabel}>
-            RESEARCHERS
-          </span>
-        </div>
-      </section>
-
-      {/* Patrons */}
-      <div style={styles.peopleSection}>
-        <h1 style={styles.sectionTitle}>
-          Patrons
-        </h1>
-
-        <div style={styles.peopleContainer}>
-          <div style={styles.peopleGrid}>
-
-            <div style={styles.person}>
-              <img
-                src="Images/pankaj-DsE5rnwQ.webp"
-                alt="Er. Pankaj Agarwal"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Er. Pankaj Agarwal
-              </h5>
-
-              <p style={styles.personRole}>
-                Chancellor
-              </p>
-            </div>
-
-            <div style={styles.person}>
-              <img
-                src="Images/pooja_Agrawal.png"
-                alt="Er. Pooja Agarwal"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Er. Pooja Agarwal
-              </h5>
-
-              <p style={styles.personRole}>
-                Pro Chancellor
-              </p>
-            </div>
-
-            <div
-              style={{
-                ...styles.person,
-                gridColumn: isMobile
-                  ? "1 / -1"
-                  : "auto",
-                justifySelf: isMobile
-                  ? "center"
-                  : "auto",
-              }}
-            >
-              <img
-                src="Images/vijaytiwari-DtLhXa4L.webp"
-                alt="Prof. (Dr.) Vijay Tiwari"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Prof. (Dr.) Vijay Tiwari
-              </h5>
-
-              <p style={styles.personRole}>
-                Vice Chancellor
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Co Patrons */}
-      <div style={styles.peopleSection}>
-        <h1 style={styles.sectionTitle}>
-          Co Patrons
-        </h1>
-
-        <div style={styles.peopleContainer}>
-          <div style={styles.peopleGrid}>
-
-            <div style={styles.person}>
-              <img
-                src="Images/Hemendra-NSaxOOgS.webp"
-                alt="Prof. (Dr.) Hemendra Sharma"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Prof. (Dr.) Hemendra Sharma
-              </h5>
-
-              <p style={styles.personRole}>
-                Registrar
-              </p>
-            </div>
-
-            <div style={styles.person}>
-              <img
-                src="Images/Nabeel-Ahmad.jpeg"
-                alt="Nabeel Ahmad"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Prof. (Dr.) Nabeel Ahmad
-              </h5>
-
-              <p style={styles.personRole}>
-                Director (Research)
-              </p>
-            </div>
-
-            <div
-              style={{
-                ...styles.person,
-                gridColumn: isMobile
-                  ? "1 / -1"
-                  : "auto",
-                justifySelf: isMobile
-                  ? "center"
-                  : "auto",
-              }}
-            >
-              <img
-                src="Images/Alkesh_Agrawal.webp"
-                alt="Prof. (Dr.) Alkesh Agrawal"
-                style={styles.personImage}
-              />
-
-              <h5 style={styles.personName}>
-                Prof. (Dr.) Alkesh Agrawal
-              </h5>
-
-              <p style={styles.personRole}>
-                Deputy Director (Research)
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Institutes */}
-      <section
-        style={{
-          ...styles.section,
-          ...styles.width,
-        }}
-      >
-        <div style={styles.heading}>
-          <div>
-            <p
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-mono)",
-                fontSize: 13,
-                fontWeight: 600,
-                letterSpacing: ".059em",
-                textTransform: "uppercase",
-                color:
-                  "var(--color-pine-shadow)",
-              }}
-            >
-              <span
-                style={{
-                  display: "inline-block",
-                  width: 7,
-                  height: 7,
-                  marginRight: 8,
-                  borderRadius: "50%",
-                  background:
-                    "var(--color-sage)",
-                }}
-              />
-
-              RECENT NOTES
-            </p>
-
-            <h2 style={styles.headingTitle}>
-              Research Publication / Patents /
-              <span
-                style={{
-                  color:
-                    "var(--color-deep-teal)",
-                }}
-              >
-                Books &amp; Chapters from...
-              </span>
-            </h2>
-          </div>
-
-          <Link
-            to="/patents"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              color:
-                "var(--color-pine-shadow)",
-              fontSize: 14,
-              fontWeight: 700,
-              textDecoration: "none",
-            }}
-          >
-            View all papers
-            <ArrowRight size={15} />
-          </Link>
-        </div>
-
-        {/* Institute Row 1 */}
-        <div className="flex flex-col md:flex-row gap-4">
-          {[
-            {
-              src: "Images/c1.webp",
-              title: "Institute of Technology",
-              text:
-                "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
-              Department: "5 Departments",
-            },
-            {
-              src: "Images/c2.jpg",
-              title:
-                "Institute of Biosciences and Technology",
-              text:
-                "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
-              Department: "2 Departments",
-            },
-            {
-              src: "Images/c3.webp",
-              title:
-                "Institute of Management, Commerce and Economics",
-              text:
-                "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
-              Department: "2 Departments",
-            },
-          ].map((card) => (
-            <div
-              key={card.title}
-              className="flex-1 p-2"
-            >
-              <ElectricBorder
-                color="#94a3b8"
-                speed={0.5}
-                chaos={0.11}
-                thickness={2}
-                style={{
-                  borderRadius: 18,
-                  background:
-                    "rgba(255,255,255,0.55)",
-                  minHeight: 180,
-                }}
-              >
-                <div style={{ padding: 20 }}>
-                  <div>
-                    <img
-                      src={card.src}
-                      alt={card.title}
-                      style={{
-                        width: "100%",
-                        height: 180,
-                        objectFit: "cover",
-                        borderRadius: 12,
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily:
-                        "var(--font-mono)",
-                      fontSize: 11,
-                      letterSpacing: ".08em",
-                      textTransform:
-                        "uppercase",
-                      color:
-                        "var(--color-pine-shadow)",
-                    }}
-                  >
-                    SRMU
-                  </div>
-
-                  <h3
-                    style={{
-                      margin: "12px 0 10px",
-                      fontFamily:
-                        "var(--font-serif)",
-                      fontSize: 26,
-                      color:
-                        "var(--color-charcoal-navy)",
-                    }}
-                  >
-                    {card.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      margin: 0,
-                      color:
-                        "var(--color-slate-body)",
-                      lineHeight: 1.6,
-                      fontSize: 15,
-                    }}
-                  >
-                    {card.text}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold text-deep-teal bold">
-                    {card.Department}
-                  </p>
-                </div>
-              </ElectricBorder>
-            </div>
-          ))}
-        </div>
-
-        {/* Institute Row 2 */}
-        <div className="flex flex-col md:flex-row gap-4">
-          {[
-            {
-              src: "Images/c4.jpg",
-              title: "Institute of Media Studies",
-              text:
-                "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
-              Department: "1 Department",
-            },
-            {
-              src: "Images/c5.webp",
-              title:
-                "Institute of Natural Sciences and Humanities",
-              text:
-                "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
-              Department: "4 Departments",
-            },
-            {
-              src: "Images/c6.webp",
-              title:
-                "Institute of Pharmaceutical Sciences",
-              text:
-                "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
-              Department: "1 Department",
-            },
-          ].map((card) => (
-            <div
-              key={card.title}
-              className="flex-1 p-2"
-            >
-              <ElectricBorder
-                color="#94a3b8"
-                speed={0.5}
-                chaos={0.11}
-                thickness={2}
-                style={{
-                  borderRadius: 18,
-                  background:
-                    "rgba(255,255,255,0.55)",
-                  minHeight: 180,
-                }}
-              >
-                <div style={{ padding: 20 }}>
-                  <div>
-                    <img
-                      src={card.src}
-                      alt={card.title}
-                      style={{
-                        width: "100%",
-                        height: 180,
-                        objectFit: "cover",
-                        borderRadius: 12,
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily:
-                        "var(--font-mono)",
-                      fontSize: 11,
-                      letterSpacing: ".08em",
-                      textTransform:
-                        "uppercase",
-                      color:
-                        "var(--color-pine-shadow)",
-                    }}
-                  >
-                    SRMU
-                  </div>
-
-                  <h3
-                    style={{
-                      margin: "12px 0 10px",
-                      fontFamily:
-                        "var(--font-serif)",
-                      fontSize: 26,
-                      color:
-                        "var(--color-charcoal-navy)",
-                    }}
-                  >
-                    {card.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      margin: 0,
-                      color:
-                        "var(--color-slate-body)",
-                      lineHeight: 1.6,
-                      fontSize: 15,
-                    }}
-                  >
-                    {card.text}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold text-deep-teal bold">
-                    {card.Department}
-                  </p>
-                </div>
-              </ElectricBorder>
-            </div>
-          ))}
-        </div>
-
-        {/* Institute Row 3 */}
-        <div className="flex flex-col md:flex-row gap-4">
-          {[
-            {
-              src: "Images/c7.webp",
-              title:
-                "Institute of Agricultural Sciences and Technology",
-              text:
-                "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
-              Department: "1 Department",
-            },
-            {
-              src: "Images/c8.avif",
-              title: "Institute of Legal Studies",
-              text:
-                "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
-              Department: "1 Department",
-            },
-            {
-              src: "Images/c9.webp",
-              title: "Institute of Pharmacy",
-              text:
-                "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
-              Department: "1 Department",
-            },
-          ].map((card) => (
-            <div
-              key={card.title}
-              className="flex-1 p-2"
-            >
-              <ElectricBorder
-                color="#94a3b8"
-                speed={0.5}
-                chaos={0.11}
-                thickness={2}
-                style={{
-                  borderRadius: 18,
-                  background:
-                    "rgba(255,255,255,0.55)",
-                  minHeight: 180,
-                }}
-              >
-                <div
-                  style={{ padding: 20 }}
-                  className="mb-10"
-                >
-                  <div>
-                    <img
-                      src={card.src}
-                      alt={card.title}
-                      style={{
-                        width: "100%",
-                        height: 180,
-                        objectFit: "cover",
-                        borderRadius: 12,
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily:
-                        "var(--font-mono)",
-                      fontSize: 11,
-                      letterSpacing: ".08em",
-                      textTransform:
-                        "uppercase",
-                      color:
-                        "var(--color-pine-shadow)",
-                    }}
-                  >
-                    SRMU
-                  </div>
-
-                  <h3
-                    style={{
-                      margin: "12px 0 10px",
-                      fontFamily:
-                        "var(--font-serif)",
-                      fontSize: 26,
-                      color:
-                        "var(--color-charcoal-navy)",
-                    }}
-                  >
-                    {card.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      margin: 0,
-                      color:
-                        "var(--color-slate-body)",
-                      lineHeight: 1.6,
-                      fontSize: 15,
-                    }}
-                  >
-                    {card.text}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold text-deep-teal bold">
-                    {card.Department}
-                  </p>
-                </div>
-              </ElectricBorder>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

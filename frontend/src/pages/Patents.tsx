@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FileText, Search, RefreshCw, Loader2 } from 'lucide-react';
+import { FileText, Search, RefreshCw, Loader2, X, Award } from 'lucide-react';
+import { gsap } from 'gsap';
 import PaperCard from '../components/patentsCard';
 import { getPatents, getDepartments } from '../data/researchService';
 import { Patent, Department } from '../types';
 
 function PapersPage() {
+  const pageRef = useRef<HTMLDivElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [papers, setPapers] = useState<Patent[]>([]);
@@ -13,14 +15,13 @@ function PapersPage() {
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState<Department[]>([]);
 
-  
   // Filters — always read live from URL
   const search = searchParams.get('search') || '';
   const selectedDept = searchParams.get('department') || 'All';
   const selectedYear = searchParams.get('year') || '';
 
   // Helper to update URL params
-  const updateParam = (key, value) => {
+  const updateParam = (key: string, value: string) => {
     const next = new URLSearchParams(searchParams);
     if (value && value !== 'All' && value !== '') {
       next.set(key, value);
@@ -29,7 +30,6 @@ function PapersPage() {
     }
     setSearchParams(next, { replace: true });
   };
-  
 
   const resetFilters = () => setSearchParams({}, { replace: true });
 
@@ -54,31 +54,53 @@ function PapersPage() {
     }
   }, [search, selectedDept, selectedYear]);
 
+  // Page entrance animation
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || !pageRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.archive-hero-reveal',
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out', clearProps: 'all' }
+      );
+      gsap.fromTo(
+        '.archive-filter-reveal',
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, delay: 0.15, ease: 'power2.out', clearProps: 'all' }
+      );
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const hasFilters = search || selectedDept !== 'All' || selectedYear;
 
   return (
-    <div className="archive-page home-width">
+    <div ref={pageRef} className="archive-page home-width py-8 sm:py-12">
       
       {/* Header */}
-      <div className="page-hero-copy">
-        <div className="eyebrow"><span className="eyebrow-dot" />
+      <div className="page-hero-copy mb-8">
+        <div className="archive-hero-reveal eyebrow">
+          <span className="eyebrow-dot" />
           <FileText className="w-4 h-4" />
           <span>Research Showcase</span>
         </div>
-        <h1>
-          Granted and Published <em>Patents   </em> 
+        <h1 className="archive-hero-reveal text-3xl sm:text-4xl md:text-5xl font-bold font-serif text-[#1F2937] tracking-tight mt-2 mb-3">
+          Granted and Published <em>Patents</em> 
         </h1>
-        <p>
+        <p className="archive-hero-reveal text-base sm:text-lg text-[#6B7280] max-w-2xl">
           Browse and filter faculty research publications, patents, and scientific contributions.
         </p>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="filter-bar papers-filter-bar">
+      <div className="archive-filter-reveal filter-bar papers-filter-bar mb-6 p-4 rounded-2xl bg-white/80 border border-[#0A4A8F]/15 shadow-md backdrop-blur-md">
         
         {/* Search Field */}
-        <div className="filter-search">
-          <Search />
+        <div className="filter-search flex-1">
+          <Search className="text-[#0A4A8F]" />
           <input
             type="text"
             value={search}
@@ -123,8 +145,9 @@ function PapersPage() {
           <button
             onClick={resetFilters}
             className="btn-ghost reset-button"
+            title="Reset filters"
           >
-            <RefreshCw className="w-4 h-4 text-red-500" />
+            <RefreshCw className="w-4 h-4" style={{ color: 'var(--color-deep-teal)' }} />
             <span>Reset All</span>
           </button>
         )}
@@ -133,46 +156,44 @@ function PapersPage() {
 
       {/* Active Filter Badge */}
       {selectedDept !== 'All' && (
-        <div className="flex items-center space-x-2 text-xs">
-          <span className="text-zinc-500">Filtered by:</span>
-          <span className="px-3 py-1 rounded-full bg-red-950/40 text-red-400 border border-red-800/40 font-medium">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xs text-[#6B7280] font-mono">Filtered by:</span>
+          <span className="active-filter-chip">
             {departments.find(d => d.key === selectedDept)?.name || selectedDept}
+            <button onClick={() => updateParam('department', 'All')} aria-label="Clear filter">
+              <X size={12} />
+            </button>
           </span>
-          <button
-            onClick={() => updateParam('department', 'All')}
-            className="text-zinc-500 hover:text-red-400 transition-colors text-xs underline"
-          >
-            clear
-          </button>
         </div>
       )}
 
       {/* Results Count Banner */}
-      <div className="flex items-center justify-between text-xs text-zinc-400 px-1">
-        <span>
-          Showing <strong className="text-white">{count}</strong> research publications
-          {hasFilters && <span className="text-zinc-500 ml-1">(filtered)</span>}
-        </span>
-        {loading && <Loader2 className="w-4 h-4 text-red-500 animate-spin" />}
+      <div className="flex items-center justify-between mb-5 px-1">
+        <div className="results-count-badge">
+          <strong>{count}</strong>
+          research publications
+          {hasFilters && <span className="text-[#6B7280] ml-1 font-normal">(filtered)</span>}
+        </div>
+        {loading && <Loader2 className="loader-on-theme animate-spin w-4 h-4 text-[#0A4A8F]" />}
       </div>
 
       {/* Grid */}
       {loading ? (
-        <div className="py-20 text-center text-zinc-400">
-          <Loader2 className="w-8 h-8 mx-auto mb-2 text-red-500 animate-spin" />
-          <p className="text-sm">Loading research papers...</p>
+        <div className="empty-state min-h-[280px] flex flex-col items-center justify-center p-12 bg-white/60 rounded-2xl border border-[#0A4A8F]/10">
+          <Loader2 className="loader-on-theme animate-spin w-8 h-8 text-[#0A4A8F] mb-3" />
+          <p className="text-sm text-[#6B7280]">Loading research papers...</p>
         </div>
       ) : papers.length === 0 ? (
-        <div className="glass-panel py-16 text-center text-zinc-400 rounded-2xl border border-zinc-900">
-          <FileText className="w-12 h-12 mx-auto mb-3 text-zinc-700 stroke-[1.5]" />
-          <p className="text-base font-semibold text-zinc-300 mb-2">No matching research papers found</p>
-          <p className="text-xs text-zinc-500 mb-4">The selected department or filter has no matching papers.</p>
+        <div className="empty-state min-h-[280px] flex flex-col items-center justify-center p-12 bg-white/60 rounded-2xl border border-[#0A4A8F]/10 text-center">
+          <FileText className="w-10 h-10 text-[#9CA3AF] mb-3 stroke-[1.5]" />
+          <p className="font-semibold text-[#1F2937]">No matching research papers found</p>
+          <p className="text-xs text-[#6B7280] mt-1">The selected department or filter has no matching papers.</p>
           {hasFilters && (
             <button
               onClick={resetFilters}
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/30 text-sm transition-all"
+              className="btn-ghost inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full border border-[#0A4A8F]/20 text-xs font-medium text-[#0A4A8F]"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw size={13} />
               <span>Clear All Filters</span>
             </button>
           )}

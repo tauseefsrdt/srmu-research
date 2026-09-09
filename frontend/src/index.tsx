@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SearchModal from './components/SearchModal';
+import GsapBackground from './components/GsapBackground';
+import SmoothScroll from './Effects/SmoothScroll';
 
 import HomePage from './pages/HomePage';
 import Patents from './pages/Patents';
@@ -17,25 +19,28 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className="app-shell">
-      <Navbar onSearchToggle={() => setIsSearchOpen(true)} />
-      
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage onSearchOpen={() => setIsSearchOpen(true)} />} />
-          <Route path="/patents" element={<Patents />} />
-          <Route path="/papers" element={<Patents />} />
-          <Route path="/research" element={<Research />} />
-          <Route path="/indexed" element={<Research />} />
-          <Route path="/books" element={<BooksPage />} />
-          <Route path="/about" element={<Aboutpage />} />
-        </Routes>
-      </main>
+    <SmoothScroll>
+      <div className="app-shell">
+        <GsapBackground />
+        <Navbar onSearchToggle={() => setIsSearchOpen(true)} />
+        
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage onSearchOpen={() => setIsSearchOpen(true)} />} />
+            <Route path="/patents" element={<Patents />} />
+            <Route path="/papers" element={<Patents />} />
+            <Route path="/research" element={<Research />} />
+            <Route path="/indexed" element={<Research />} />
+            <Route path="/books" element={<BooksPage />} />
+            <Route path="/about" element={<Aboutpage />} />
+          </Routes>
+        </main>
 
-      <Footer />
+        <Footer />
 
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </div>
+        <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      </div>
+    </SmoothScroll>
   );
 }
 
@@ -49,3 +54,4 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+

@@ -1,85 +1,95 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, ArrowUpRight } from 'lucide-react';
 
 function Footer() {
   return (
-    <footer className='footer1' style={{
-      backgroundImage: "linear-gradient(rgba(236, 240, 249, 0.85), rgba(236, 240, 249, 0.85)), url('https://srmu.ac.in/assets/footer-bg-IZe6NqR3.jpeg')",
+    <footer className="footer1 relative text-white mt-auto overflow-hidden border-t-4 border-[#FFB703]" style={{
+      backgroundImage: "url('https://srmu.ac.in/assets/footer-bg-IZe6NqR3.jpeg')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-      borderTop: '3px solid #FFB703',
-      marginTop: 'auto',
     }}>
-      <div style={{ maxWidth: '1200px' }} className="mx-auto px-6 py-12 z-[9999] relative">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+      {/* Deep Navy Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A3C85]/95 via-[#0C2F44]/95 to-[#082233]/98 z-0" />
+
+      <div className="max-w-[1240px] mx-auto px-6 py-14 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
 
           {/* Brand */}
           <div className="md:col-span-1 flex flex-col gap-4">
-            <div className="flex items-center gap-2.5">
-              <div style={{ width: 34, height: 34, borderRadius: 9, background: 'var(--color-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <GraduationCap size={18} color="var(--color-pine-shadow)" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FFB703] flex items-center justify-center shadow-lg shadow-[#FFB703]/25 shrink-0">
+                <GraduationCap size={22} className="text-[#0C2F44]" />
               </div>
-              <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 500, fontSize: 16, color: '#ffffff' }}>
+              <span className="font-serif font-semibold text-xl text-white tracking-tight">
                 SRMU Research
               </span>
             </div>
-            <p style={{ fontSize: 13, color: '#fff', lineHeight: 1.6 }}>
-              Shri Ramswaroop Memorial University Research & Consultancy Cell, showcasing high impact research publications, patents, books and book chapters.
+            <p className="text-xs sm:text-sm text-white/80 leading-relaxed m-0">
+              Shri Ramswaroop Memorial University Research &amp; Consultancy Cell, showcasing high impact research publications, patents, books and book chapters.
             </p>
           </div>
 
           {/* Explore */}
           <div className="flex flex-col gap-4">
-            <div className="eyebrow" style={{ fontSize: 12, color: 'var(--color-sage)' }}>Explore</div>
+            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
+              Explore
+            </div>
             <div className="flex flex-col gap-2.5">
               {[
                 { label: 'Research Publications', to: '/research' },
                 { label: 'Patents', to: '/patents' },
                 { label: 'Books & Chapters', to: '/books' },
                 { label: 'About', to: '/about' },
-              ].map(l => (
-                <Link key={l.to} to={l.to} style={{ fontSize: 14, color: '#fff', textDecoration: 'none' }}
-                  className="hover:text-deep-teal transition-colors"
-                >{l.label}</Link>
+              ].map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className="text-sm text-white/75 hover:text-white hover:translate-x-1 transition-all duration-200 inline-flex items-center gap-1.5"
+                >
+                  <span>{l.label}</span>
+                </Link>
               ))}
             </div>
           </div>
 
-          {/* Faculties */}
+          {/* Institutes col 1 */}
           <div className="flex flex-col gap-4">
-            <div className="eyebrow" style={{ fontSize: 12, color: 'var(--color-sage)' }}>Institutes</div>
-            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm" style={{ color: '#fff' }}>
-              <div style={{ width: '80%' }}><span>IoT (Institute of Technology)</span></div>
-              <div style={{ width: '100%' }}><span>IBST (Institute of Biosciences and T...)</span></div>
-              <div style={{ width: '90%' }}><span>IMCE (Institute of Management, Commerce and Economics)</span></div>
-              <div style={{ width: '90%' }}><span>ILS (Institute of Legal Studies)</span></div>
-              <div style={{ width: '90%' }}><span>IoP (Institute of Pharmacy)</span></div>
-
-
+            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
+              Institutes
+            </div>
+            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-white/75">
+              <span>IoT (Institute of Technology)</span>
+              <span>IBST (Institute of Biosciences and T...)</span>
+              <span>IMCE (Institute of Management, Commerce and Economics)</span>
+              <span>ILS (Institute of Legal Studies)</span>
+              <span>IoP (Institute of Pharmacy)</span>
             </div>
           </div>
+
+          {/* Institutes col 2 */}
           <div className="flex flex-col gap-4">
-            <div className="eyebrow" style={{ fontSize: 12, color: 'var(--color-sage)' }}>Institutes</div>
-            <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm" style={{ color: '#fff' }}>
-              <div style={{ width: '100%' }}><span>INSH (Institute of Natural Sciences and Humanities)</span></div>
-              <div style={{ width: '100%' }}><span>IER (Institute of Education and Research)</span></div>
-              <div style={{ width: '100%' }}><span>IMS (Institute of Medical Sciences)</span></div>
-              <div style={{ width: '120%' }}><span>IAST (Institute of Agricultural Sciences and Technology)</span></div>
-
-
+            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
+              Institutes
             </div>
-
-
-
+            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-white/75">
+              <span>INSH (Institute of Natural Sciences and Humanities)</span>
+              <span>IER (Institute of Education and Research)</span>
+              <span>IMS (Institute of Medical Sciences)</span>
+              <span>IAST (Institute of Agricultural Sciences and Technology)</span>
+            </div>
           </div>
+
         </div>
 
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 24, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 13, color: '#fff' }}>© {new Date().getFullYear()} SRMU Research Portal. All rights reserved.</span>
-          <span className="eyebrow" style={{ fontSize: 11, color: '#D4AF37', letterSpacing: '0.04em' }}>
-            Conceptualized by Prof. (Dr.) Alkesh Agrawal <br /> developed  by Mr. Mohit (B.Tech. EC-IV Yr)
+        {/* Bottom bar */}
+        <div className="border-t border-white/15 pt-6 flex flex-wrap justify-between items-center gap-4 text-xs">
+          <span className="text-white/65">
+            © {new Date().getFullYear()} SRMU Research Portal. All rights reserved.
+          </span>
+          <span className="text-[#FFB703] tracking-wide text-right leading-relaxed font-mono">
+            Conceptualized by Prof. (Dr.) Alkesh Agrawal <br /> developed by Mr. Mohit (B.Tech. EC-IV Yr)
           </span>
         </div>
       </div>

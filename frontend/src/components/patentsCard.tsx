@@ -15,57 +15,50 @@ function PaperCard({ paper }: PaperCardProps) {
   const details = isPatent ? paper.title : paper.abstract;
 
   return (
-    <div
-      className="card-mint flex flex-col justify-between"
-      style={{ padding: 24, transition: 'border-color 0.2s', cursor: 'default', height: '100%' }}
-    >
+    <div className="card-mint flex flex-col justify-between h-full p-6 rounded-2xl bg-white/90 border border-[#0A4A8F]/15 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
       {/* Top */}
       <div>
         {/* Eyebrow & featured */}
-        <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-          <span className="eyebrow" style={{ fontSize: 11, color: 'var(--color-pine-shadow)' }}>
+        <div className="flex items-center justify-between gap-2 mb-3.5 flex-wrap">
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontFamily: 'var(--font-mono)',
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              color: 'var(--color-deep-teal)',
+              padding: '4px 10px',
+              background: 'rgba(10,74,143,.08)',
+              border: '1px solid rgba(10,74,143,.14)',
+              borderRadius: 100,
+            }}
+          >
             ● {isPatent ? 'PATENT' : paper.departmentKey?.slice(0, 28) || 'RESEARCH'}
           </span>
           {paper.featured && (
-            <span
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 4,
-                background: 'var(--color-blush-sand)', color: 'var(--color-charcoal-navy)',
-                border: '1px solid var(--color-dusty-rose)', borderRadius: 100,
-                fontSize: 11, fontWeight: 600, padding: '3px 10px',
-                fontFamily: 'var(--font-mono)', letterSpacing: '0.04em',
-              }}
-            >
+            <span className="patent-featured-badge">
               <Award size={11} /> FEATURED
             </span>
-
           )}
         </div>
 
         {isPatent && (
-          <div className="flex items-start gap-2 mb-3">
-            <User size={13} color="var(--color-sage)" style={{ marginTop: 2, flexShrink: 0 }} />
-            <p
-              style={{ fontSize: '1.2rem', color: 'var(--color-charcoal-navy)', lineHeight: 1.1, margin: 0, fontWeight: 700 }}
-              className="line-clamp-2 "
-            >
+          <div className="flex items-start gap-2 mb-2.5">
+            <User size={14} className="text-[#FFB703] mt-0.5 shrink-0" />
+            <p className="font-serif text-lg font-bold text-[#111827] leading-tight m-0 line-clamp-2">
               {authors}
             </p>
           </div>
         )}
 
         {/* Title */}
-        <h3
-          style={{
-            fontFamily: 'var(--font-serif)', fontWeight: 500, fontSize: 18,
-            color: 'var(--color-charcoal-navy)', lineHeight: 1.35,
-            marginBottom: 12, marginTop: 0,
-            display: '-webkit-box', WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical', overflow: 'hidden',
-          }}
-        >
+        <h3 className="font-serif font-medium text-lg text-[#1F2937] leading-snug mb-3 mt-0 line-clamp-3 group-hover:text-[#0A4A8F] transition-colors">
           {isPatent && (
-            <span style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
+            <span className="block font-mono text-xs font-semibold mb-1 text-[#0A4A8F]">
               {paper.patentNumber}
             </span>
           )}
@@ -74,11 +67,9 @@ function PaperCard({ paper }: PaperCardProps) {
 
         {/* Authors */}
         {!isPatent && (
-          <div className="flex items-start gap-2 mb-2">
-            <User size={13} color="var(--color-sage)" style={{ marginTop: 2, flexShrink: 0 }} />
-            <p style={{ fontSize: 13, color: 'var(--color-slate-body)', lineHeight: 1.4, margin: 0 }}
-              className="line-clamp-2"
-            >
+          <div className="flex items-start gap-2 mb-2 font-mono text-xs text-[#6B7280]">
+            <User size={13} className="text-[#FFB703] mt-0.5 shrink-0" />
+            <p className="m-0 line-clamp-2">
               {Array.isArray(authors) ? authors.join(', ') : authors}
             </p>
           </div>
@@ -86,43 +77,29 @@ function PaperCard({ paper }: PaperCardProps) {
 
         {/* Journal */}
         {!isPatent && paper.journal && (
-          <div className="flex items-start gap-2 mb-4">
-            <Building size={13} color="var(--color-mint-mist)" style={{ marginTop: 2, flexShrink: 0 }} />
-            <p style={{ fontSize: 12, color: 'var(--color-slate-body)', fontStyle: 'italic', margin: 0 }}
-              className="line-clamp-1"
-            >{paper.journal}</p>
+          <div className="flex items-start gap-2 mb-3 text-xs text-[#4B5563] italic">
+            <Building size={13} className="text-[#0A4A8F] mt-0.5 shrink-0" />
+            <p className="m-0 line-clamp-1">{paper.journal}</p>
           </div>
         )}
 
         {/* Abstract */}
-        <p
-          style={{
-            fontSize: 13, color: 'var(--color-slate-body)', lineHeight: 1.55, margin: 0,
-            background: '#fff', border: '1px solid var(--color-sea-foam)',
-            borderRadius: 8, padding: '10px 12px',
-            display: '-webkit-box', WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical', overflow: 'hidden',
-          }}
-        >
+        <p className="text-xs text-[#6B7280] leading-relaxed m-0 p-3 rounded-xl bg-[#F8FAFC] border border-[#0A4A8F]/08 line-clamp-3">
           {details}
         </p>
       </div>
 
       {/* Footer */}
-      <div
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          borderTop: '1px solid var(--color-sea-foam)', marginTop: 16, paddingTop: 14,
-          flexWrap: 'wrap', gap: 8,
-        }}
-      >
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5" style={{ fontSize: 12, color: 'var(--color-charcoal-navy)' }}>
-            <Calendar size={12} color="var(--color-sage)" />{year}
+      <div className="flex items-center justify-between pt-3.5 mt-4 border-t border-[#0A4A8F]/10 flex-wrap gap-2">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1 text-xs text-[#1F2937] font-mono">
+            <Calendar size={12} className="text-[#FFB703]" />
+            {year}
           </span>
           {paper.citations !== undefined && (
-            <span className="flex items-center gap-1" style={{ fontSize: 12, color: 'var(--color-slate-body)' }}>
-              <Quote size={12} color="var(--color-mint-mist)" />{paper.citations} Citations
+            <span className="flex items-center gap-1 text-xs text-[#6B7280] font-mono">
+              <Quote size={12} className="text-[#0A4A8F]" />
+              {paper.citations} Citations
             </span>
           )}
         </div>
@@ -132,13 +109,13 @@ function PaperCard({ paper }: PaperCardProps) {
             href={paper.doi}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost"
-            style={{ fontSize: 12, padding: '6px 14px' }}
+            className="btn-ghost inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border border-[#0A4A8F]/20 hover:border-[#0A4A8F] hover:bg-[#EEF3FA] transition-all"
           >
-            View <ExternalLink size={11} />
+            <span>View</span>
+            <ExternalLink size={11} />
           </a>
         ) : (
-          <span style={{ fontSize: 11, color: 'var(--color-mint-mist)' }}>ID: {paper.id}</span>
+          <span className="text-xs text-[#9CA3AF] font-mono">ID: {paper.id}</span>
         )}
       </div>
     </div>

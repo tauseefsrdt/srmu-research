@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   BookOpen,
@@ -7,6 +7,7 @@ import {
   Search,
   Menu,
   X,
+  Sparkles,
 } from "lucide-react";
 
 interface NavbarProps {
@@ -15,31 +16,53 @@ interface NavbarProps {
 
 function Navbar({ onSearchToggle }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   const navLinks = [
-    // { name: 'Home', path: '/' },
     { name: "Research Publications", path: "/research", icon: Bookmark },
     { name: "Patents", path: "/patents", icon: FileText },
     { name: "Books & Chapters", path: "/books", icon: BookOpen },
-    // { name: "Departments", path: "/departments", icon: Building2 },
     { name: "About", path: "/about" },
   ];
 
-  
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path;
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Keyboard shortcut for search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        onSearchToggle?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onSearchToggle]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
-    <nav className="site-nav">
+    <nav className={`site-nav${scrolled ? " scrolled" : ""}`}>
       <div className="nav-inner">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 no-underline group">
-          <div className="logo-mark ">
-            <img src="Images\IMG-20210904-WA0042.jpg" alt="SRMU Research and Consultancy" />
+        <Link to="/" className="flex items-center gap-3 no-underline group">
+          <div className="logo-mark">
+            <img src="Images/IMG-20210904-WA0042.jpg" alt="SRMU Research and Consultancy" />
           </div>
           <div>
             <div className="logo-type">
-              SRMU Research <br />& Consultancy.
+              SRMU Research <br />
+              <span style={{ color: 'var(--color-deep-teal)', fontWeight: 600 }}>&amp; Consultancy</span>
             </div>
           </div>
         </Link>
@@ -63,18 +86,36 @@ function Navbar({ onSearchToggle }: NavbarProps) {
         {/* Actions */}
         <div className="desktop-actions">
           {onSearchToggle && (
-            <button onClick={onSearchToggle} className="nav-search">
-              <Search size={14} color="var(--color-deep-teal)" />
+            <button 
+              onClick={onSearchToggle} 
+              className="nav-search"
+              aria-label="Search research archive"
+            >
+              <Search size={14} color="currentColor" />
               <span>Search…</span>
+              <kbd style={{
+                fontSize: 10,
+                fontFamily: 'var(--font-mono)',
+                padding: '2px 5px',
+                borderRadius: 4,
+                background: 'rgba(10, 74, 143, 0.08)',
+                color: 'var(--color-deep-teal)',
+                border: '1px solid rgba(10, 74, 143, 0.14)',
+                marginLeft: 4,
+              }}>⌘K</kbd>
             </button>
           )}
           <Link to="/research" className="btn-primary nav-cta">
-            Explore research
+            <span>Explore research</span>
           </Link>
         </div>
 
         {/* Mobile toggle */}
-        <button className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
+        <button 
+          className="mobile-toggle" 
+          onClick={() => setIsOpen(!isOpen)} 
+          aria-label="Toggle menu"
+        >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
@@ -82,6 +123,26 @@ function Navbar({ onSearchToggle }: NavbarProps) {
       {/* Mobile menu */}
       {isOpen && (
         <div className="mobile-menu">
+          {onSearchToggle && (
+            <button 
+              onClick={() => { setIsOpen(false); onSearchToggle(); }} 
+              className="nav-search"
+              style={{ width: '100%', marginBottom: 12, justifyContent: 'space-between' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Search size={14} color="currentColor" />
+                <span>Search archive…</span>
+              </div>
+              <kbd style={{
+                fontSize: 10,
+                fontFamily: 'var(--font-mono)',
+                padding: '2px 6px',
+                borderRadius: 4,
+                background: 'rgba(10, 74, 143, 0.08)',
+              }}>⌘K</kbd>
+            </button>
+          )}
+
           {navLinks.map((link) => {
             const active = isActive(link.path);
             return (
@@ -95,6 +156,16 @@ function Navbar({ onSearchToggle }: NavbarProps) {
               </Link>
             );
           })}
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--color-card-mint)' }}>
+            <Link
+              to="/research"
+              onClick={() => setIsOpen(false)}
+              className="btn-primary"
+              style={{ display: 'flex', justifyContent: 'center', fontSize: 14 }}
+            >
+              Explore research
+            </Link>
+          </div>
         </div>
       )}
     </nav>
@@ -102,3 +173,4 @@ function Navbar({ onSearchToggle }: NavbarProps) {
 }
 
 export default Navbar;
+
