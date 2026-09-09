@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, Search, RefreshCw, Loader2 } from 'lucide-react';
 import { gsap } from 'gsap';
 import BookCard from '../components/BookCard';
+import Pagination from '../components/Pagination';
 import { getBooks } from '../data/researchService';
 import { Book } from '../types';
 
@@ -10,6 +11,8 @@ function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 9;
 
   // Filters
   const [search, setSearch] = useState('');
@@ -54,7 +57,18 @@ function BooksPage() {
     setSelectedYear('');
   };
 
-  const hasFilters = search || selectedYear;
+  const hasFilters = Boolean(search || selectedYear);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedYear]);
+
+  const totalPages = Math.ceil(books.length / ITEMS_PER_PAGE);
+  const currentBooks = books.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div ref={pageRef} className="archive-page home-width py-8 sm:py-12">
@@ -139,11 +153,21 @@ function BooksPage() {
           <p className="text-xs text-[#6B7280] mt-1">Try searching for other keywords or resetting filters</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {books.map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentBooks.map((book) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={books.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
+        </>
       )}
 
     </div>

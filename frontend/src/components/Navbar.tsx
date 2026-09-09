@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 
 interface NavbarProps {
@@ -105,8 +106,9 @@ function Navbar({ onSearchToggle }: NavbarProps) {
               }}>⌘K</kbd>
             </button>
           )}
-          <Link to="/research" className="btn-primary nav-cta">
+          <Link to="/research" className="btn-primary nav-cta inline-flex items-center gap-1.5 group">
             <span>Explore research</span>
+            <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
 

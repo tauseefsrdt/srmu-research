@@ -88,9 +88,7 @@ function Footer() {
           <span className="text-white/65">
             © {new Date().getFullYear()} SRMU Research Portal. All rights reserved.
           </span>
-          <span className="text-[#FFB703] tracking-wide text-right leading-relaxed font-mono">
-            Conceptualized by Prof. (Dr.) Alkesh Agrawal <br /> developed by Mr. Mohit (B.Tech. EC-IV Yr)
-          </span>
+
         </div>
       </div>
     </footer>

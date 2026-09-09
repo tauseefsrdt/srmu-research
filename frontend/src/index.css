@@ -1636,17 +1636,14 @@ select:focus {
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 24px;
   align-items: stretch;
-  grid-auto-rows: 575px;
 }
 
 .archive-card {
-  height: 575px;
   min-height: 0;
   min-width: 0;
   box-sizing: border-box;
-  padding: 24px;
   color: var(--color-charcoal-navy);
   background: #fff;
   border: 1px solid rgba(10, 74, 143, .08);
@@ -2045,9 +2042,9 @@ select:focus {
 }
 
 .research-card-abstract {
-  min-height: 76px;
-  margin: 18px 0 0;
-  padding: 14px;
+  min-height: auto;
+  margin: 12px 0 0;
+  padding: 12px 14px;
   overflow: hidden;
   color: var(--color-slate);
   background: var(--color-paper-white);
@@ -2058,7 +2055,6 @@ select:focus {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  flex: 1;
 }
 
 .research-card-footer {
@@ -2087,7 +2083,7 @@ select:focus {
 
 /* ── Archive grid global rows ─────────────────────────── */
 .research-card-grid {
-  grid-auto-rows: 575px;
+  grid-auto-rows: auto;
 }
 
 @media (max-width: 800px) {

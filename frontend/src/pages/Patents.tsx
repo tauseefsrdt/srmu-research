@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { FileText, Search, RefreshCw, Loader2, X, Award } from 'lucide-react';
 import { gsap } from 'gsap';
 import PaperCard from '../components/patentsCard';
+import Pagination from '../components/Pagination';
 import { getPatents, getDepartments } from '../data/researchService';
 import { Patent, Department } from '../types';
 
@@ -14,6 +15,8 @@ function PapersPage() {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 9;
 
   // Filters — always read live from URL
   const search = searchParams.get('search') || '';
@@ -76,6 +79,17 @@ function PapersPage() {
   }, []);
 
   const hasFilters = search || selectedDept !== 'All' || selectedYear;
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedDept, selectedYear]);
+
+  const totalPages = Math.ceil(papers.length / ITEMS_PER_PAGE);
+  const currentPapers = papers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div ref={pageRef} className="archive-page home-width py-8 sm:py-12">
@@ -171,7 +185,7 @@ function PapersPage() {
       <div className="flex items-center justify-between mb-5 px-1">
         <div className="results-count-badge">
           <strong>{count}</strong>
-          research publications
+          patents
           {hasFilters && <span className="text-[#6B7280] ml-1 font-normal">(filtered)</span>}
         </div>
         {loading && <Loader2 className="loader-on-theme animate-spin w-4 h-4 text-[#0A4A8F]" />}
@@ -199,11 +213,21 @@ function PapersPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {papers.map((paper) => (
-            <PaperCard key={paper.id} paper={paper} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentPapers.map((paper) => (
+              <PaperCard key={paper.id} paper={paper} />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={papers.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
+        </>
       )}
 
     </div>

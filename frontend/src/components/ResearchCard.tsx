@@ -1,76 +1,85 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bookmark, Calendar, User, Building, ExternalLink, Loader2, Award } from 'lucide-react';
 import { ResearchPaper } from '../types';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
+import Pagination from './Pagination';
 
 interface PublicationCardProps {
   paper: ResearchPaper;
 }
 
 function PublicationCard({ paper }: PublicationCardProps) {
+  const isISSN = paper.abstract && paper.abstract.trim().length <= 25 && !paper.abstract.includes(' ');
+
   return (
-    <article className="card-mint research-card p-6 flex flex-col justify-between h-full rounded-2xl bg-white/90 border border-[#0A4A8F]/15 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-      <div className="flex-1 flex flex-col">
-        <div className="research-card-label mb-3">
-          <span
-            className="eyebrow"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '4px 10px',
-              background: 'rgba(10,74,143,.08)',
-              border: '1px solid rgba(10,74,143,.14)',
-              borderRadius: 100,
-              fontSize: 11,
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
-              color: 'var(--color-deep-teal)',
-            }}
-          >
+    <article className="group relative p-6 sm:p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between h-full overflow-hidden">
+      {/* Top Accent Strip on Hover */}
+      <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+      <div>
+        {/* Eyebrow / Department and Badges */}
+        <div className="flex items-center justify-between gap-2 mb-3.5 flex-wrap">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-1 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
             ● {paper.departmentKey || 'RESEARCH'}
+          </span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200">
+            SCOPUS / WOS
           </span>
         </div>
 
-        <h3 className="font-serif text-lg font-medium text-[#1F2937] leading-snug mb-3 group-hover:text-[#0A4A8F] transition-colors">
+        {/* Paper Title */}
+        <h3 className="font-serif text-[17px] sm:text-[18px] font-bold text-[#0F172A] leading-snug mb-3 group-hover:text-[#0A4A8F] transition-colors line-clamp-3">
           {paper.title || 'Untitled research publication'}
         </h3>
 
-        <div className="research-card-detail flex items-center gap-2 text-xs text-[#6B7280] mb-2 font-mono">
-          <User size={13} className="text-[#FFB703] shrink-0" />
-          <span className="line-clamp-1">{paper.authors || 'Author not available'}</span>
+        {/* Authors */}
+        <div className="flex items-start gap-2 text-xs text-slate-600 mb-2 font-mono">
+          <User size={14} className="text-[#FFB703] mt-0.5 shrink-0" />
+          <span className="line-clamp-2">
+            {Array.isArray(paper.authors) ? paper.authors.join(', ') : paper.authors || 'Author not available'}
+          </span>
         </div>
 
+        {/* Journal */}
         {paper.journal && (
-          <div className="research-card-detail research-card-journal flex items-center gap-2 text-xs text-[#4B5563] mb-3 italic">
-            <Building size={13} className="text-[#0A4A8F] shrink-0" />
+          <div className="flex items-start gap-2 text-xs text-slate-500 italic mb-3.5">
+            <Building size={14} className="text-[#0A4A8F] mt-0.5 shrink-0" />
             <span className="line-clamp-1">{paper.journal}</span>
           </div>
         )}
 
-        <p className="research-card-abstract text-xs text-[#6B7280] leading-relaxed line-clamp-3 p-3 rounded-xl bg-[#F8FAFC] border border-[#0A4A8F]/08 mb-4">
-          {paper.abstract || 'Publication details unavailable'}
-        </p>
+        {/* ISSN / Identifier or Abstract Box */}
+        {paper.abstract && (
+          <div className="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 mb-4 flex items-center justify-between gap-3">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              {isISSN ? 'ISSN / Ref' : 'Abstract'}
+            </span>
+            <span className="font-mono text-xs font-bold text-[#0A4A8F] px-2.5 py-0.5 rounded-md bg-white border border-slate-200 shadow-2xs">
+              {paper.abstract}
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="research-card-footer pt-3 border-t border-[#0A4A8F]/10 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-xs text-[#4B5563] font-mono">
+      {/* Footer */}
+      <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between">
+        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-slate-600 px-3 py-1 rounded-full bg-slate-100/80 border border-slate-200/60">
           <Calendar size={13} className="text-[#FFB703]" />
-          {paper.year || 'Year unavailable'}
+          {paper.year || 'Year N/A'}
         </span>
         {paper.doi ? (
           <Link
             to={`${paper.doi}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-[#0A4A8F]/20 hover:border-[#0A4A8F] hover:bg-[#EEF3FA] transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-sm hover:shadow hover:-translate-y-0.5"
           >
             <span>View</span>
             <ExternalLink size={12} />
           </Link>
         ) : (
-          <span className="text-xs text-[#9CA3AF] font-mono">ID: {paper.id}</span>
+          <span className="font-mono text-xs text-slate-400">ID: {paper.id}</span>
         )}
       </div>
     </article>
@@ -85,25 +94,38 @@ interface ResearchCardProps {
 
 function ResearchCard({ papers, count, loading }: ResearchCardProps) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 9;
+
+  // Reset page when papers change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [papers.length]);
+
+  const totalPages = Math.ceil(papers.length / ITEMS_PER_PAGE);
+  const currentPapers = papers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   useEffect(() => {
-    if (loading || !gridRef.current || papers.length === 0) return;
+    if (loading || !gridRef.current || currentPapers.length === 0) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
       gsap.from('.research-card-item', {
-        y: 30,
+        y: 25,
         opacity: 0,
-        duration: 0.5,
-        stagger: 0.05,
+        duration: 0.45,
+        stagger: 0.04,
         ease: 'power2.out',
       });
     }, gridRef);
 
     return () => ctx.revert();
-  }, [loading, papers]);
+  }, [loading, currentPage]);
 
   return (
     <>
@@ -127,13 +149,23 @@ function ResearchCard({ papers, count, loading }: ResearchCardProps) {
           <p className="text-xs text-[#6B7280] mt-1">Try refining your search terms or faculty filter</p>
         </div>
       ) : (
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 research-card-grid">
-          {papers.map((paper) => (
-            <div key={paper.id} className="research-card-item">
-              <PublicationCard paper={paper} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 research-card-grid">
+            {currentPapers.map((paper) => (
+              <div key={paper.id} className="research-card-item">
+                <PublicationCard paper={paper} />
+              </div>
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={papers.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
+        </>
       )}
     </>
   );

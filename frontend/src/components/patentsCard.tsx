@@ -15,110 +15,78 @@ function PaperCard({ paper }: PaperCardProps) {
   const details = isPatent ? paper.title : paper.abstract;
 
   return (
-    <div className="card-mint flex flex-col justify-between h-full p-6 rounded-2xl bg-white/90 border border-[#0A4A8F]/15 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-      {/* Top */}
+    <article className="group relative p-6 sm:p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between h-full overflow-hidden">
+      {/* Top Accent Strip on Hover */}
+      <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
       <div>
-        {/* Eyebrow & featured */}
+        {/* Eyebrow & Badges */}
         <div className="flex items-center justify-between gap-2 mb-3.5 flex-wrap">
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              fontFamily: 'var(--font-mono)',
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              color: 'var(--color-deep-teal)',
-              padding: '4px 10px',
-              background: 'rgba(10,74,143,.08)',
-              border: '1px solid rgba(10,74,143,.14)',
-              borderRadius: 100,
-            }}
-          >
-            ● {isPatent ? 'PATENT' : paper.departmentKey?.slice(0, 28) || 'RESEARCH'}
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-1 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
+            ● {isPatent ? 'PATENT' : paper.departmentKey || 'RESEARCH'}
           </span>
           {paper.featured && (
-            <span className="patent-featured-badge">
+            <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#FFB703] px-2.5 py-0.5 rounded-full bg-[#FFF8E7] border border-[#FFB703]/30">
               <Award size={11} /> FEATURED
             </span>
           )}
         </div>
 
-        {isPatent && (
-          <div className="flex items-start gap-2 mb-2.5">
-            <User size={14} className="text-[#FFB703] mt-0.5 shrink-0" />
-            <p className="font-serif text-lg font-bold text-[#111827] leading-tight m-0 line-clamp-2">
-              {authors}
-            </p>
-          </div>
-        )}
-
         {/* Title */}
-        <h3 className="font-serif font-medium text-lg text-[#1F2937] leading-snug mb-3 mt-0 line-clamp-3 group-hover:text-[#0A4A8F] transition-colors">
-          {isPatent && (
-            <span className="block font-mono text-xs font-semibold mb-1 text-[#0A4A8F]">
-              {paper.patentNumber}
-            </span>
-          )}
-          {!isPatent && paper.title}
+        <h3 className="font-serif text-[17px] sm:text-[18px] font-bold text-[#0F172A] leading-snug mb-3 group-hover:text-[#0A4A8F] transition-colors line-clamp-3">
+          {isPatent ? details : paper.title}
         </h3>
 
-        {/* Authors */}
-        {!isPatent && (
-          <div className="flex items-start gap-2 mb-2 font-mono text-xs text-[#6B7280]">
-            <User size={13} className="text-[#FFB703] mt-0.5 shrink-0" />
-            <p className="m-0 line-clamp-2">
-              {Array.isArray(authors) ? authors.join(', ') : authors}
-            </p>
+        {/* Authors / Patenter */}
+        <div className="flex items-start gap-2 text-xs text-slate-600 mb-2.5 font-mono">
+          <User size={14} className="text-[#FFB703] mt-0.5 shrink-0" />
+          <span className="line-clamp-2">
+            <strong className="text-slate-700 font-semibold">{isPatent ? 'Inventor(s): ' : 'Author(s): '}</strong>
+            {Array.isArray(authors) ? authors.join(', ') : authors || 'N/A'}
+          </span>
+        </div>
+
+        {/* Patent Number Box */}
+        {isPatent && paper.patentNumber && (
+          <div className="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/70 mb-4 flex items-center justify-between gap-3">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Patent No.
+            </span>
+            <span className="font-mono text-xs font-bold text-[#0A4A8F] px-2.5 py-0.5 rounded-md bg-white border border-slate-200 shadow-2xs">
+              {paper.patentNumber}
+            </span>
           </div>
         )}
 
-        {/* Journal */}
         {!isPatent && paper.journal && (
-          <div className="flex items-start gap-2 mb-3 text-xs text-[#4B5563] italic">
-            <Building size={13} className="text-[#0A4A8F] mt-0.5 shrink-0" />
-            <p className="m-0 line-clamp-1">{paper.journal}</p>
+          <div className="flex items-start gap-2 text-xs text-slate-500 italic mb-3.5">
+            <Building size={14} className="text-[#0A4A8F] mt-0.5 shrink-0" />
+            <span className="line-clamp-1">{paper.journal}</span>
           </div>
         )}
-
-        {/* Abstract */}
-        <p className="text-xs text-[#6B7280] leading-relaxed m-0 p-3 rounded-xl bg-[#F8FAFC] border border-[#0A4A8F]/08 line-clamp-3">
-          {details}
-        </p>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-3.5 mt-4 border-t border-[#0A4A8F]/10 flex-wrap gap-2">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 text-xs text-[#1F2937] font-mono">
-            <Calendar size={12} className="text-[#FFB703]" />
-            {year}
-          </span>
-          {paper.citations !== undefined && (
-            <span className="flex items-center gap-1 text-xs text-[#6B7280] font-mono">
-              <Quote size={12} className="text-[#0A4A8F]" />
-              {paper.citations} Citations
-            </span>
-          )}
-        </div>
-
+      <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between">
+        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-slate-600 px-3 py-1 rounded-full bg-slate-100/80 border border-slate-200/60">
+          <Calendar size={13} className="text-[#FFB703]" />
+          {year || 'Awarded'}
+        </span>
         {paper.doi ? (
           <a
             href={paper.doi}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border border-[#0A4A8F]/20 hover:border-[#0A4A8F] hover:bg-[#EEF3FA] transition-all"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-sm hover:shadow hover:-translate-y-0.5"
           >
             <span>View</span>
-            <ExternalLink size={11} />
+            <ExternalLink size={12} />
           </a>
         ) : (
-          <span className="text-xs text-[#9CA3AF] font-mono">ID: {paper.id}</span>
+          <span className="font-mono text-xs text-slate-400">ID: {paper.id}</span>
         )}
       </div>
-    </div>
+    </article>
   );
 }
 
