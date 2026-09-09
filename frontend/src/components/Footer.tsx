@@ -1,93 +1,154 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { GraduationCap, ArrowUpRight } from 'lucide-react';
+import { GraduationCap, ArrowRight, BookOpen, FileText, Bookmark, Info, Sparkles } from 'lucide-react';
 
 function Footer() {
+  const exploreLinks = [
+    { label: 'Research Publications', to: '/research', icon: Bookmark },
+    { label: 'Patents', to: '/patents', icon: FileText },
+    { label: 'Books & Chapters', to: '/books', icon: BookOpen },
+    { label: 'About', to: '/about', icon: Info },
+  ];
+
+  const institutesCol1 = [
+    { code: 'IoT', name: 'Institute of Technology' },
+    { code: 'IBST', name: 'Institute of Biosciences and T...' },
+    { code: 'IMCE', name: 'Institute of Management, Commerce and Economics' },
+    { code: 'ILS', name: 'Institute of Legal Studies' },
+    { code: 'IoP', name: 'Institute of Pharmacy' },
+  ];
+
+  const institutesCol2 = [
+    { code: 'INSH', name: 'Institute of Natural Sciences and Humanities' },
+    { code: 'IER', name: 'Institute of Education and Research' },
+    { code: 'IMS', name: 'Institute of Medical Sciences' },
+    { code: 'IAST', name: 'Institute of Agricultural Sciences and Technology' },
+  ];
+
   return (
-    <footer className="footer1 relative text-white mt-auto overflow-hidden border-t-4 border-[#FFB703]" style={{
-      backgroundImage: "url('https://srmu.ac.in/assets/footer-bg-IZe6NqR3.jpeg')",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-    }}>
-      {/* Deep Navy Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A3C85]/95 via-[#0C2F44]/95 to-[#082233]/98 z-0" />
+    <footer className="relative bg-[#06182E] text-white mt-auto overflow-hidden border-t-2 border-[#FFB703]/80">
+      {/* Subtle Background Glows & Ambience */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#FFB703] to-transparent opacity-60" />
+      <div className="absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-[#0A4A8F]/15 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[#FFB703]/10 blur-[140px] pointer-events-none" />
 
-      <div className="max-w-[1240px] mx-auto px-6 py-14 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+      {/* Subtle Grid Overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
 
-          {/* Brand */}
-          <div className="md:col-span-1 flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#FFB703] flex items-center justify-center shadow-lg shadow-[#FFB703]/25 shrink-0">
-                <GraduationCap size={22} className="text-[#0C2F44]" />
-              </div>
-              <span className="font-serif font-semibold text-xl text-white tracking-tight">
-                SRMU Research
-              </span>
+      <div className="max-w-[1240px] mx-auto px-6 pt-16 pb-12 relative z-10">
+        {/* Main 4-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-12">
+
+          {/* Col 1: Brand & Overview (Span 4) */}
+          <div className="md:col-span-4 flex flex-col justify-between">
+            <div>
+              {/* Brand Logo & Heading */}
+              <Link to="/" className="inline-flex items-center gap-3.5 no-underline group mb-4">
+                <div className="w-12 h-12 rounded-md bg-white border border-white/20 shadow-md p-1 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-200">
+                  <img src="/Images/IMG-20210904-WA0042.jpg" alt="SRMU Emblem" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex flex-col font-sans font-black uppercase tracking-wide leading-[1.1]">
+                  <span className="text-[16px] sm:text-[17px] font-extrabold text-white tracking-wide">
+                    SRMU RESEARCH
+                  </span>
+                  <span className="text-[14px] sm:text-[15px] font-extrabold text-[#FFB703] tracking-wider">
+                    &amp; CONSULTANCY
+                  </span>
+                </div>
+              </Link>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-slate-300/80 leading-relaxed max-w-sm mb-6">
+                Shri Ramswaroop Memorial University Research &amp; Consultancy Cell, showcasing high impact research publications, patents, books and book chapters.
+              </p>
             </div>
-            <p className="text-xs sm:text-sm text-white/80 leading-relaxed m-0">
-              Shri Ramswaroop Memorial University Research &amp; Consultancy Cell, showcasing high impact research publications, patents, books and book chapters.
-            </p>
+
+            {/* University Tag */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 w-fit text-slate-400 text-xs font-mono">
+              <span className="w-2 h-2 rounded-full bg-[#FFB703] animate-pulse" />
+              <span>Academic Research Portal</span>
+            </div>
           </div>
 
-          {/* Explore */}
-          <div className="flex flex-col gap-4">
-            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
-              Explore
+          {/* Col 2: Explore Links (Span 2) */}
+          <div className="md:col-span-2 flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-3.5 bg-[#FFB703] rounded-full" />
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FFB703] m-0">
+                Explore
+              </h4>
             </div>
+
             <div className="flex flex-col gap-2.5">
-              {[
-                { label: 'Research Publications', to: '/research' },
-                { label: 'Patents', to: '/patents' },
-                { label: 'Books & Chapters', to: '/books' },
-                { label: 'About', to: '/about' },
-              ].map((l) => (
+              {exploreLinks.map((link) => (
                 <Link
-                  key={l.to}
-                  to={l.to}
-                  className="text-sm text-white/75 hover:text-white hover:translate-x-1 transition-all duration-200 inline-flex items-center gap-1.5"
+                  key={link.to}
+                  to={link.to}
+                  className="text-xs sm:text-sm text-slate-300 hover:text-[#FFB703] hover:translate-x-1.5 transition-all duration-200 inline-flex items-center gap-2 py-0.5 group"
                 >
-                  <span>{l.label}</span>
+                  <ArrowRight size={12} className="text-[#FFB703]/70 group-hover:text-[#FFB703] transition-colors" />
+                  <span>{link.label}</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Institutes col 1 */}
-          <div className="flex flex-col gap-4">
-            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
-              Institutes
+          {/* Col 3: Institutes Group 1 (Span 3) */}
+          <div className="md:col-span-3 flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-3.5 bg-[#FFB703] rounded-full" />
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FFB703] m-0">
+                Institutes
+              </h4>
             </div>
-            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-white/75">
-              <span>IoT (Institute of Technology)</span>
-              <span>IBST (Institute of Biosciences and T...)</span>
-              <span>IMCE (Institute of Management, Commerce and Economics)</span>
-              <span>ILS (Institute of Legal Studies)</span>
-              <span>IoP (Institute of Pharmacy)</span>
+
+            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-slate-300/80">
+              {institutesCol1.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-2 group cursor-default">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB703]/50 mt-1.5 shrink-0 group-hover:bg-[#FFB703] transition-colors" />
+                  <span className="group-hover:text-white transition-colors leading-relaxed">
+                    <strong className="text-slate-200 font-semibold">{item.code}</strong> ({item.name})
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Institutes col 2 */}
-          <div className="flex flex-col gap-4">
-            <div className="font-mono text-xs uppercase tracking-widest text-[#FFB703] font-semibold">
-              Institutes
+          {/* Col 4: Institutes Group 2 (Span 3) */}
+          <div className="md:col-span-3 flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-3.5 bg-[#FFB703] rounded-full" />
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FFB703] m-0">
+                Institutes
+              </h4>
             </div>
-            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-white/75">
-              <span>INSH (Institute of Natural Sciences and Humanities)</span>
-              <span>IER (Institute of Education and Research)</span>
-              <span>IMS (Institute of Medical Sciences)</span>
-              <span>IAST (Institute of Agricultural Sciences and Technology)</span>
+
+            <div className="flex flex-col gap-2.5 text-xs sm:text-sm text-slate-300/80">
+              {institutesCol2.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-2 group cursor-default">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB703]/50 mt-1.5 shrink-0 group-hover:bg-[#FFB703] transition-colors" />
+                  <span className="group-hover:text-white transition-colors leading-relaxed">
+                    <strong className="text-slate-200 font-semibold">{item.code}</strong> ({item.name})
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-white/15 pt-6 flex flex-wrap justify-between items-center gap-4 text-xs">
-          <span className="text-white/65">
-            © {new Date().getFullYear()} SRMU Research Portal. All rights reserved.
+        {/* Bottom Bar: Copyright & Credits */}
+        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+          <span className="text-slate-400 font-mono">
+            &copy; {new Date().getFullYear()} SRMU Research Portal. All rights reserved.
           </span>
+
 
         </div>
       </div>

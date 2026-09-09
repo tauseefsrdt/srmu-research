@@ -56,15 +56,17 @@ function Navbar({ onSearchToggle }: NavbarProps) {
     <nav className={`site-nav${scrolled ? " scrolled" : ""}`}>
       <div className="nav-inner">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 no-underline group">
-          <div className="logo-mark">
-            <img src="Images/IMG-20210904-WA0042.jpg" alt="SRMU Research and Consultancy" />
+        <Link to="/" className="flex items-center gap-3 no-underline group shrink-0">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-md border border-slate-200/90 shadow-sm p-1 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-200">
+            <img src="/Images/IMG-20210904-WA0042.jpg" alt="SRMU Emblem" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <div className="logo-type">
-              SRMU Research <br />
-              <span style={{ color: 'var(--color-deep-teal)', fontWeight: 600 }}>&amp; Consultancy</span>
-            </div>
+          <div className="flex flex-col font-sans font-black uppercase text-[#0B2545] tracking-wide leading-[1.1]">
+            <span className="text-[14px] sm:text-[15px] font-extrabold tracking-wide group-hover:text-[#0A4A8F] transition-colors">
+              SRMU RESEARCH
+            </span>
+            <span className="text-[13px] sm:text-[14px] font-extrabold tracking-wider text-[#0A4A8F]">
+              &amp; CONSULTANCY
+            </span>
           </div>
         </Link>
 
