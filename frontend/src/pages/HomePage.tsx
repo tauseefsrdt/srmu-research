@@ -2,13 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  Search,
   FileText,
   Lightbulb,
   BookOpen,
   Users,
-  GraduationCap,
-  Sparkles,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -29,6 +26,45 @@ const sliderItems = [
     image: "Images/J2.png",
     title: "Biosciences",
     caption: "Research papers.",
+  },
+];
+
+const patronsList = [
+  {
+    name: "Er. Pankaj Agarwal",
+    role: "CHANCELLOR",
+    image: "Images/pankaj-DsE5rnwQ.webp",
+    highlight: true,
+  },
+  {
+    name: "Er. Pooja Agarwal",
+    role: "PRO CHANCELLOR",
+    image: "Images/pooja_Agrawal.png",
+    highlight: true,
+  },
+  {
+    name: "Prof. (Dr.) Vijay Tiwari",
+    role: "VICE CHANCELLOR",
+    image: "Images/vijaytiwari-DtLhXa4L.webp",
+    highlight: false,
+  },
+];
+
+const coPatronsList = [
+  {
+    name: "Prof. (Dr.) Hemendra Sharma",
+    role: "REGISTRAR",
+    image: "Images/Hemendra-NSaxOOgS.webp",
+  },
+  {
+    name: "Prof. (Dr.) Nabeel Ahmad",
+    role: "DIRECTOR (RESEARCH)",
+    image: "Images/Nabeel-Ahmad.jpeg",
+  },
+  {
+    name: "Prof. (Dr.) Alkesh Agrawal",
+    role: "DEPUTY DIRECTOR (RESEARCH)",
+    image: "Images/Alkesh_Agrawal.webp",
   },
 ];
 
@@ -349,89 +385,79 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           />
         </div>
 
-        {/* Right Top Motto Badge */}
-        <div className="hidden lg:flex absolute top-2 right-6 flex-col items-end pointer-events-none select-none z-10">
-          <span className="font-serif italic text-lg lg:text-xl text-[#0A4A8F] font-bold tracking-tight">
-            Research
-          </span>
-          <span className="font-serif italic text-lg lg:text-xl text-[#FFB703] font-bold tracking-tight">
-            For A Brighter
-          </span>
-          <span className="font-serif italic text-lg lg:text-xl text-[#0A4A8F] font-bold tracking-tight">
-            Tomorrow
-          </span>
-        </div>
 
-        {/* Left Faint Watermark Callout */}
-        <div className="hidden xl:block absolute -left-16 top-40 font-serif italic text-slate-300 text-base leading-relaxed select-none pointer-events-none z-0">
-          Ideas<br />
-          Research<br />
-          People<br />
-          Change
-        </div>
 
-        {/* Right Faint Watermark Callout */}
-        <div className="hidden xl:block absolute -right-16 bottom-8 font-mono text-[10px] uppercase tracking-widest text-slate-300 select-none pointer-events-none text-right z-0">
-          INNOVATION<br />
-          COLLABORATION<br />
-          IMPACT
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Left Column: Hero Copy & Message Card */}
+          <div className="lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 md:p-9 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-message-reveal">
+            <div>
+              {/* Eyebrow badge */}
+              <div className="hero-badge-reveal inline-flex items-center gap-2 mb-3">
+                <span className="w-5 h-[2px] bg-[#FFB703]" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+                  MESSAGE
+                </span>
+              </div>
 
-          {/* Left Column: Hero Copy & Message */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
+              {/* Title */}
+              <h1 className="hero-title-reveal font-serif text-3xl sm:text-4xl lg:text-[2.65rem] font-bold tracking-tight text-[#0F172A] leading-[1.16] mb-5">
+                The Research and <br />
+                Consultancy Cell <span className="text-[#0A4A8F]">(R&amp;C)</span>
+              </h1>
 
-            {/* Eyebrow badge */}
-            <div className="hero-badge-reveal inline-flex items-center gap-2 mb-3">
-              <span className="w-5 h-[2px] bg-[#FFB703]" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
-                MESSAGE
-              </span>
+              {/* Message Content */}
+              <div className="space-y-4 text-slate-600 text-[14.5px] sm:text-[15px] leading-relaxed">
+                <p>
+                  At Shri Ramswaroop Memorial University (SRMU) Barabanki, we believe that research
+                  and innovation are fundamental drivers of academic excellence, technological
+                  advancement, and societal progress. Our commitment is to cultivate a dynamic research
+                  ecosystem that empowers students, faculty members, and research scholars to transform
+                  ideas into impactful solutions.
+                </p>
+                <p>
+                  The University has established state-of-the-art research and innovation facilities, including
+                  the AI Center of Excellence, Virtual Instrumentation Laboratory, Cadence Design
+                  Laboratory, PCB design Lab, Centre of Excellence (EV Lab), and the Innovation &amp;
+                  Incubation Hub, which provide a robust platform for experimentation, product development,
+                  entrepreneurship, and interdisciplinary research.
+                </p>
+              </div>
             </div>
 
-            {/* Title */}
-            <h1 className="hero-title-reveal font-serif text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight text-[#0F172A] leading-[1.12] mb-5">
-              The Research and <br />
-              Consultancy Cell <br />
-              <span className="text-[#0A4A8F]">
-                (R&amp;C)
+            {/* Bottom Action Area */}
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-medium text-sm transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer hover:-translate-y-0.5"
+              >
+                <span>VIEW MORE</span>
+                <ArrowRight size={14} />
+              </button>
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 hidden sm:inline-block">
+                SRMU Research Cell
               </span>
-            </h1>
-
-            {/* Message Box */}
-            <div className="hero-message-reveal w-full p-6 sm:p-7 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm mb-5">
-              <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed m-0 mb-4">
-                At Shri Ramswaroop Memorial University (SRMU) Barabanki, we believe that research
-                and innovation are fundamental drivers of academic excellence, technological
-                advancement, and societal progress. Our commitment is to cultivate a dynamic research
-                ecosystem that empowers students, faculty members, and research scholars to transform
-                ideas into impactful solutions.
-              </p>
-              <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed m-0">
-                The University has established state-of-the-art research and innovation facilities, including
-                the AI Center of Excellence, Virtual Instrumentation Laboratory, Cadence Design
-                Laboratory, PCB design Lab, Centre of Excellence (EV Lab), and the Innovation &amp;
-                Incubation Hub, which provide a robust platform for experimentation, product development,
-                entrepreneurship, and interdisciplinary research.
-              </p>
             </div>
-
-            {/* Solid Navy Pill Button */}
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="hero-badge-reveal inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-medium text-sm transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer hover:-translate-y-0.5"
-            >
-              <span>VIEW MORE</span>
-              <ArrowRight size={14} />
-            </button>
           </div>
 
-          {/* Right Column: Morph Slider in white frame */}
-          <div className="lg:col-span-5 hero-slider-reveal flex flex-col items-center justify-start w-full lg:pt-4">
-            <div className="w-full max-w-[500px] rounded-3xl overflow-hidden shadow-2xl border border-white bg-white p-3 backdrop-blur-xl relative">
-              <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden relative shadow-inner bg-zinc-900">
+          {/* Right Column: Morph Slider Card */}
+          <div className="lg:col-span-5 flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-slider-reveal">
+            <div>
+              {/* Eyebrow badge */}
+              <div className="inline-flex items-center gap-2 mb-3">
+                <span className="w-5 h-[2px] bg-[#FFB703]" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+                  HIGHLIGHTS
+                </span>
+              </div>
+
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A] leading-snug mb-5">
+                Research Environment &amp; <span className="text-[#0A4A8F]">Facilities</span>
+              </h2>
+
+              {/* Slider in framed container */}
+              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative shadow-inner bg-zinc-900 border border-slate-200/60">
                 <MorphSlider
                   items={sliderItems}
                   transition="melt"
@@ -445,21 +471,27 @@ function HomePage({ onSearchOpen }: HomePageProps) {
                   scale={2.3}
                   autoplayDelay={4}
                   loop
-                  radius={18}
+                  radius={16}
                   fit="cover"
                   showCaptions
                   showControls
                   showIndicators
                 />
               </div>
+            </div>
 
-              {/* Slider Pagination Indicator Mockup */}
-              <div className="pt-3 pb-1 flex items-center justify-center gap-1.5">
-                <span className="w-6 h-1 rounded-full bg-[#FFB703]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-              </div>
+            {/* Slider Bottom Action Area */}
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+              <span className="font-mono text-xs font-bold text-[#0A4A8F] uppercase tracking-wider">
+                Explore Innovations
+              </span>
+              <Link
+                to="/research"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#0A4A8F] transition-colors"
+              >
+                <span>All Research</span>
+                <ArrowRight size={13} />
+              </Link>
             </div>
           </div>
 
@@ -533,165 +565,128 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         </div>
       </section>
 
-      {/* ── PATRONS SECTION ──────────────────────────────── */}
-      <section ref={patronsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6 relative">
+      {/* ── PATRONS & LEADERSHIP SECTION ──────────────────────── */}
+      <section ref={patronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8 relative">
 
-        {/* Left Decorative Watermark Callout */}
-        <div className="hidden xl:block absolute -left-16 top-16 text-left select-none pointer-events-none">
-          <GraduationCap className="w-8 h-8 text-slate-300 mb-2" />
-          <p className="font-serif italic text-slate-400 text-sm leading-snug">
-            Knowledge<br />
-            Today<br />
-            A Better<br />
-            Tomorrow
-          </p>
-          <div className="w-6 h-[2px] bg-[#FFB703] mt-2" />
-        </div>
-
-        {/* Right Decorative Watermark Callout */}
-        <div className="hidden xl:block absolute -right-16 top-20 text-right select-none pointer-events-none">
-          <p className="font-serif text-slate-400 text-sm leading-snug">
-            Research<br />
-            Transforms<br />
-            Possibilities<br />
-            into Progress
-          </p>
-          <div className="w-6 h-[2px] bg-[#FFB703] mt-2 ml-auto" />
-        </div>
-
-        {/* Centered Heading with lines */}
-        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
-          <div className="flex-1 h-[1px] bg-slate-200" />
-          <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#0F172A] tracking-tight">
-            Patrons
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-2 mb-3">
+            <span className="w-5 h-[2px] bg-[#FFB703]" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+              LEADERSHIP &amp; GOVERNANCE
+            </span>
+            <span className="w-5 h-[2px] bg-[#FFB703]" />
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#0F172A] mb-3">
+            University <span className="text-[#0A4A8F]">Patrons</span>
           </h2>
-          <div className="flex-1 h-[1px] bg-slate-200" />
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Distinguished visionary leadership fostering academic excellence, innovation, and global research standards.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
-          {/* Patron 1 */}
-          <div className="patron-card-reveal flex flex-col items-center text-center group">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/pankaj-DsE5rnwQ.webp"
-                alt="Er. Pankaj Agarwal"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
-            </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Er. Pankaj Agarwal
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              CHANCELLOR
-            </p>
-          </div>
+        {/* Patrons Grid (3 Cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
+          {patronsList.map((patron) => (
+            <div
+              key={patron.name}
+              className="patron-card-reveal group relative p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center overflow-hidden"
+            >
+              {/* Top Accent Strip */}
+              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              {/* Background ambient radial glow */}
+              <div className="absolute -top-16 -right-16 w-32 h-32 bg-[#FFB703]/15 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
 
-          {/* Patron 2 */}
-          <div className="patron-card-reveal flex flex-col items-center text-center group">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/pooja_Agrawal.png"
-                alt="Er. Pooja Agarwal"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
-            </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Er. Pooja Agarwal
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              PRO CHANCELLOR
-            </p>
-          </div>
+              {/* Avatar Frame with metallic gradient ring */}
+              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                <img
+                  src={patron.image}
+                  alt={patron.name}
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-white shadow-inner block"
+                />
+              </div>
 
-          {/* Patron 3 */}
-          <div className="patron-card-reveal flex flex-col items-center text-center group sm:col-span-2 md:col-span-1">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/vijaytiwari-DtLhXa4L.webp"
-                alt="Prof. (Dr.) Vijay Tiwari"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
+              {/* Role Pill Badge */}
+              <span
+                className={`inline-block px-3.5 py-1 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-2.5 ${
+                  patron.highlight
+                    ? "bg-[#FFF8E7] text-[#B8860B] border border-[#FFB703]/40"
+                    : "bg-[#0A4A8F]/10 text-[#0A4A8F] border border-[#0A4A8F]/20"
+                }`}
+              >
+                {patron.role}
+              </span>
+
+              {/* Name */}
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1 leading-snug">
+                {patron.name}
+              </h3>
+
+              {/* Subtitle */}
+              <p className="font-mono text-[11px] text-slate-400 uppercase tracking-wider">
+                Shri Ramswaroop Memorial University
+              </p>
             </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Prof. (Dr.) Vijay Tiwari
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              VICE CHANCELLOR
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* ── CO-PATRONS SECTION ───────────────────────────── */}
-      <section ref={coPatronsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 pb-16 relative">
+      {/* ── CO-PATRONS & RESEARCH DIRECTORATE SECTION ─────────── */}
+      <section ref={coPatronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-2 pb-16 relative">
 
-        {/* Right Lower Callout */}
-        <div className="hidden xl:block absolute -right-16 bottom-10 text-right select-none pointer-events-none font-serif italic text-slate-400 text-xs">
-          Discover<br />
-          Innovate<br />
-          Collaborate
-        </div>
-
-        {/* Centered Heading with lines */}
-        <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
-          <div className="flex-1 h-[1px] bg-slate-200" />
-          <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#0F172A] tracking-tight">
-            Co Patrons
+        {/* Section Sub-header */}
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-2 mb-2">
+            <span className="w-4 h-[2px] bg-[#FFB703]" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+              RESEARCH DIRECTORATE
+            </span>
+            <span className="w-4 h-[2px] bg-[#FFB703]" />
+          </div>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
+            Co <span className="text-[#0A4A8F]">Patrons</span>
           </h2>
-          <div className="flex-1 h-[1px] bg-slate-200" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
-          {/* Co Patron 1 */}
-          <div className="copatron-card-reveal flex flex-col items-center text-center group">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/Hemendra-NSaxOOgS.webp"
-                alt="Prof. (Dr.) Hemendra Sharma"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
-            </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Prof. (Dr.) Hemendra Sharma
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              REGISTRAR
-            </p>
-          </div>
+        {/* Co-Patrons Grid (3 Cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+          {coPatronsList.map((coPatron) => (
+            <div
+              key={coPatron.name}
+              className="copatron-card-reveal group relative p-7 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center overflow-hidden"
+            >
+              {/* Top Accent Strip */}
+              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          {/* Co Patron 2 */}
-          <div className="copatron-card-reveal flex flex-col items-center text-center group">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/Nabeel-Ahmad.jpeg"
-                alt="Prof. (Dr.) Nabeel Ahmad"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
-            </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Prof. (Dr.) Nabeel Ahmad
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              DIRECTOR (RESEARCH)
-            </p>
-          </div>
+              {/* Background ambient radial glow */}
+              <div className="absolute -top-16 -right-16 w-32 h-32 bg-[#0A4A8F]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
 
-          {/* Co Patron 3 */}
-          <div className="copatron-card-reveal flex flex-col items-center text-center group sm:col-span-2 md:col-span-1">
-            <div className="relative p-1 rounded-full bg-gradient-to-tr from-[#0A4A8F]/25 via-[#FFB703]/50 to-[#0A4A8F]/25 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-              <img
-                src="Images/Alkesh_Agrawal.webp"
-                alt="Prof. (Dr.) Alkesh Agrawal"
-                className="w-36 h-36 sm:w-40 sm:h-40 rounded-full object-cover border-2 border-white shadow-inner"
-              />
+              {/* Avatar Frame */}
+              <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                <img
+                  src={coPatron.image}
+                  alt={coPatron.name}
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-white shadow-inner block"
+                />
+              </div>
+
+              {/* Role Pill Badge */}
+              <span className="inline-block px-3.5 py-1 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase bg-[#0A4A8F]/10 text-[#0A4A8F] border border-[#0A4A8F]/20 mb-2.5">
+                {coPatron.role}
+              </span>
+
+              {/* Name */}
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A] group-hover:text-[#0A4A8F] transition-colors mb-1 leading-snug">
+                {coPatron.name}
+              </h3>
+
+              {/* Subtitle */}
+              <p className="font-mono text-[11px] text-slate-400 uppercase tracking-wider">
+                Shri Ramswaroop Memorial University
+              </p>
             </div>
-            <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-4 mb-0.5">
-              Prof. (Dr.) Alkesh Agrawal
-            </h3>
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-              DEPUTY DIRECTOR (RESEARCH)
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
