@@ -64,7 +64,7 @@ function Navbar({ onSearchToggle }: NavbarProps) {
         <div className="desktop-actions">
           {onSearchToggle && (
             <button onClick={onSearchToggle} className="nav-search">
-              <Search size={14} color="var(--color-sage)" />
+              <Search size={14} color="var(--color-deep-teal)" />
               <span>Search…</span>
             </button>
           )}

@@ -35,7 +35,7 @@ function PublicationCard({ paper }: PublicationCardProps) {
         </p>
       </div>
 
-      <footer className="research-card-footer">
+      <div className="research-card-footer">
         <span>
           <Calendar />
           {paper.year || 'Year unavailable'}
@@ -47,7 +47,7 @@ function PublicationCard({ paper }: PublicationCardProps) {
         ) : (
           <span>ID: {paper.id}</span>
         )}
-      </footer>
+      </div>
     </article>
   );
 }
