@@ -529,7 +529,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       </section>
 
       {/* ── STATISTICS STRIP (With Animated GSAP Counters) ── */}
-      <section ref={statsRef} className="max-w-[1200px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
+      <section ref={statsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl shadow-xl border border-slate-200/90 relative overflow-hidden">
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#FFB703]/50 to-transparent" />
 
