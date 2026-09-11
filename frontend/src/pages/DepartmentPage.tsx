@@ -14,19 +14,27 @@ import {
   ChevronRight,
   Search,
   Filter,
-  RefreshCw,
+  Award,
+  BookCheck,
+  LayoutGrid,
+  Table as TableIcon,
+  Sparkles,
+  UserCheck,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { getDepartmentById, DEPARTMENTS_LIST, DepartmentInfo } from "../data/departmentData";
+import { ThesisAwarded } from "../data/thesisAwardedData";
 import Pagination from "../components/Pagination";
 
 export default function DepartmentPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<"faculty" | "publications" | "patents" | "books">("faculty");
+  const [activeTab, setActiveTab] = useState<"theses" | "faculty" | "publications" | "patents" | "books">("theses");
+  const [thesisViewMode, setThesisViewMode] = useState<"cards" | "table">("cards");
   const [deptInfo, setDeptInfo] = useState<DepartmentInfo | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedThesisDept, setSelectedThesisDept] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -62,11 +70,41 @@ export default function DepartmentPage() {
   }, [deptInfo]);
 
   // Reset page on tab change
-  const handleTabChange = (tab: "faculty" | "publications" | "patents" | "books") => {
+  const handleTabChange = (tab: "theses" | "faculty" | "publications" | "patents" | "books") => {
     setActiveTab(tab);
     setSearchQuery("");
     setCurrentPage(1);
   };
+
+  // Filtered Theses Awarded
+  const filteredTheses = useMemo(() => {
+    if (!deptInfo) return [];
+    return deptInfo.thesesAwarded.filter((t) => {
+      if (selectedThesisDept !== "All" && t.department !== selectedThesisDept && t.rawFacultyInstitute !== selectedThesisDept) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchTitle = t.title.toLowerCase().includes(q) || t.rawTitle.toLowerCase().includes(q);
+        const matchScholar = t.scholarName.toLowerCase().includes(q) || t.regNo.toLowerCase().includes(q);
+        const matchSup = t.supervisors.toLowerCase().includes(q);
+        const matchDept = t.rawFacultyInstitute.toLowerCase().includes(q) || t.department.toLowerCase().includes(q);
+        const matchDate = t.defenseDate.includes(q);
+        return matchTitle || matchScholar || matchSup || matchDept || matchDate;
+      }
+      return true;
+    });
+  }, [deptInfo, searchQuery, selectedThesisDept]);
+
+  // Unique departments for thesis filter dropdown
+  const thesisDepartments = useMemo(() => {
+    if (!deptInfo) return [];
+    const set = new Set<string>();
+    deptInfo.thesesAwarded.forEach((t) => {
+      if (t.rawFacultyInstitute) set.add(t.rawFacultyInstitute);
+    });
+    return Array.from(set);
+  }, [deptInfo]);
 
   // Filtered Faculty Supervisors
   const filteredFaculty = useMemo(() => {
@@ -126,7 +164,9 @@ export default function DepartmentPage() {
 
   // Current active data list for pagination
   const activeListLength =
-    activeTab === "faculty"
+    activeTab === "theses"
+      ? filteredTheses.length
+      : activeTab === "faculty"
       ? filteredFaculty.length
       : activeTab === "publications"
       ? filteredPublications.length
@@ -135,6 +175,7 @@ export default function DepartmentPage() {
       : filteredBooks.length;
 
   const totalPages = Math.ceil(activeListLength / itemsPerPage);
+  const paginatedTheses = filteredTheses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedFaculty = filteredFaculty.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedPublications = filteredPublications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedPatents = filteredPatents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -257,67 +298,96 @@ export default function DepartmentPage() {
       </div>
 
       {/* ── KPI METRICS CARDS ──────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {/* Ph.D. Seats */}
-        <div className="dept-card-reveal p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 mb-8">
+        {/* Theses Awarded */}
+        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-amber-50/40 backdrop-blur-xl border border-amber-200/80 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-900/80">
+              Theses Awarded
+            </span>
+            <Award className="w-4 h-4 text-amber-600" />
+          </div>
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+            {deptInfo.thesesAwarded.length}
+          </div>
+          <span className="text-[10px] sm:text-[11px] text-amber-700/80 mt-1 font-medium">Session 2025-26</span>
+        </div>
+
+        {/* Ph.D. Seats */}
+        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Total Ph.D.
             </span>
             <GraduationCap className="w-4 h-4 text-[#0A4A8F]" />
           </div>
-          <div className="font-mono text-3xl font-extrabold text-[#0A4A8F]">
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0A4A8F]">
             {deptInfo.totalPhDSeats}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1">Ph.D. Registrations</span>
+          <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1">Ph.D. Matrix Seats</span>
         </div>
 
         {/* Faculty Supervisors */}
-        <div className="dept-card-reveal p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Supervisors
             </span>
             <Users className="w-4 h-4 text-[#0A4A8F]" />
           </div>
-          <div className="font-mono text-3xl font-extrabold text-[#0F172A]">
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
             {deptInfo.facultySupervisors.length}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1">Active Faculty</span>
+          <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1">Active Faculty</span>
         </div>
 
         {/* Vacant Seats */}
-        <div className="dept-card-reveal p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Vacant Seats
             </span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="font-mono text-3xl font-extrabold text-emerald-600">
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-emerald-600">
             {deptInfo.totalVacantSeats}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1">Available Seats</span>
+          <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1">Available Seats</span>
         </div>
 
         {/* Research Papers */}
-        <div className="dept-card-reveal p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Publications
             </span>
             <FileText className="w-4 h-4 text-[#FFB703]" />
           </div>
-          <div className="font-mono text-3xl font-extrabold text-[#0A4A8F]">
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0A4A8F]">
             {deptInfo.researchPublications.length}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1">Indexed Papers</span>
+          <span className="text-[10px] sm:text-[11px] text-slate-400 mt-1">Indexed Papers</span>
         </div>
       </div>
 
       {/* ── TABS NAVIGATION & SEARCH BAR ────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-slate-200/90 pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 border-b border-slate-200/90 pb-4">
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          {deptInfo.thesesAwarded.length > 0 && (
+            <button
+              type="button"
+              onClick={() => handleTabChange("theses")}
+              className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+                activeTab === "theses"
+                  ? "bg-[#0A4A8F] text-white shadow-sm"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              <Award size={14} />
+              <span>Theses Awarded ({deptInfo.thesesAwarded.length})</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => handleTabChange("faculty")}
@@ -401,6 +471,253 @@ export default function DepartmentPage() {
           )}
         </div>
       </div>
+
+      {/* ── TAB 0: THESES AWARDED (Exact from Thesis Awarded_List (Academic Session 2025-26).docx) ── */}
+      {activeTab === "theses" && (
+        <div className="space-y-6">
+          {/* Header Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-800">
+                  Academic Session 2025-26
+                </span>
+              </div>
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
+                List of Ph.D. Degrees Awarded ({filteredTheses.length})
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Source: Official university records from <em>Thesis Awarded_List (Academic Session 2025-26).docx</em>
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Department Filter (if multiple) */}
+              {thesisDepartments.length > 1 && (
+                <div className="flex items-center gap-1.5 text-xs">
+                  <Filter size={13} className="text-[#0A4A8F]" />
+                  <select
+                    value={selectedThesisDept}
+                    onChange={(e) => {
+                      setSelectedThesisDept(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="text-xs font-medium px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-xs focus:outline-none focus:border-[#0A4A8F] max-w-[220px]"
+                  >
+                    <option value="All">All Department Streams ({deptInfo.thesesAwarded.length})</option>
+                    {thesisDepartments.map((deptName) => (
+                      <option key={deptName} value={deptName}>
+                        {deptName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* View Toggle */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setThesisViewMode("cards")}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    thesisViewMode === "cards"
+                      ? "bg-white text-[#0A4A8F] shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <LayoutGrid size={13} />
+                  <span>Cards</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setThesisViewMode("table")}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    thesisViewMode === "table"
+                      ? "bg-white text-[#0A4A8F] shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <TableIcon size={13} />
+                  <span>Table</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Cards View */}
+          {thesisViewMode === "cards" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTheses.length === 0 ? (
+                <div className="col-span-full py-12 text-center bg-white/60 rounded-3xl border border-slate-200 text-slate-500">
+                  <Award className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                  <p className="font-semibold text-slate-700">No awarded theses found matching your search.</p>
+                  <p className="text-xs text-slate-400 mt-1">Try changing your search term or department filter.</p>
+                </div>
+              ) : (
+                paginatedTheses.map((thesis) => (
+                  <div
+                    key={thesis.id}
+                    className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-xl hover:border-[#0A4A8F]/30 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                    <div>
+                      {/* Top Header Badge */}
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
+                          Sr. #{thesis.srNo}
+                        </span>
+                        <span className="font-mono text-[10px] font-bold text-amber-700 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/80">
+                          {thesis.academicSession}
+                        </span>
+                      </div>
+
+                      {/* Thesis Title */}
+                      <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-3 group-hover:text-[#0A4A8F] transition-colors">
+                        "{thesis.title}"
+                      </h3>
+
+                      {/* Department / Faculty info */}
+                      <div className="mb-3.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs">
+                        <span className="text-[10px] font-mono uppercase text-slate-400 block font-bold mb-0.5">
+                          Faculty / Institute / Department
+                        </span>
+                        <span className="font-semibold text-slate-800 leading-relaxed block">
+                          {thesis.rawFacultyInstitute}
+                        </span>
+                      </div>
+
+                      {/* Scholar Info */}
+                      <div className="mb-3 flex items-start gap-2 text-xs">
+                        <GraduationCap size={15} className="text-[#0A4A8F] shrink-0 mt-0.5" />
+                        <div>
+                          <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">
+                            Ph.D. Scholar
+                          </span>
+                          <span className="font-bold text-slate-900 block">
+                            {thesis.scholarName}
+                          </span>
+                          {thesis.regNo && (
+                            <span className="font-mono text-[11px] text-[#0A4A8F] font-semibold">
+                              Reg. No: {thesis.regNo}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Supervisor Info */}
+                      <div className="mb-2 flex items-start gap-2 text-xs">
+                        <Users size={15} className="text-[#FFB703] shrink-0 mt-0.5" />
+                        <div>
+                          <span className="text-[10px] font-mono uppercase text-slate-400 block font-semibold">
+                            Research Supervisor(s)
+                          </span>
+                          <span className="font-medium text-slate-800 whitespace-pre-line leading-relaxed">
+                            {thesis.supervisors}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Date & Status */}
+                    <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <Calendar size={13} className="text-[#0A4A8F]" />
+                        <span>Defense: <strong className="text-slate-900">{thesis.defenseDate}</strong></span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                        <CheckCircle2 size={10} />
+                        <span>Awarded</span>
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          ) : (
+            /* Table View */
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse min-w-[950px]">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200/90 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600">
+                      <th className="py-3.5 px-4">Sr. No</th>
+                      <th className="py-3.5 px-4">Name of Faculty / Institute / Department</th>
+                      <th className="py-3.5 px-4">PhD Scholar &amp; Reg. No.</th>
+                      <th className="py-3.5 px-4">Supervisor(s)</th>
+                      <th className="py-3.5 px-4 min-w-[280px]">Title of the Thesis</th>
+                      <th className="py-3.5 px-4 text-center">Open House Defense Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredTheses.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="py-10 text-center text-slate-500">
+                          No thesis records found matching your search.
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedTheses.map((t) => (
+                        <tr key={t.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3.5 px-4 font-mono text-xs font-bold text-[#0A4A8F]">
+                            {t.srNo}
+                          </td>
+                          <td className="py-3.5 px-4 text-xs font-semibold text-slate-800 whitespace-pre-line leading-relaxed">
+                            {t.rawFacultyInstitute}
+                          </td>
+                          <td className="py-3.5 px-4 text-xs">
+                            <div className="font-bold text-slate-900">{t.scholarName}</div>
+                            {t.regNo && (
+                              <div className="font-mono text-[11px] text-[#0A4A8F] font-semibold">
+                                ({t.regNo})
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-xs text-slate-700 whitespace-pre-line leading-relaxed">
+                            {t.supervisors}
+                          </td>
+                          <td className="py-3.5 px-4 text-xs font-medium text-slate-900 leading-relaxed font-serif">
+                            "{t.title}"
+                          </td>
+                          <td className="py-3.5 px-4 text-center font-mono text-xs font-bold text-slate-700 whitespace-nowrap">
+                            <span className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200/80 inline-block">
+                              {t.defenseDate}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  <tfoot>
+                    <tr className="bg-slate-900 text-white font-mono font-bold text-xs uppercase tracking-wider border-t-2 border-[#FFB703]">
+                      <td className="py-3.5 px-4">Σ</td>
+                      <td className="py-3.5 px-4" colSpan={2}>
+                        {deptInfo.title} Total Awarded
+                      </td>
+                      <td className="py-3.5 px-4" colSpan={2}>
+                        {filteredTheses.length} Ph.D. Theses Awarded (Session 2025-26)
+                      </td>
+                      <td className="py-3.5 px-4 text-center text-[#FFB703]">
+                        Official Records
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Theses Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filteredTheses.length}
+            itemsPerPage={itemsPerPage}
+          />
+        </div>
+      )}
 
       {/* ── TAB 1: FACULTY & PH.D. SEATS (Exact Vacant Seat Data) ── */}
       {activeTab === "faculty" && (

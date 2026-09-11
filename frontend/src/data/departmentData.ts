@@ -1,5 +1,6 @@
 import { patents, researchPapers, books } from "./data";
 import { VACANT_SEAT_DATA, VacantSeatRow } from "./vacantSeatData";
+import { THESIS_AWARDED_DATA, ThesisAwarded } from "./thesisAwardedData";
 
 export interface DepartmentInfo {
   id: string;
@@ -18,6 +19,7 @@ export interface DepartmentInfo {
   researchPublications: any[];
   patents: any[];
   books: any[];
+  thesesAwarded: ThesisAwarded[];
 }
 
 export const DEPARTMENTS_LIST = [
@@ -40,6 +42,11 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "Institute of Technology" ||
       ["Civil Engineering", "CSE", "Electrical Engineering", "Electronics & CommunicationEng", "Mechanical Engineering"].includes(row.department),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Technology") ||
+      t.rawFacultyInstitute.includes("Computer Science") ||
+      t.rawFacultyInstitute.includes("Mechanical") ||
+      t.rawFacultyInstitute.includes("Energy Studies"),
     paperCodes: ["DEEE", "DoEEE", "FoME", "DCSE", "FoCE", "FoCS", "FOCS", "CSIS", "DCSIS"],
     patentCodes: ["Alkesh Agrawal", "Vaibhava Srivastava", "Shubham Mishra", "Amit Kumar Srivastava", "Jullius Kumar", "Shilpi Shukla", "Rajeev Kumar", "Yusuf Perwej", "DCSE", "FoME", "DEEE"],
     bookCodes: ["Engineering", "Technology", "CS", "CSE", "Mechanical", "Electrical", "Electronics", "IoT"],
@@ -63,6 +70,9 @@ export const DEPARTMENTS_LIST = [
       row.department.includes("Bio Sciences") ||
       row.department.includes("Bio Technology") ||
       row.department.includes("Biomedical"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Biosciences") ||
+      t.rawFacultyInstitute.includes("Biotechnology"),
     paperCodes: ["IBST", "Bio", "Biotechnology", "Biomedical"],
     patentCodes: ["IBST", "Bio", "Biotechnology", "Biomedical", "Biomedical Imaging"],
     bookCodes: ["IBST", "Bio", "Biotechnology", "Biomedical"],
@@ -86,6 +96,10 @@ export const DEPARTMENTS_LIST = [
       row.department.includes("Commerce") ||
       row.department.includes("Management") ||
       row.department.includes("Data Science"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Management") ||
+      t.rawFacultyInstitute.includes("Commerce") ||
+      t.rawFacultyInstitute.includes("Economics"),
     paperCodes: ["IMCE", "FoMSS", "Fomss", "fomss"],
     patentCodes: ["IMCE", "Kanupriya", "Vaibhav sharma", "Uma Rajey Shukla", "Khushboo Joshi", "Biometric Device", "Trading Analysis"],
     bookCodes: ["IMCE", "Management", "Commerce", "Economics", "FoMSS"],
@@ -106,6 +120,8 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "Institute of Media Studies" ||
       row.department.includes("Media Studies"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Media"),
     paperCodes: ["IMS", "Media"],
     patentCodes: ["IMS", "Media", "Journalism"],
     bookCodes: ["IMS", "Media", "Journalism"],
@@ -131,6 +147,13 @@ export const DEPARTMENTS_LIST = [
       row.department.includes("Humanities") ||
       row.department.includes("Mathematical") ||
       row.department.includes("Physical"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Natural Sciences") ||
+      t.rawFacultyInstitute.includes("Humanities") ||
+      t.rawFacultyInstitute.includes("Mathematical") ||
+      t.rawFacultyInstitute.includes("Chemical") ||
+      t.rawFacultyInstitute.includes("Public Health") ||
+      t.rawFacultyInstitute.includes("Sociology"),
     paperCodes: ["FoPS", "FOHSS", "FoHSS", "Sociology", "Public Health", "Political Science"],
     patentCodes: ["FoPS", "SACHIN SINGH", "INSH", "Physical Sciences", "Chemical"],
     bookCodes: ["FoPS", "FOHSS", "FoHSS", "INSH", "Humanities", "Sciences"],
@@ -151,6 +174,8 @@ export const DEPARTMENTS_LIST = [
     ],
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "IOP" || row.department.includes("Pharmaceutical Science"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Pharmaceutical"),
     paperCodes: ["IOP", "Pharmaceutical"],
     patentCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
     bookCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
@@ -172,6 +197,8 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "Institute of Agricultural Sciences and Technology" ||
       row.department.includes("Agricultural"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Agricultural"),
     paperCodes: ["IAST", "Agriculture", "Agricultural"],
     patentCodes: ["IAST", "Agriculture", "Agricultural"],
     bookCodes: ["IAST", "Agriculture", "Agricultural"],
@@ -193,6 +220,8 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "Institute of Legal Studies" ||
       row.department.includes("Legal Studies"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Legal"),
     paperCodes: ["ILS", "Law", "Legal"],
     patentCodes: ["ILS", "Law", "Legal"],
     bookCodes: ["ILS", "Law", "Legal"],
@@ -213,6 +242,8 @@ export const DEPARTMENTS_LIST = [
     ],
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "IOP" || row.department.includes("Pharmaceutical Science"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Pharmaceutical"),
     paperCodes: ["IOP", "Pharmaceutical", "Pharmacy"],
     patentCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
     bookCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
@@ -235,6 +266,8 @@ export const DEPARTMENTS_LIST = [
       row.institute === "IER" ||
       row.department.includes("Education") ||
       row.department.includes("Educational"),
+    thesisMatcher: (t: ThesisAwarded) =>
+      t.rawFacultyInstitute.includes("Education"),
     paperCodes: ["IER", "Education"],
     patentCodes: ["IER", "Education"],
     bookCodes: ["IER", "Education"],
@@ -285,6 +318,7 @@ export const getAllDepartmentsInfo = (): DepartmentInfo => {
     researchPublications: researchPapers,
     patents: patents,
     books: books,
+    thesesAwarded: THESIS_AWARDED_DATA,
   };
 };
 
@@ -355,6 +389,9 @@ export const getDepartmentById = (idOrSlug: string): DepartmentInfo | null => {
     });
   });
 
+  // Filter theses awarded
+  const matchedTheses = THESIS_AWARDED_DATA.filter(config.thesisMatcher);
+
   return {
     id: config.id,
     slug: config.slug,
@@ -372,5 +409,6 @@ export const getDepartmentById = (idOrSlug: string): DepartmentInfo | null => {
     researchPublications,
     patents: matchedPatents,
     books: matchedBooks,
+    thesesAwarded: matchedTheses,
   };
 };
