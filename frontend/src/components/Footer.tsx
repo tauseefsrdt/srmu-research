@@ -11,15 +11,15 @@ function Footer() {
   ];
 
   const allInstitutes = [
-    { code: 'IoT', name: 'Institute of Technology' },
-    { code: 'IBST', name: 'Institute of Biosciences and T...' },
-    { code: 'IMCE', name: 'Institute of Management, Commerce and Economics' },
-    { code: 'ILS', name: 'Institute of Legal Studies' },
-    { code: 'IoP', name: 'Institute of Pharmacy' },
-    { code: 'INSH', name: 'Institute of Natural Sciences and Humanities' },
-    { code: 'IER', name: 'Institute of Education and Research' },
-    { code: 'IMS', name: 'Institute of Medical Sciences' },
-    { code: 'IAST', name: 'Institute of Agricultural Sciences and Technology' },
+    { code: 'IoT', name: 'Institute of Technology', to: '/department/institute-of-technology' },
+    { code: 'IBST', name: 'Institute of Biosciences and Technology', to: '/department/institute-of-biosciences-and-technology' },
+    { code: 'IMCE', name: 'Institute of Management, Commerce and Economics', to: '/department/institute-of-management-commerce-and-economics' },
+    { code: 'ILS', name: 'Institute of Legal Studies', to: '/department/institute-of-legal-studies' },
+    { code: 'IoP', name: 'Institute of Pharmacy', to: '/department/institute-of-pharmacy' },
+    { code: 'INSH', name: 'Institute of Natural Sciences and Humanities', to: '/department/institute-of-natural-sciences-and-humanities' },
+    { code: 'IER', name: 'Institute of Education and Research', to: '/department/institute-of-education-and-research' },
+    { code: 'IMS', name: 'Institute of Media Studies', to: '/department/institute-of-media-studies' },
+    { code: 'IAST', name: 'Institute of Agricultural Sciences and Technology', to: '/department/institute-of-agricultural-sciences-and-technology' },
   ];
 
   return (
@@ -102,12 +102,16 @@ function Footer() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-[13px] text-slate-300">
               {allInstitutes.map((inst, idx) => (
-                <div key={idx} className="flex items-start gap-2 py-0.5 group">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB703] mt-1.5 shrink-0" />
-                  <span className="leading-snug group-hover:text-white transition-colors">
+                <Link
+                  key={idx}
+                  to={inst.to}
+                  className="flex items-start gap-2 py-0.5 group text-inherit no-underline hover:translate-x-1 transition-all duration-200"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB703] mt-1.5 shrink-0 group-hover:scale-125 transition-transform" />
+                  <span className="leading-snug group-hover:text-[#FFB703] transition-colors">
                     <strong className="text-white font-semibold">{inst.code}</strong> ({inst.name})
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

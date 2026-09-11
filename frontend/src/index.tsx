@@ -14,6 +14,7 @@ import Patents from './pages/Patents';
 import Research from './pages/Research';
 import BooksPage from './pages/BooksPage';
 import Aboutpage from './landing_page/aboutpage/Aboutpage';
+import DepartmentPage from './pages/DepartmentPage';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -32,6 +33,11 @@ function App() {
             <Route path="/research" element={<Research />} />
             <Route path="/indexed" element={<Research />} />
             <Route path="/books" element={<BooksPage />} />
+            <Route path="/department" element={<DepartmentPage />} />
+            <Route path="/department/:id" element={<DepartmentPage />} />
+            <Route path="/departments" element={<DepartmentPage />} />
+            <Route path="/departments/:id" element={<DepartmentPage />} />
+            <Route path="/institute/:id" element={<DepartmentPage />} />
             <Route path="/about" element={<Aboutpage />} />
           </Routes>
         </main>

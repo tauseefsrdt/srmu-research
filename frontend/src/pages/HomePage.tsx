@@ -65,62 +65,15 @@ const coPatronsList = [
   },
 ];
 
-const institutes = [
-  {
-    src: "Images/c1.webp",
-    title: "Institute of Technology",
-    text: "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
-    department: "5 DEPARTMENTS",
-  },
-  {
-    src: "Images/c2.jpg",
-    title: "Institute of Biosciences and Technology",
-    text: "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
-    department: "2 DEPARTMENTS",
-  },
-  {
-    src: "Images/c3.webp",
-    title: "Institute of Management, Commerce and Economics",
-    text: "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
-    department: "2 DEPARTMENTS",
-  },
-  {
-    src: "Images/c4.jpg",
-    title: "Institute of Media Studies",
-    text: "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
-    department: "1 DEPARTMENT",
-  },
-  {
-    src: "Images/c5.webp",
-    title: "Institute of Natural Sciences and Humanities",
-    text: "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
-    department: "4 DEPARTMENTS",
-  },
-  {
-    src: "Images/c6.webp",
-    title: "Institute of Pharmaceutical Sciences",
-    text: "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
-    department: "1 DEPARTMENT",
-  },
-  {
-    src: "Images/c7.webp",
-    title: "Institute of Agricultural Sciences and Technology",
-    text: "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
-    department: "1 DEPARTMENT",
-  },
-  {
-    src: "Images/c8.avif",
-    title: "Institute of Legal Studies",
-    text: "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
-    department: "1 DEPARTMENT",
-  },
-  {
-    src: "Images/c9.webp",
-    title: "Institute of Pharmacy",
-    text: "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
-    department: "1 DEPARTMENT",
-  },
-];
+import { DEPARTMENTS_LIST } from "../data/departmentData";
+
+const institutes = DEPARTMENTS_LIST.map((dept) => ({
+  id: dept.id,
+  src: dept.image,
+  title: dept.title,
+  text: dept.description,
+  department: dept.departmentCountLabel,
+}));
 
 interface HomePageProps {
   onSearchOpen?: () => void;
@@ -528,70 +481,86 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         </div>
       </section>
 
-      {/* ── STATISTICS STRIP (With Animated GSAP Counters) ── */}
+      {/* ── STATISTICS STRIP (With Animated GSAP Counters & Interactive Navigation) ── */}
       <section ref={statsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 my-6 sm:my-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl shadow-xl border border-slate-200/90 relative overflow-hidden">
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#FFB703]/50 to-transparent" />
 
-          {/* Stat 1 */}
-          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 group justify-center sm:justify-start">
+          {/* Stat 1: Research Publications */}
+          <Link
+            to="/research"
+            className="stat-item-reveal flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50/90 hover:shadow-md border border-transparent hover:border-[#0A4A8F]/20 transition-all duration-300 group justify-center sm:justify-start cursor-pointer no-underline text-inherit"
+          >
             <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
               <FileText className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight group-hover:text-[#0C5CA8] transition-colors">
                 {displayCounts.indexed}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5 group-hover:text-[#0A4A8F] transition-colors flex items-center gap-1">
                 Research Publications
+                <ArrowRight size={11} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#0A4A8F]" />
               </span>
             </div>
-          </div>
+          </Link>
 
-          {/* Stat 2 */}
-          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+          {/* Stat 2: Patents */}
+          <Link
+            to="/patents"
+            className="stat-item-reveal flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50/90 hover:shadow-md border border-transparent hover:border-[#0A4A8F]/20 transition-all duration-300 sm:border-l sm:border-slate-100 group justify-center sm:justify-start cursor-pointer no-underline text-inherit"
+          >
             <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
               <Lightbulb className="w-6 h-6 text-[#FFB703]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight group-hover:text-[#0C5CA8] transition-colors">
                 {displayCounts.papers}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5 group-hover:text-[#0A4A8F] transition-colors flex items-center gap-1">
                 Patents
+                <ArrowRight size={11} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#0A4A8F]" />
               </span>
             </div>
-          </div>
+          </Link>
 
-          {/* Stat 3 */}
-          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+          {/* Stat 3: Books & Chapters */}
+          <Link
+            to="/books"
+            className="stat-item-reveal flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50/90 hover:shadow-md border border-transparent hover:border-[#0A4A8F]/20 transition-all duration-300 sm:border-l sm:border-slate-100 group justify-center sm:justify-start cursor-pointer no-underline text-inherit"
+          >
             <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
               <BookOpen className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight group-hover:text-[#0C5CA8] transition-colors">
                 {displayCounts.books}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5 group-hover:text-[#0A4A8F] transition-colors flex items-center gap-1">
                 Books &amp; Chapters
+                <ArrowRight size={11} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#0A4A8F]" />
               </span>
             </div>
-          </div>
+          </Link>
 
-          {/* Stat 4 */}
-          <div className="stat-item-reveal flex items-center gap-4 p-2.5 rounded-2xl hover:bg-slate-50/80 transition-all duration-300 border-l border-slate-100 group justify-center sm:justify-start">
+          {/* Stat 4: Researchers */}
+          <Link
+            to="/research"
+            className="stat-item-reveal flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50/90 hover:shadow-md border border-transparent hover:border-[#0A4A8F]/20 transition-all duration-300 sm:border-l sm:border-slate-100 group justify-center sm:justify-start cursor-pointer no-underline text-inherit"
+          >
             <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#FFF8E7] to-[#FFE8B3] border border-[#FFB703]/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
               <Users className="w-6 h-6 text-[#0A4A8F]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight">
+              <span className="font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0A4A8F] leading-tight tracking-tight group-hover:text-[#0C5CA8] transition-colors">
                 {displayCounts.researchers}+
               </span>
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider mt-0.5 group-hover:text-[#0A4A8F] transition-colors flex items-center gap-1">
                 Researchers
+                <ArrowRight size={11} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#0A4A8F]" />
               </span>
             </div>
-          </div>
+          </Link>
 
         </div>
       </section>
@@ -704,7 +673,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           </div>
 
           <Link
-            to="/patents"
+            to="/departments"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0A4A8F] hover:text-[#0C5CA8] transition-colors shrink-0 group"
           >
             <span>View all papers</span>
@@ -716,7 +685,10 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {institutes.map((card) => (
             <div key={card.title} className="institute-card-reveal">
-              <div className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between h-full relative overflow-hidden">
+              <Link
+                to={`/department/${card.id}`}
+                className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between h-full relative overflow-hidden no-underline text-inherit block cursor-pointer"
+              >
                 {/* Top Accent Strip on Hover */}
                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -747,11 +719,12 @@ function HomePage({ onSearchOpen }: HomePageProps) {
                   <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-md bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
                     {card.department}
                   </span>
-                  <span className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-[#0A4A8F] transition-colors font-medium">
-                    Explore <ArrowRight size={12} />
+                  <span className="text-xs text-[#0A4A8F] flex items-center gap-1 font-semibold group-hover:translate-x-0.5 transition-transform">
+                    <span>Explore</span>
+                    <ArrowRight size={13} />
                   </span>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </div>
