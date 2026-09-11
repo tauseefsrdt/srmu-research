@@ -288,9 +288,12 @@ export default function DepartmentPage() {
           <div className="lg:col-span-4">
             <div className="rounded-2xl overflow-hidden shadow-inner aspect-[16/11] bg-slate-100 border border-slate-200/80 mb-4">
               <img
-                src={deptInfo.image}
+                src={deptInfo.image?.startsWith('/') ? deptInfo.image : `/${deptInfo.image || 'Images/c1.webp'}`}
                 alt={deptInfo.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "/Images/c1.webp";
+                }}
               />
             </div>
           </div>

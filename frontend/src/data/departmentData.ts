@@ -29,7 +29,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Technology",
     code: "IoT",
     departmentCountLabel: "5 DEPARTMENTS",
-    image: "Images/c1.webp",
+    image: "/Images/c1.webp",
     description:
       "The Institute of Technology is committed to provide focused learning in the fields of engineering with an aim of creating human resources with knowledge and skills to contribute successfully to a complex world.",
     programs: [
@@ -57,7 +57,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Biosciences and Technology",
     code: "IBST",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c2.jpg",
+    image: "/Images/c2.jpg",
     description:
       "Biotechnology encompasses the applications of understanding of the biological systems to improve human life by addressing challenges and issues facing agricultural sciences, medical sciences, food sciences, etc.",
     programs: [
@@ -83,7 +83,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Management, Commerce and Economics",
     code: "IMCE",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c3.webp",
+    image: "/Images/c3.webp",
     description:
       "The Institute of Management, Commerce and Economics (IMCE) was started in the year 2012. IMCE seeks to be a trailblazer in management education through strong academic-industry collaboration for international alliances.",
     programs: [
@@ -110,7 +110,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Media Studies",
     code: "IMS",
     departmentCountLabel: "2 DEPARTMENTS",
-    image: "Images/c4.jpg",
+    image: "/Images/c4.jpg",
     description:
       "Journalism and Mass Communication study is an encouragement to think about the forces involved in giving it shape. Mass Media industry is one of the fastest growing industries with the mission of social conscience.",
     programs: [
@@ -132,7 +132,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Natural Sciences and Humanities",
     code: "INSH",
     departmentCountLabel: "4 DEPARTMENTS",
-    image: "Images/c5.webp",
+    image: "/Images/c5.webp",
     description:
       "The Institute boasts of being the heart and soul of the University as its various disciplines of knowledge is essentially required with all the academic programs that run across the University.",
     programs: [
@@ -164,7 +164,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Pharmaceutical Sciences",
     code: "IOP",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c6.webp",
+    image: "/Images/c6.webp",
     description:
       "Due to its integration of chemistry and health sciences, pharmaceutical science is both a unique field and extremely important to human survival.",
     programs: [
@@ -186,7 +186,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Agricultural Sciences and Technology",
     code: "IAST",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c7.webp",
+    image: "/Images/c7.webp",
     description:
       "The Indian Council of Agricultural Sciences has already recognized the B.Sc.(Hons.) Agriculture 4 Years as a professional Degree with consequential benefits to the Students.",
     programs: [
@@ -209,7 +209,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Legal Studies",
     code: "ILS",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c8.avif",
+    image: "/Images/c8.avif",
     description:
       "The Institute of Legal Studies is a convergence of academic, cultural and intellectual resources. It aims at achieving the highest levels of distinction in the innovation and transmission of knowledge and understanding.",
     programs: [
@@ -232,7 +232,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Pharmacy",
     code: "IOP",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c9.webp",
+    image: "/Images/c9.webp",
     description:
       "Pharmacy is one of the unique professions and also very vital for the sustenance of human lives as it involves the combination of chemical science with health sciences.",
     programs: [
@@ -254,7 +254,7 @@ export const DEPARTMENTS_LIST = [
     title: "Institute of Education and Research",
     code: "IER",
     departmentCountLabel: "3 DEPARTMENTS",
-    image: "Images/c1.webp",
+    image: "/Images/c1.webp",
     description:
       "The Institute of Education and Research is dedicated to fostering progressive teaching methodologies, educational psychology, and innovative academic research.",
     programs: [
@@ -306,7 +306,7 @@ export const getAllDepartmentsInfo = (): DepartmentInfo => {
     title: "All University Institutes & Departments",
     code: "ALL DEPARTMENTS",
     departmentCountLabel: "10 INSTITUTES • 29+ DEPARTMENTS",
-    image: "Images/c1.webp",
+    image: "/Images/c1.webp",
     description:
       "Comprehensive research repository uniting all academic institutes, departments, research faculties, supervisor seat matrices, publications, patents, and published books across Shri Ramswaroop Memorial University.",
     programs: allPrograms,
