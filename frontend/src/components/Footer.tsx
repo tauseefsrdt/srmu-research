@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Bookmark, FileText, BookOpen, Info, Sparkles } from 'lucide-react';
+import { ArrowRight, Bookmark, FileText, BookOpen, Info } from 'lucide-react';
 
 function Footer() {
   const exploreLinks = [

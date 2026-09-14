@@ -13,7 +13,7 @@ import HomePage from './pages/HomePage';
 import Patents from './pages/Patents';
 import Research from './pages/Research';
 import BooksPage from './pages/BooksPage';
-import Aboutpage from './landing_page/aboutpage/Aboutpage';
+import Aboutpage from './pages/Aboutpage';
 import DepartmentPage from './pages/DepartmentPage';
 
 function App() {

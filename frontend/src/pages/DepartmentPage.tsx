@@ -15,11 +15,9 @@ import {
   Search,
   Filter,
   Award,
-  BookCheck,
   LayoutGrid,
   Table as TableIcon,
   Sparkles,
-  UserCheck,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { getDepartmentById, DEPARTMENTS_LIST, DepartmentInfo } from "../data/departmentData";

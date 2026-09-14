@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bookmark, Search, RefreshCw, Loader2, Sparkles } from 'lucide-react';
+import { Bookmark, Search, RefreshCw, Loader2 } from 'lucide-react';
 import { gsap } from 'gsap';
 import ResearchCard from '../components/ResearchCard';
 import { getResearchPapers, getDepartments } from '../data/researchService';

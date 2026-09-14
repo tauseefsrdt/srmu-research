@@ -7,7 +7,6 @@ import {
   Search,
   Menu,
   X,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 

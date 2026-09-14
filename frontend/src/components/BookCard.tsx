@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, User, Building, Hash, BookmarkCheck } from 'lucide-react';
+import { BookOpen, User, Building, BookmarkCheck } from 'lucide-react';
 import { Book } from '../types';
 
 interface BookCardProps {

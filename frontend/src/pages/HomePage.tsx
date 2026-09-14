@@ -11,8 +11,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import MorphSlider from "../Effects/Morph-Slider";
-import { getStats, getFeatured, getDepartments } from "../data/researchService";
-import { Stats, FeaturedRecords, Department } from "../types";
+import { getStats } from "../data/researchService";
+import { Stats } from "../types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,12 +88,6 @@ function HomePage({ onSearchOpen }: HomePageProps) {
   const institutesRef = useRef<HTMLDivElement>(null);
 
   const [stats, setStats] = useState<Stats | null>(null);
-  const [, setFeatured] = useState<FeaturedRecords>({
-    papers: [],
-    indexed: [],
-    books: [],
-  });
-  const [, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeProfile] = useState("message");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -157,12 +151,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
   useEffect(() => {
     try {
       const statsData = getStats();
-      const featData = getFeatured();
-      const deptData = getDepartments();
-
       setStats(statsData);
-      setFeatured(featData);
-      setDepartments(deptData);
     } catch (err) {
       console.error("Failed to load home page data:", err);
     } finally {
@@ -370,7 +359,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       {/* ── HERO SECTION ─────────────────────────────────── */}
       <section ref={heroRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-12 sm:pt-14 sm:pb-16 relative">
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
           {/* Left Column: Hero Copy & Message Card */}
           <div className="lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 md:p-9 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-message-reveal">
@@ -428,7 +417,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           <div className="lg:col-span-5 flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-slider-reveal">
             <div>
               {/* Eyebrow badge */}
-              <div className="inline-flex items-center gap-2 mb-3">
+              {/* <div className="inline-flex items-center gap-2 mb-3">
                 <span className="w-5 h-[2px] bg-[#FFB703]" />
                 <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
                   HIGHLIGHTS
@@ -437,7 +426,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A] leading-snug mb-5">
                 Research Environment &amp; <span className="text-[#0A4A8F]">Facilities</span>
-              </h2>
+              </h2> */}
 
               {/* Slider in framed container */}
               <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden relative shadow-inner bg-zinc-900 border border-slate-200/60">
@@ -464,7 +453,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
             </div>
 
             {/* Slider Bottom Action Area */}
-            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+            {/* <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
               <span className="font-mono text-xs font-bold text-[#0A4A8F] uppercase tracking-wider">
                 Explore Innovations
               </span>
@@ -475,7 +464,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
                 <span>All Research</span>
                 <ArrowRight size={13} />
               </Link>
-            </div>
+            </div> */}
           </div>
 
         </div>
@@ -566,9 +555,9 @@ function HomePage({ onSearchOpen }: HomePageProps) {
       </section>
 
       {/* ── PATRONS SECTION ──────────────────────────────── */}
-      <section ref={patronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6 relative">
+      {/* <section ref={patronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6 relative">
 
-        {/* Centered Heading with lines */}
+       
         <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
           <div className="flex-1 h-[1px] bg-slate-200" />
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
@@ -577,17 +566,17 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           <div className="flex-1 h-[1px] bg-slate-200" />
         </div>
 
-        {/* Patrons Grid (Cards with Circular Images) */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {patronsList.map((patron) => (
             <div
               key={patron.name}
               className="patron-card-reveal group p-7 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
             >
-              {/* Top Accent Strip on Hover */}
+              
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-              {/* Circular Avatar with Gradient Ring */}
+           
               <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F]/30 via-[#FFB703]/60 to-[#0A4A8F]/30 shadow-md group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                 <img
                   src={patron.image}
@@ -606,12 +595,12 @@ function HomePage({ onSearchOpen }: HomePageProps) {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* ── CO-PATRONS SECTION ───────────────────────────── */}
-      <section ref={coPatronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-16 relative">
+      {/* <section ref={coPatronsRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-16 relative">
 
-        {/* Centered Heading with lines */}
+      
         <div className="flex items-center justify-center gap-4 max-w-md mx-auto mb-10">
           <div className="flex-1 h-[1px] bg-slate-200" />
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
@@ -619,18 +608,13 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           </h2>
           <div className="flex-1 h-[1px] bg-slate-200" />
         </div>
-
-        {/* Co-Patrons Grid (Cards with Circular Images) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {coPatronsList.map((coPatron) => (
             <div
               key={coPatron.name}
               className="copatron-card-reveal group p-7 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#0A4A8F]/40 transition-all duration-300 hover:-translate-y-2 flex flex-col items-center text-center relative overflow-hidden"
             >
-              {/* Top Accent Strip on Hover */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#0A4A8F] via-[#FFB703] to-[#0A4A8F] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              {/* Circular Avatar with Gradient Ring */}
               <div className="relative mb-5 p-1.5 rounded-full bg-gradient-to-tr from-[#0A4A8F]/30 via-[#FFB703]/60 to-[#0A4A8F]/30 shadow-md group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
                 <img
                   src={coPatron.image}
@@ -649,28 +633,22 @@ function HomePage({ onSearchOpen }: HomePageProps) {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* ── INSTITUTES SECTION ("RECENT NOTES") ─────────── */}
       <section ref={institutesRef} className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-10 pb-20">
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-3">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#FFB703]" />
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#0C2F44]">
-                RECENT NOTES
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-1.5 h-8 bg-[#FFB703] rounded-full hidden sm:block" />
-              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#0F172A] leading-tight font-bold">
-                Research Publication / Patents /{" "}
-                <span className="text-[#0A4A8F]">Books &amp; Chapters from...</span>
-              </h2>
-            </div>
+
+
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-[#FFB703] rounded-full hidden sm:block" />
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#0F172A] leading-tight font-bold">
+              Institutes- Wise Research Data (2025-26)
+            </h2>
           </div>
+
 
           <Link
             to="/departments"
