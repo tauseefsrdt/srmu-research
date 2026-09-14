@@ -42,6 +42,7 @@ export default function DepartmentPage() {
     const data = getDepartmentById(currentSlug);
     setDeptInfo(data);
     setSearchQuery("");
+    setSelectedThesisDept("All");
     setCurrentPage(1);
   }, [currentSlug]);
 
@@ -165,12 +166,12 @@ export default function DepartmentPage() {
     activeTab === "theses"
       ? filteredTheses.length
       : activeTab === "faculty"
-      ? filteredFaculty.length
-      : activeTab === "publications"
-      ? filteredPublications.length
-      : activeTab === "patents"
-      ? filteredPatents.length
-      : filteredBooks.length;
+        ? filteredFaculty.length
+        : activeTab === "publications"
+          ? filteredPublications.length
+          : activeTab === "patents"
+            ? filteredPatents.length
+            : filteredBooks.length;
 
   const totalPages = Math.ceil(activeListLength / itemsPerPage);
   const paginatedTheses = filteredTheses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -374,78 +375,65 @@ export default function DepartmentPage() {
       {/* ── TABS NAVIGATION & SEARCH BAR ────────────────────── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 border-b border-slate-200/90 pb-4">
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          {deptInfo.thesesAwarded.length > 0 && (
-            <button
-              type="button"
-              onClick={() => handleTabChange("theses")}
-              className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-                activeTab === "theses"
-                  ? "bg-[#0A4A8F] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          <button
+            type="button"
+            onClick={() => handleTabChange("theses")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "theses"
+                ? "bg-[#0A4A8F] text-white shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
-            >
-              <Award size={14} />
-              <span>Theses Awarded ({deptInfo.thesesAwarded.length})</span>
-            </button>
-          )}
+          >
+            <Award size={14} />
+            <span>Theses Awarded ({deptInfo.thesesAwarded.length})</span>
+          </button>
 
           <button
             type="button"
             onClick={() => handleTabChange("faculty")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-              activeTab === "faculty"
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "faculty"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-            }`}
+              }`}
           >
             <Users size={14} />
             <span>Faculty &amp; Seats ({deptInfo.facultySupervisors.length})</span>
           </button>
 
-          {deptInfo.researchPublications.length > 0 && (
-            <button
-              type="button"
-              onClick={() => handleTabChange("publications")}
-              className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-                activeTab === "publications"
-                  ? "bg-[#0A4A8F] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          <button
+            type="button"
+            onClick={() => handleTabChange("publications")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "publications"
+                ? "bg-[#0A4A8F] text-white shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
-            >
-              <FileText size={14} />
-              <span>Publications ({deptInfo.researchPublications.length})</span>
-            </button>
-          )}
+          >
+            <FileText size={14} />
+            <span>Publications ({deptInfo.researchPublications.length})</span>
+          </button>
 
-          {deptInfo.patents.length > 0 && (
-            <button
-              type="button"
-              onClick={() => handleTabChange("patents")}
-              className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-                activeTab === "patents"
-                  ? "bg-[#0A4A8F] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          <button
+            type="button"
+            onClick={() => handleTabChange("patents")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "patents"
+                ? "bg-[#0A4A8F] text-white shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
-            >
-              <Lightbulb size={14} />
-              <span>Patents ({deptInfo.patents.length})</span>
-            </button>
-          )}
+          >
+            <Lightbulb size={14} />
+            <span>Patents ({deptInfo.patents.length})</span>
+          </button>
 
-          {deptInfo.books.length > 0 && (
-            <button
-              type="button"
-              onClick={() => handleTabChange("books")}
-              className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
-                activeTab === "books"
-                  ? "bg-[#0A4A8F] text-white shadow-sm"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          <button
+            type="button"
+            onClick={() => handleTabChange("books")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "books"
+                ? "bg-[#0A4A8F] text-white shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
-            >
-              <BookOpen size={14} />
-              <span>Books ({deptInfo.books.length})</span>
-            </button>
-          )}
+          >
+            <BookOpen size={14} />
+            <span>Books ({deptInfo.books.length})</span>
+          </button>
         </div>
 
         {/* Search Field */}
@@ -521,11 +509,10 @@ export default function DepartmentPage() {
                 <button
                   type="button"
                   onClick={() => setThesisViewMode("cards")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                    thesisViewMode === "cards"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${thesisViewMode === "cards"
                       ? "bg-white text-[#0A4A8F] shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   <LayoutGrid size={13} />
                   <span>Cards</span>
@@ -533,11 +520,10 @@ export default function DepartmentPage() {
                 <button
                   type="button"
                   onClick={() => setThesisViewMode("table")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                    thesisViewMode === "table"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${thesisViewMode === "table"
                       ? "bg-white text-[#0A4A8F] shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   <TableIcon size={13} />
                   <span>Table</span>
@@ -788,13 +774,12 @@ export default function DepartmentPage() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span
-                            className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${
-                              row.noOfVacant > 0
+                            className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${row.noOfVacant > 0
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : row.noOfVacant === 0
-                                ? "bg-slate-100 text-slate-600 border-slate-200"
-                                : "bg-rose-50 text-rose-700 border-rose-200"
-                            }`}
+                                  ? "bg-slate-100 text-slate-600 border-slate-200"
+                                  : "bg-rose-50 text-rose-700 border-rose-200"
+                              }`}
                           >
                             {row.noOfVacant}
                           </span>
@@ -855,7 +840,13 @@ export default function DepartmentPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedPublications.map((paper: any, idx: number) => (
+            {filteredPublications.length === 0 ? (
+              <div className="col-span-full py-12 text-center bg-white/60 rounded-3xl border border-slate-200 text-slate-500">
+                <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                <p className="font-semibold text-slate-700">No data available</p>
+                <p className="text-xs text-slate-400 mt-1">No publications are available for this department.</p>
+              </div>
+            ) : paginatedPublications.map((paper: any, idx: number) => (
               <div
                 key={paper.srNo || idx}
                 className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
@@ -937,7 +928,13 @@ export default function DepartmentPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedPatents.map((pat: any, idx: number) => (
+            {filteredPatents.length === 0 ? (
+              <div className="col-span-full py-12 text-center bg-white/60 rounded-3xl border border-slate-200 text-slate-500">
+                <Lightbulb className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                <p className="font-semibold text-slate-700">No data available</p>
+                <p className="text-xs text-slate-400 mt-1">No patents are available for this department.</p>
+              </div>
+            ) : paginatedPatents.map((pat: any, idx: number) => (
               <div
                 key={pat.srNo || idx}
                 className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
@@ -999,7 +996,13 @@ export default function DepartmentPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedBooks.map((b: any, idx: number) => (
+            {filteredBooks.length === 0 ? (
+              <div className="col-span-full py-12 text-center bg-white/60 rounded-3xl border border-slate-200 text-slate-500">
+                <BookOpen className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                <p className="font-semibold text-slate-700">No data available</p>
+                <p className="text-xs text-slate-400 mt-1">No books or chapters are available for this department.</p>
+              </div>
+            ) : paginatedBooks.map((b: any, idx: number) => (
               <div
                 key={b.slNo || idx}
                 className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"

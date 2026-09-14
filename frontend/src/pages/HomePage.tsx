@@ -190,7 +190,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         indexed: stats?.totalIndexed || 195,
         papers: stats?.totalPapers || 47,
         books: stats?.totalBooks || 68,
-        researchers: stats?.totalResearchers || 437,
+        researchers: stats?.totalResearchers || 310,
       });
       return;
     }
@@ -237,7 +237,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
         const targetIndexed = stats?.totalIndexed || 195;
         const targetPapers = stats?.totalPapers || 47;
         const targetBooks = stats?.totalBooks || 68;
-        const targetResearchers = stats?.totalResearchers || 437;
+        const targetResearchers = targetIndexed + targetPapers + targetBooks || 310;
 
         ScrollTrigger.create({
           trigger: statsRef.current,

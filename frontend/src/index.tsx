@@ -24,7 +24,7 @@ function App() {
       <div className="app-shell">
         <GsapBackground />
         <Navbar onSearchToggle={() => setIsSearchOpen(true)} />
-        
+
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage onSearchOpen={() => setIsSearchOpen(true)} />} />
