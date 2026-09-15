@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   GraduationCap,
   Globe,
@@ -106,12 +106,89 @@ function Aboutpage() {
     },
   ];
 
+  // Research images
+  const researchImages = [
+    {
+      src: '/Images/5.png',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/6.png',
+      alt: 'SRMU research facility',
+    },
+    {
+      src: '/Images/research/8.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/9.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/10.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/11.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/12.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/13.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/14.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/15.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/16.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/17.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/18.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/19.webp',
+      alt: 'Research and consultancy activities',
+    },
+    {
+      src: '/Images/research/20.webp',
+      alt: 'Research and consultancy activities',
+    },
+  ];
+
+  // Initially show 4 cards
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  const handleViewMore = () => {
+    setVisibleCount((prev) =>
+      Math.min(prev + 4, researchImages.length)
+    );
+  };
+
   return (
-    <div ref={pageRef} className="about-page home-width py-8 sm:py-14">
+    <div
+      ref={pageRef}
+      className="about-page home-width py-8 sm:py-14"
+    >
       {/* Hero Banner */}
       <div className="about-hero mb-12 text-center max-w-3xl mx-auto">
         <div className="about-hero-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#0A4A8F]/15 shadow-sm backdrop-blur-md mb-4">
           <GraduationCap className="w-4 h-4 text-[#0A4A8F]" />
+
           <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#0C2F44]">
             Shri Ramswaroop Memorial University
           </span>
@@ -134,7 +211,7 @@ function Aboutpage() {
       <div className="flex flex-col gap-4 mb-12">
         {/* Vision */}
         <div className="about-card-reveal about-card blush-surface p-8 rounded-3xl bg-[#FFF8E7]/90 border border-[#FFB703]/30 shadow-md backdrop-blur-md flex flex-col justify-between hover:shadow-xl transition-all duration-300">
-          <div className="w-full ">
+          <div className="w-full">
             <div className="w-12 h-12 rounded-2xl bg-[#0A4A8F] text-white flex items-center justify-center mb-6 shadow-md">
               <Globe className="w-6 h-6" />
             </div>
@@ -186,16 +263,19 @@ function Aboutpage() {
       <div className="about-highlight-reveal highlights-panel p-8 sm:p-10 rounded-3xl bg-white/90 border border-[#0A4A8F]/15 shadow-lg backdrop-blur-md mb-12">
         <h3 className="font-serif text-2xl font-medium text-[#1F2937] flex items-center gap-3 mb-8">
           <Sparkles className="w-6 h-6 text-[#FFB703]" />
+
           <span>Research Excellence Highlights</span>
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-start gap-4 p-4 rounded-2xl bg-[#F8FAFC] border border-[#0A4A8F]/08 hover:bg-[#EEF3FA]/60 transition-colors">
             <CheckCircle2 className="w-6 h-6 text-[#0A4A8F] shrink-0 mt-0.5" />
+
             <div>
               <strong className="block text-base font-serif text-[#1F2937] mb-1">
                 Patents & Designs
               </strong>
+
               <span className="text-sm text-[#6B7280] leading-relaxed">
                 Multiple Indian and International patents filed & published.
               </span>
@@ -204,10 +284,12 @@ function Aboutpage() {
 
           <div className="flex items-start gap-4 p-4 rounded-2xl bg-[#F8FAFC] border border-[#0A4A8F]/08 hover:bg-[#EEF3FA]/60 transition-colors">
             <CheckCircle2 className="w-6 h-6 text-[#0A4A8F] shrink-0 mt-0.5" />
+
             <div>
               <strong className="block text-base font-serif text-[#1F2937] mb-1">
                 Indexed Publications
               </strong>
+
               <span className="text-sm text-[#6B7280] leading-relaxed">
                 Scopus, Web of Science, and UGC CARE recognized articles.
               </span>
@@ -216,10 +298,12 @@ function Aboutpage() {
 
           <div className="flex items-start gap-4 p-4 rounded-2xl bg-[#F8FAFC] border border-[#0A4A8F]/08 hover:bg-[#EEF3FA]/60 transition-colors">
             <CheckCircle2 className="w-6 h-6 text-[#0A4A8F] shrink-0 mt-0.5" />
+
             <div>
               <strong className="block text-base font-serif text-[#1F2937] mb-1">
                 Books & Monograph
               </strong>
+
               <span className="text-sm text-[#6B7280] leading-relaxed">
                 Authored book chapters and textbooks published globally.
               </span>
@@ -229,25 +313,40 @@ function Aboutpage() {
       </div>
 
       {/* Research Images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 rounded-3xl overflow-hidden">
-        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-zinc-100 shadow-md">
-          <img
-            src="/Images/5.png"
-            alt="Research and consultancy activities"
-            className="w-full h-full object-cover block transition-transform duration-500 hover:scale-105"
-          />
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 rounded-3xl overflow-hidden">
+          {researchImages
+            .slice(0, visibleCount)
+            .map((image, index) => (
+              <div
+                key={index}
+                className="rounded-2xl overflow-hidden bg-zinc-100 shadow-md"
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-contain block transition-transform duration-500 hover:scale-105"
+                />
+              </div>
+            ))}
         </div>
 
-        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-zinc-100 shadow-md">
-          <img
-            src="/Images/6.png"
-            alt="SRMU research facility"
-            className="w-full h-full object-cover block transition-transform duration-500 hover:scale-105"
-          />
-        </div>
+        {/* View More Button */}
+        {visibleCount < researchImages.length && (
+          <div className="flex justify-center mt-8">
+            <button
+              type="button"
+              onClick={handleViewMore}
+              className="px-7 py-3 rounded-full bg-[#0A4A8F] text-white font-medium shadow-md hover:bg-[#0C2F44] hover:shadow-lg transition-all duration-300"
+            >
+              View More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default Aboutpage;
+
