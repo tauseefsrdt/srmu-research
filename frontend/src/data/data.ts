@@ -8,7 +8,8 @@ export const patents = [
     patenterName: "Dr. Alkesh Agrawal",
     patentNumber: "Patent Office Journal No. 14/2025\n202511024894",
     title: "Microstrip Patch Antenna with Metamaterial Unit Cells Loaded Radiating Patches and Ground Structure for ITS Applications",
-    yearOfAward: "2025-04-04"
+    yearOfAward: "2025-04-04",
+    pdf: "/patent_pdf/Serial No 42_Dr . Akhilesh Kumar Mishra.pdf"
   },
   {
     srNo: 2,

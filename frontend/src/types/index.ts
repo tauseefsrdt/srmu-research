@@ -12,6 +12,8 @@ export interface Patent {
   featured?: boolean;
   citations?: number;
   doi?: string;
+  pdf?: string;
+  pdfUrl?: string;
   departmentKey?: string;
 }
 

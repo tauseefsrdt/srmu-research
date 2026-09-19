@@ -4,6 +4,7 @@ import { FileText, Search, RefreshCw, Loader2, X, Award } from 'lucide-react';
 import { gsap } from 'gsap';
 import PaperCard from '../components/patentsCard';
 import Pagination from '../components/Pagination';
+import PdfModal from '../components/PdfModal';
 import { getPatents, getDepartments } from '../data/researchService';
 import { Patent, Department } from '../types';
 
@@ -16,6 +17,7 @@ function PapersPage() {
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPdf, setSelectedPdf] = useState<{ url: string; title?: string; subtitle?: string } | null>(null);
   const ITEMS_PER_PAGE = 9;
 
   // Filters — always read live from URL
@@ -216,7 +218,11 @@ function PapersPage() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentPapers.map((paper) => (
-              <PaperCard key={paper.id} paper={paper} />
+              <PaperCard
+                key={paper.id}
+                paper={paper}
+                onViewPdf={(url, title, subtitle) => setSelectedPdf({ url, title, subtitle })}
+              />
             ))}
           </div>
 
@@ -229,6 +235,15 @@ function PapersPage() {
           />
         </>
       )}
+
+      {/* PDF Modal */}
+      <PdfModal
+        isOpen={Boolean(selectedPdf)}
+        onClose={() => setSelectedPdf(null)}
+        pdfUrl={selectedPdf?.url}
+        title={selectedPdf?.title}
+        subtitle={selectedPdf?.subtitle}
+      />
 
     </div>
   );

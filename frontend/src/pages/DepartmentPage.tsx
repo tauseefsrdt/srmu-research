@@ -23,6 +23,7 @@ import { gsap } from "gsap";
 import { getDepartmentById, DEPARTMENTS_LIST, DepartmentInfo } from "../data/departmentData";
 import { ThesisAwarded } from "../data/thesisAwardedData";
 import Pagination from "../components/Pagination";
+import PdfModal from "../components/PdfModal";
 
 export default function DepartmentPage() {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,7 @@ export default function DepartmentPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedThesisDept, setSelectedThesisDept] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPdf, setSelectedPdf] = useState<{ url: string; title?: string; subtitle?: string } | null>(null);
   const itemsPerPage = 12;
 
   const currentSlug = id || "all";
@@ -967,7 +969,24 @@ export default function DepartmentPage() {
 
                 <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
                   <span>Patent Record #{pat.srNo || idx + 1}</span>
-                  <span className="text-[#0A4A8F] font-bold">Granted / Published</span>
+                  {(pat.pdf || pat.pdfUrl) ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedPdf({
+                          url: pat.pdf || pat.pdfUrl,
+                          title: pat.title,
+                          subtitle: pat.patentNumber ? `Patent No: ${pat.patentNumber.replace(/\n/g, ' • ')}` : undefined,
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-xs hover:shadow hover:-translate-y-0.5 cursor-pointer"
+                    >
+                      <FileText size={12} />
+                      <span>View</span>
+                    </button>
+                  ) : (
+                    <span className="text-[#0A4A8F] font-bold">Granted / Published</span>
+                  )}
                 </div>
               </div>
             ))}
@@ -1057,6 +1076,15 @@ export default function DepartmentPage() {
           />
         </div>
       )}
+
+      {/* PDF Modal */}
+      <PdfModal
+        isOpen={Boolean(selectedPdf)}
+        onClose={() => setSelectedPdf(null)}
+        pdfUrl={selectedPdf?.url}
+        title={selectedPdf?.title}
+        subtitle={selectedPdf?.subtitle}
+      />
     </div>
   );
 }
