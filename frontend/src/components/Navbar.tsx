@@ -23,6 +23,7 @@ function Navbar({ onSearchToggle }: NavbarProps) {
     { name: "Research Publications", path: "/research", icon: Bookmark },
     { name: "Patents", path: "/patents", icon: FileText },
     { name: "Books & Chapters", path: "/books", icon: BookOpen },
+    { name: "R&C Format", path: "/rc-format", icon: FileText },
     { name: "About", path: "/about" },
   ];
 

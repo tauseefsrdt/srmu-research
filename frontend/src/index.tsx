@@ -15,6 +15,7 @@ import Research from './pages/Research';
 import BooksPage from './pages/BooksPage';
 import Aboutpage from './pages/Aboutpage';
 import DepartmentPage from './pages/DepartmentPage';
+import RcFormatPage from './pages/RcFormatPage';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -33,6 +34,9 @@ function App() {
             <Route path="/research" element={<Research />} />
             <Route path="/indexed" element={<Research />} />
             <Route path="/books" element={<BooksPage />} />
+            <Route path="/rc-format" element={<RcFormatPage />} />
+            <Route path="/rc-formats" element={<RcFormatPage />} />
+            <Route path="/rc" element={<RcFormatPage />} />
             <Route path="/department" element={<DepartmentPage />} />
             <Route path="/department/:id" element={<DepartmentPage />} />
             <Route path="/departments" element={<DepartmentPage />} />

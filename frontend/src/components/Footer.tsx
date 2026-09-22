@@ -7,6 +7,7 @@ function Footer() {
     { label: 'Research Publications', to: '/research', icon: Bookmark },
     { label: 'Patents', to: '/patents', icon: FileText },
     { label: 'Books & Chapters', to: '/books', icon: BookOpen },
+    { label: 'R&C Format', to: '/rc-format', icon: FileText },
     { label: 'About', to: '/about', icon: Info },
   ];
 
