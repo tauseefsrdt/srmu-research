@@ -94,11 +94,11 @@ function PaperCard({ paper, onViewPdf }: PaperCardProps) {
             <button
               type="button"
               onClick={handleOpenPdf}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-sm hover:shadow hover:-translate-y-0.5 cursor-pointer"
-              title="View Patent PDF in Modal"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 cursor-pointer active:scale-95"
+              title="View Patent PDF"
             >
               <FileText size={13} />
-              <span>View</span>
+              <span>View PDF</span>
             </button>
           ) : paper.doi ? (
             <a
@@ -111,7 +111,7 @@ function PaperCard({ paper, onViewPdf }: PaperCardProps) {
               <ExternalLink size={12} />
             </a>
           ) : (
-            <span className="font-mono text-xs text-slate-400">ID: {paper.id}</span>
+            <span className="font-mono text-xs text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200/60">No PDF Available</span>
           )}
         </div>
       </article>

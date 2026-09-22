@@ -9,77 +9,87 @@ export const patents = [
     patentNumber: "Patent Office Journal No. 14/2025\n202511024894",
     title: "Microstrip Patch Antenna with Metamaterial Unit Cells Loaded Radiating Patches and Ground Structure for ITS Applications",
     yearOfAward: "2025-04-04",
-    pdf: "/patent_pdf/Serial No 42_Dr . Akhilesh Kumar Mishra.pdf"
+    pdf: "/patent_pdf/Serial 1Microstrip Patch Antenna with Metamaterial  _Dr.Alkesh.pdf"
   },
   {
     srNo: 2,
     patenterName: "Dr. Alkesh Agrawal",
     patentNumber: "Patent Office Journal No. 19/2026\n202611034363",
     title: "METAMATERIAL UNIT-CELLS LOADED GROUND-STRUCTURE AND RADIATINGPATCH MICROSTRIP-ANTENNA FOR INTELLIGENT-TRANSPORTATION-SYSTEM\nAPPLICATIONS IN S-, C-, X-, KU-BAND",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 2 Metamaterial Unit Cell loaded with or 45_Dr.Alkesh.pdf"
   },
   {
     srNo: 3,
     patenterName: "Dr. Vaibhava Srivastava",
     patentNumber: "Design No. 471020-001",
     title: "Flexible Photovoltaic Film with Integrated Connector Tabs",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 3 Flexible Ohotovoltaic Film_Dr. Vaibhava Srivastava.pdf"
   },
   {
     srNo: 4,
     patenterName: "Dr. Shubham Mishra",
     patentNumber: "International Design Classification:\nVersion: 14-2023\nClass: 29 DEVICES AND EQUIPMENT AGAINST FIRE HAZARDS, FOR\nACCIDENT PREVENTION AND FOR RESCUE\nSubclass: 01 DEVICES AND EQUIPMENT AGAINST FIRE HAZARDS",
     title: "Fire Fighting Robot",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 4 Fire Fighting Robot_Dr.Shubham Mishra.pdf"
   },
   {
     srNo: 5,
     patenterName: "Dr. Kanupriya (IMCE)",
     patentNumber: "443130-001",
     title: "BIOMETRIC DEVICE",
-    yearOfAward: "2025-04-01"
+    yearOfAward: "2025-04-01",
+    pdf: "/patent_pdf/Serial 5 Biometric Device_Dr. Kanupriya (IMCE).pdf"
   },
   {
     srNo: 6,
     patenterName: "Dr. Vaibhav sharma (IMCE)",
     patentNumber: "462280-001",
     title: "AI Based Processing DeviceForTrading Analysis",
-    yearOfAward: "14/06/2025"
+    yearOfAward: "14/06/2025",
+    pdf: "/patent_pdf/Serial 6_AI based Processing Dr. Vaibhav sharma (IMCE).pdf"
   },
   {
     srNo: 7,
     patenterName: "Ms. Uma Rajey Shukla Ojha (IMCE)",
     patentNumber: "443130-001",
     title: "Design Registration (National): \"Biometric Device\" — Design No. 443130-001, Indian Patent Office, dated 04/01/2025; joint registration with 6 co-applicants (Dr. Amit Trivedi, Dr. Veena Singh, Dr. Kanupriya, Dr. Ratna Singh, Ms. Dhaarni Singh, Ms. Khushboo Joshi)",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 7 Biometric Device_ Ms. Uma Rajey Shukla Ojha (IMCE).pdf"
   },
   {
     srNo: 8,
     patenterName: "Ms. Khushboo Joshi (IMCE)",
     patentNumber: "443130-001",
     title: "Design Registration (National): \"Biometric Device\" — Design No. 443130-001, Indian Patent Office, dated 04/01/2025; joint registration with 6 co-applicants (Dr. Amit Trivedi, Dr. Veena Singh, Dr. Kanupriya, Dr. Ratna Singh, Ms. Dhaarni Singh, Ms. Khushboo Joshi)",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 8_ Biometric DeviceMs. Khushboo Joshi (IMCE).pdf"
   },
   {
     srNo: 9,
     patenterName: "Dr. Shubham Mishra",
     patentNumber: "473601-001",
     title: "PIPELINE INSPECTION ROBOT WITH INTEGRATED LIGHT AND CAMERA",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial 9_ Pipelie Inspection ROBOT Dr.Shubham Mishra.pdf"
   },
   {
     srNo: 10,
     patenterName: "Mr. Amit Kumar Srivastava",
     patentNumber: "473598-001",
     title: "IOT Based Both analog and digital meter laboratory caliper",
-    yearOfAward: "Sept 2025"
+    yearOfAward: "Sept 2025",
+    pdf: "/patent_pdf/Serial 10 IoT based both Analog and Digital_Mr. Amit Kumar Srivastava.pdf"
   },
   {
     srNo: 11,
     patenterName: "Er. Jullius Kumar, Er. Shilpi Shukla",
     patentNumber: "482137-001",
     title: "Integrated Biomedical Imaging Console for Tissue Pattern Recognition",
-    yearOfAward: "2026-02-11"
+    yearOfAward: "2026-02-11",
+    pdf: "/patent_pdf/Serial 11 Integrated Biomedical Imaging_Er. Jullius Kumar, Er. Shilpi Shukla.pdf"
   },
   {
     srNo: 12,
@@ -93,14 +103,16 @@ export const patents = [
     patenterName: "Dr. Rajeev Kumar (DCSE)",
     patentNumber: "490840-001",
     title: "AI- DRIVEN DIAGNOSTIC APPARATUS FOR ORAL CANCER RISK EVALUATION",
-    yearOfAward: "2026-12-02"
+    yearOfAward: "2026-12-02",
+    pdf: "/patent_pdf/Serial 13 _Dr. Rajeev Kumar (DCSE).pdf"
   },
   {
     srNo: 14,
     patenterName: "Dr. Yusuf Perwej (DCSE)",
     patentNumber: "6500730",
     title: "AI and EEG Based Lie Detection Device",
-    yearOfAward: "2026-03-02"
+    yearOfAward: "2026-03-02",
+    pdf: "/patent_pdf/Serial 14_Dr. Yusuf Perwej (DCSE).pdf"
   },
   {
     srNo: 15,
@@ -114,35 +126,40 @@ export const patents = [
     patenterName: "Prof. (Dr.) Balvir Singh and others.",
     patentNumber: "444640-001",
     title: "Cycle-Operated Agrochemical Sprayer",
-    yearOfAward: "Design Accepted and Published, Journal No is 18/2025 and Journal Date is 02/05/2025"
+    yearOfAward: "Design Accepted and Published, Journal No is 18/2025 and Journal Date is 02/05/2025",
+    pdf: "/patent_pdf/Serial 16 Cycle Operated Agrochemical Sprayer_Prof. (Dr.) Balvir Singh and others..pdf"
   },
   {
     srNo: 17,
     patenterName: "Prof. (Dr.) Balvir Singh and others.",
     patentNumber: "461230-001",
     title: "UV Pest Killer",
-    yearOfAward: "Design Accepted and Published, Journal No is 24/2026 and Journal Date is 12/06/2026"
+    yearOfAward: "Design Accepted and Published, Journal No is 24/2026 and Journal Date is 12/06/2026",
+    pdf: "/patent_pdf/Serial 17 UV Pest Killer_Prof. (Dr.) Balvir Singh and others..pdf"
   },
   {
     srNo: 18,
     patenterName: "Prof. (Dr.) Balvir Singh and others.",
     patentNumber: "497995-001",
     title: "Corcyra Egg Production and Collection Device",
-    yearOfAward: "CBR No.: 208663 & CBR Date: 09.04.2026; \nUnder process (Application Accepted, Certificate of Design not Generated)"
+    yearOfAward: "CBR No.: 208663 & CBR Date: 09.04.2026; \nUnder process (Application Accepted, Certificate of Design not Generated)",
+    pdf: "/patent_pdf/Serial 18 Corcyra Egg Production_Prof. (Dr.) Balvir Singh and others..pdf"
   },
   {
     srNo: 19,
     patenterName: "Prof. (Dr.) Balvir Singh and others.",
     patentNumber: "498150-001",
     title: "Vertical Crop Cultivation Device",
-    yearOfAward: "CBR No.: 208771 & CBR Date: 10.04.2026; Under process (Awaited for Technical Examination)"
+    yearOfAward: "CBR No.: 208771 & CBR Date: 10.04.2026; Under process (Awaited for Technical Examination)",
+    pdf: "/patent_pdf/Serial 19 Vertical Crop Cultivation Device _Prof. (Dr.) Balvir Singh and others..pdf"
   },
   {
     srNo: 20,
     patenterName: "Prof. (Dr.) Balvir Singh and others.",
     patentNumber: "5000796-001",
     title: "Horticulture Irrigation Device",
-    yearOfAward: "CBR No.: 210504 & CBR Date: 05.05.2026; Under process (Awaited for Technical Examination)"
+    yearOfAward: "CBR No.: 210504 & CBR Date: 05.05.2026; Under process (Awaited for Technical Examination)",
+    pdf: "/patent_pdf/Serial 20 Horticulture Irrigation Device_Prof. (Dr.) Balvir Singh and others..pdf"
   },
   {
     srNo: 21,
@@ -184,70 +201,80 @@ export const patents = [
     patenterName: "Dr. Manju Bhardwaj",
     patentNumber: "International Design Classification:\nVersion: 14-2023\nClass: 29 DEVICES AND EQUIPMENT AGAINST FIRE HAZARDS, FOR\nACCIDENT PREVENTION AND FOR RESCUE\nSubclass: 01 DEVICES AND EQUIPMENT AGAINST FIRE HAZARDS",
     title: "Fire Fighting Robot",
-    yearOfAward: "2026"
+    yearOfAward: "2026",
+    pdf: "/patent_pdf/Serial No 50 Fire Fighting Robot_Dr.Rohit Singh.pdf"
   },
   {
     srNo: 27,
     patenterName: "Prof. (Dr.) Abhishek Saxena and Er. Saman Khan",
     patentNumber: "471911-001",
     title: "Smart IoT Driven Micro-Irrigation and Water Allocation System with AI-Based Crop and Soil Response Analytics (Design No. - 471911-001, Serial No. 216265, The Patent Office, Government of India)",
-    yearOfAward: "31/08/2025"
+    yearOfAward: "31/08/2025",
+    pdf: "/patent_pdf/Serial 27_ Smart IoT Driven Micro Irrigation Dr Abshishek Saxena.pdf"
   },
   {
     srNo: 28,
     patenterName: "Prof. (Dr.) Abhishek Saxena",
     patentNumber: "464457-001",
     title: "Intelligent Irrigation Sheduler with ML Forecasting (Design No. - 464457-001, Serial No. 210602, The Patent Office, Government of India)",
-    yearOfAward: "2025-03-07"
+    yearOfAward: "2025-03-07",
+    pdf: "/patent_pdf/Serial 28 Intelligent Irrigation Sheduler _ Dr Abshishek Saxena.pdf"
   },
   {
     srNo: 29,
     patenterName: "Prof. (Dr.) Abhishek Saxena",
     patentNumber: "467509-001",
     title: "Drone Based Smart Agricultural Health Monitoring System  (Design No. - 467509-001, Serial No. 214571, The Patent Office, Government of India)",
-    yearOfAward: "28/07/2025"
+    yearOfAward: "28/07/2025",
+    pdf: "/patent_pdf/Serial 29 Drone based Smart Agricultural Health_ Dr Abshishek Saxena.pdf"
   },
   {
     srNo: 30,
     patenterName: "Ms. Sarita Singh",
     patentNumber: "487894-001",
     title: "MICROREACTOR DEVICE FOR SYNTHESIS OF NANOPARTICLES",
-    yearOfAward: "Granted/ Published , 20/01/2026"
+    yearOfAward: "Granted/ Published , 20/01/2026",
+    pdf: "/patent_pdf/Serial 30 Microreactor Device _Ms. Sarita Singh.pdf"
   },
   {
     srNo: 31,
     patenterName: "Dr. Sushma Singh, Pramod Chauhan\nLAVKUSH KUMAR PAL, Saumya Awasthi\nShraddha Pandey",
     patentNumber: "479325-001",
     title: "PORTABLE NEUROSTIMULATION APPARATUS FOR TARGETED BRAIN REGION ACTIVATION",
-    yearOfAward: "Granted/ Published ,06/11/2025"
+    yearOfAward: "Granted/ Published ,06/11/2025",
+    pdf: "/patent_pdf/Serial 31 Portable Neurostimulation apparatus_Dr. Sushma Singh.pdf"
   },
   {
     srNo: 32,
     patenterName: "Ajeet Singh",
     patentNumber: "4658510-001",
     title: "AI Based Apparatus molecular docking and drug discovery",
-    yearOfAward: "Granted/ Published"
+    yearOfAward: "Granted/ Published",
+    pdf: "/patent_pdf/Serial 32 AI based Apparatus molecular _Ajeet Singh.pdf"
   },
   {
     srNo: 33,
     patenterName: "Dr. Shikha Srivastava",
     patentNumber: "465279-001",
     title: "AI-BASED MASS SPECTROMETRY\nPLATFORM FOR NOVEL DRUG METABOLITE PROFILING",
-    yearOfAward: "Granted"
+    yearOfAward: "Granted",
+    pdf: "/patent_pdf/Serial 33 AI based Mass Spectrometry_Dr. Shikha Srivastava.pdf"
   },
   {
     srNo: 34,
     patenterName: "Shubham Goutam",
     patentNumber: "491980-002",
     title: "DEVICE FOR DETECTION AND MONITORING OF COLON CANCER PROGRESSION",
-    yearOfAward: "Granted/ Published ,09/02/2026"
+    yearOfAward: "Granted/ Published ,09/02/2026",
+    pdf: "/patent_pdf/Serial 34 Device for Detection and Monitoring of Colon Cancer_Shubham Goutam.pdf"
   },
   {
     srNo: 35,
     patenterName: "Shubham Goutam",
     patentNumber: "491525-001",
     title: "DEVICE FOR ASSESSING HEART PHARMACODYNAMICS DURING DRUG ADMINISTRATION",
-    yearOfAward: "Granted/ Published ,16/04/2026"
+    yearOfAward: "Granted/ Published ,16/04/2026",
+    pdf: "/patent_pdf/Serial 35 Device for Assessing Heart_Shubham Goutam.pdf"
   },
   {
     srNo: 36,
@@ -275,7 +302,8 @@ export const patents = [
     patenterName: "Dr . Akhilesh Kumar Mishra,Dr Anjali Harshvardhan Ghongade,Dr. Harshvardhan Prabhakar Ghongade",
     patentNumber: "Certificate No: LD-20260183510 (Copy right Certificate)",
     title: "AI Based Image Recognition Device for  Autonomous Vehicles",
-    yearOfAward: "Granted/ Published ,17/03/2026"
+    yearOfAward: "Granted/ Published ,17/03/2026",
+    pdf: "/patent_pdf/Serial 39 AI based Image Recognition_Dr . Akhilesh Kumar Mishra.pdf"
   },
   {
     srNo: 40,
@@ -296,7 +324,8 @@ export const patents = [
     patenterName: "Dr Pramod Kumar, Dr Akhilesh Kumar Mishra , Dr Ajay Singh, Dr Anuj Kumar Agarwal, Dr. Mayank Trivedi , Dr. Ambrish Kumar Pandey , Dr . Ramamnand Mishra , Dr. Arunesh Kumar Mishra, Ms. Siddhi Srivastava, Ms Chhavi Singh",
     patentNumber: "Design No:  472943-001",
     title: "FUZZY- CONTROLLED SMART SAFETY HARNESS",
-    yearOfAward: "Granted/ Published ,10/12/2025"
+    yearOfAward: "Granted/ Published ,10/12/2025",
+    pdf: "/patent_pdf/Serial No 42_Dr . Akhilesh Kumar Mishra.pdf"
   },
   {
     srNo: 43,
@@ -324,7 +353,8 @@ export const patents = [
     patenterName: "Dr. Ramesh Kumar, Dr. Ravindra Pratap Singh, Dr Abhiram Shukla, Prof(Dr.) VIRENDRA NATH PATHAK, Mrs Anamika Srivastava, Dr. Archana Srivastava, Dr. Sachin Khare, Dr. Mamta pathak, Dr vimlesh kumar gupta",
     patentNumber: "Design No:  488457-001",
     title: "Mathematics Problem -Solving Device",
-    yearOfAward: "published on 20/05/2026"
+    yearOfAward: "published on 20/05/2026",
+    pdf: "/patent_pdf/Serial 46 Mathematical Problem Solving Device_Dr . Akhilesh Kumar Mishra.pdf"
   },
   {
     srNo: 48,
