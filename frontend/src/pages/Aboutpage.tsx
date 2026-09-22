@@ -5,11 +5,39 @@ import {
   Target,
   Sparkles,
   CheckCircle2,
+  Mail,
+  UserCheck,
+  Building2,
+  Phone,
 } from 'lucide-react';
 import { gsap } from 'gsap';
 
 function Aboutpage() {
   const pageRef = useRef<HTMLDivElement>(null);
+
+  const leadership = [
+    {
+      name: 'Prof. (Dr.) Nabeel Ahmad',
+      role: 'Director (Research)',
+      email: 'director.research@srmu.ac.in',
+      tag: 'Leadership',
+      image: '/about/Nabeel Ahmad.png',
+    },
+    {
+      name: 'Prof. (Dr.) Alkesh Agrawal',
+      role: 'Deputy Director (Research)',
+      email: 'dd.research@srmu.ac.in',
+      tag: 'Administration',
+      image: '/about/Alkesh Agrawal.png',
+    },
+    {
+      name: 'Dr. Shailendra Bisht',
+      role: 'Asstt. Registrar (Research)',
+      email: 'research@srmu.ac.in',
+      tag: 'Coordination',
+      image: '/about/Shailendra Bisht.png',
+    },
+  ];
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -205,6 +233,71 @@ function Aboutpage() {
           scholarly excellence across engineering, technology, sciences,
           humanities, and management.
         </p>
+      </div>
+
+      {/* R&C Leadership Directory */}
+      <div className="mb-12">
+        <div className="about-card-reveal flex items-center justify-between mb-6 pb-2 border-b border-slate-200/80 flex-wrap gap-2">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2 h-5 bg-[#0A4A8F] rounded-full" />
+            <h2 className="font-serif text-2xl font-bold text-[#1F2937] m-0">
+              Research &amp; Consultancy Administration
+            </h2>
+          </div>
+          <span className="font-mono text-xs font-semibold uppercase tracking-wider text-[#0A4A8F] px-3 py-1 rounded-full bg-[#0A4A8F]/10 border border-[#0A4A8F]/20">
+            Official Directory
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {leadership.map((person, idx) => (
+            <div
+              key={idx}
+              className="about-card-reveal group relative p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-[#0A4A8F]/30 transition-all duration-300 hover:-translate-y-1 flex items-center gap-5 overflow-hidden"
+            >
+              {/* Circular Avatar with Golden Ring */}
+              <div className="relative shrink-0">
+                <div className="w-20 h-20 sm:w-[88px] sm:h-[88px] rounded-full p-[3px] bg-gradient-to-tr from-[#FFB703] via-[#FFE29A] to-[#FFB703] shadow-md group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                    <img
+                      src={person.image}
+                      alt={person.name}
+                      className="w-full h-full object-cover object-top"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Information Content */}
+              <div className="min-w-0 flex-1 flex flex-col justify-center">
+                <h3 className="font-sans text-[17px] sm:text-[18px] font-bold text-[#0A4A8F] leading-snug mb-1 group-hover:text-[#0C5CA8] transition-colors truncate" title={person.name}>
+                  {person.name}
+                </h3>
+
+                <p className="text-xs sm:text-[13px] font-medium text-slate-700 leading-snug mb-2 truncate" title={person.role}>
+                  {person.role}
+                </p>
+
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2 truncate">
+                  <Building2 size={13} className="text-slate-400 shrink-0" />
+                  <span className="truncate">SRMU, Barabanki-India</span>
+                </div>
+
+                <a
+                  href={`mailto:${person.email}`}
+                  className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-500 hover:text-[#0A4A8F] transition-colors group/mail truncate"
+                  title={person.email}
+                >
+                  <Mail size={12} className="text-[#0A4A8F] shrink-0" />
+                  <span className="truncate hover:underline underline-offset-2">{person.email}</span>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Mission & Vision Cards */}
