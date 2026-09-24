@@ -2317,6 +2317,316 @@ export const researchPapers = [
     issnNumber: "2395-4396",
     ugcRecognitionLink: "https://ijariie.com/manuscript/27753"
   },
+  {
+    srNo: 205,
+    title: "Genome-wide identification and characterization of B3 superfamily in Cucumis melo (L.) and their expression profiling under fruit development and biotic stress",
+    authorName: "Nootan Singh",
+    department: "IBST",
+    journalName: "Vegetos",
+    yearOfPublication: "2026",
+    issnNumber: "2229-4473",
+    ugcRecognitionLink: "https://link.springer.com/journal/42535"
+  },
+  {
+    srNo: 206,
+    title: "Genome-wide identification and characterization of B3 superfamily in Cucumis melo (L.) and their expression profiling under fruit development and biotic stress",
+    authorName: "Dr. Ankita Srivastava",
+    department: "IBST",
+    journalName: "Vegetos",
+    yearOfPublication: "2026",
+    issnNumber: "2229-4473",
+    ugcRecognitionLink: "https://link.springer.com/article/10.1007/s42535-026-01721-8"
+  },
+  {
+    srNo: 207,
+    title: "Chemoresistance: The hidden barrier in cancer treatment",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Cancer Pathogenesis and Therapy",
+    yearOfPublication: "2025",
+    issnNumber: "2949-7132",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/pii/S2949713225000783"
+  },
+  {
+    srNo: 208,
+    title: "Nanomaterials for sustainable agriculture: Plant physiology and environmental resilience",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Physiological and Molecular Plant Pathology",
+    yearOfPublication: "2025",
+    issnNumber: "1096-1178",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/abs/pii/S0885576525002632"
+  },
+  {
+    srNo: 209,
+    title: "Recent advances in phosphorus nano-fertilizers: Impacts on crop productivity and soil sustainability",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Physiological and Molecular Plant Pathology",
+    yearOfPublication: "2025",
+    issnNumber: "1096-1178",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/abs/pii/S0885576525003248"
+  },
+  {
+    srNo: 210,
+    title: "Plant growth promoting rhizobacteria as biostimulants for plant and soil health: Current research and future challenges",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Journal of Applied Biology & Biotechnology",
+    yearOfPublication: "2025",
+    issnNumber: "2347-212X",
+    ugcRecognitionLink: "https://jabonline.in/abstract.php?article_id=1386&sts=2"
+  },
+  {
+    srNo: 211,
+    title: "Clinical evidence on BCG vaccination and COVID-19 infection: A systematic review",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Respiratory Investigation",
+    yearOfPublication: "2026",
+    issnNumber: "2212-5353",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/abs/pii/S2212534526000560"
+  },
+  {
+    srNo: 212,
+    title: "Liquid biopsy in modern medicine: advancing diagnostics from molecular insights to clinical practice",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Clinical and Translational Oncology",
+    yearOfPublication: "2026",
+    issnNumber: "1699-3055",
+    ugcRecognitionLink: "https://link.springer.com/article/10.1007/s12094-026-04363-z"
+  },
+  {
+    srNo: 213,
+    title: "Large Language Models (LLMs) and multimodal AI as clinical copilots in allergy clinics: Opportunities, pitfalls, and regulatory horizons",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Allergy Medicine",
+    yearOfPublication: "2026",
+    issnNumber: "2949-9135",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/pii/S2949913526000303"
+  },
+  {
+    srNo: 214,
+    title: "Sustained-release fertilizers for nutrient-use efficiency and environmental resilience: A critical and integrative review",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Journal of Environmental Chemical Engineering",
+    yearOfPublication: "2026",
+    issnNumber: "2213-3437",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/abs/pii/S2213343726028083"
+  },
+  {
+    srNo: 215,
+    title: "Bioefficiency and profile of lignocellulolytic enzymes in oyster mushroom (Pleurotus florida) cultured on the substrate with dried mango leaves",
+    authorName: "Dr. Devendra Singh",
+    department: "IBST",
+    journalName: "Vegetos",
+    yearOfPublication: "2026",
+    issnNumber: "2229-4473",
+    ugcRecognitionLink: "https://link.springer.com/article/10.1007/s42535-026-01819-z"
+  },
+  {
+    srNo: 216,
+    title: "Bacillus spp. and Jeotgalicoccus huakuii induce rice growth and salt stress resilience through eco-physiological adaptations",
+    authorName: "Dr. Sankalp Misra",
+    department: "IBST",
+    journalName: "Environmental Sustainability",
+    yearOfPublication: "2026",
+    issnNumber: "2523-8922",
+    ugcRecognitionLink: "Bacillus spp. and Jeotgalicoccus huakuii induce rice growth and salt stress resilience through eco-physiological adaptations | Environmental Sustainability | Springer Nature Link"
+  },
+  {
+    srNo: 217,
+    title: "The biostimulant role of microbial exopolysaccharides: mechanisms and agricultural applications",
+    authorName: "Dr. Sankalp Misra",
+    department: "IBST",
+    journalName: "World Journal of Microbiology and Biotechnology",
+    yearOfPublication: "2026",
+    issnNumber: "0959-3993",
+    ugcRecognitionLink: "The biostimulant role of microbial exopolysaccharides: mechanisms and agricultural applications | World Journal of Microbiology and Biotechnology | Springer Nature Link"
+  },
+  {
+    srNo: 218,
+    title: "Harnessing Endophytes and Multi-Omics for Sustainable Colchicine",
+    authorName: "Dr. Sankalp Misra",
+    department: "IBST",
+    journalName: "World Journal of Microbiology and Biotechnology",
+    yearOfPublication: "2026",
+    issnNumber: "0959-3993",
+    ugcRecognitionLink: "Harnessing endophytes and Multi-Omics for sustainable Colchicine biosynthesis | World Journal of Microbiology and Biotechnology | Springer Nature Link"
+  },
+  {
+    srNo: 219,
+    title: "Endophytic bacterial's phenylalanine and trans-cinnamic acid as exogenous precursors involved in the modulating colchicine biosynthesis pathway in Gloriosa superba",
+    authorName: "Dr. Sankalp Misra",
+    department: "IBST",
+    journalName: "Plant Physiology and Biochemistry",
+    yearOfPublication: "2025",
+    issnNumber: "1873-2690",
+    ugcRecognitionLink: "Endophytic bacterial's phenylalanine and trans-cinnamic acid as exogenous precursors involved in the modulating colchicine biosynthesis pathway in Gloriosa superba - ScienceDirect"
+  },
+  {
+    srNo: 220,
+    title: "Novel laccases for synthetic dye pollution mitigation-screening, statistical optimization and molecular characterization",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "3 Biotech",
+    yearOfPublication: "2026",
+    issnNumber: null,
+    ugcRecognitionLink: "https://doi.org/10.1007/s13205-026-04794-z."
+  },
+  {
+    srNo: 221,
+    title: "From concept to shelf: engineering biopolymer-based food packaging for sustainability",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "RSC Sustainability",
+    yearOfPublication: "2025",
+    issnNumber: null,
+    ugcRecognitionLink: "https://doi.org/10.1039/d5su00483g"
+  },
+  {
+    srNo: 222,
+    title: "Circular economy inspired utilization of tea waste in dye pollution mitigation",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "Journal of Solid Waste Technology and Management",
+    yearOfPublication: "2025",
+    issnNumber: null,
+    ugcRecognitionLink: "http://doi.org/10.5276/jswtm/iswmaw/514-1/2025.777"
+  },
+  {
+    srNo: 223,
+    title: "Evaluation of Aspergillus fumigatus for degradation of Resorcinol",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "International Journal of Emerging Trends in Research",
+    yearOfPublication: "2025",
+    issnNumber: "2455-6130",
+    ugcRecognitionLink: "https://www.ijoetr.com/_files/ugd/0d215a_5d1e537b324c4861b30cfc421dc0e4fb.pdf"
+  },
+  {
+    srNo: 224,
+    title: "Regulatory influence of sugars on amylase production by Aspergillus fumigatus using agricultural waste as fermentation substrate",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "Internat. J. agric. Sci.,",
+    yearOfPublication: "2025",
+    issnNumber: null,
+    ugcRecognitionLink: "10.15740/HAS/IJAS/21/RAABASED-2025/12-19"
+  },
+  {
+    srNo: 225,
+    title: "Computational modelling for soil fertility evaluation in IIB-TPLB Zone of Rajasthan, India- A step towads efficient soil managament",
+    authorName: "Dr Shalini Singh",
+    department: "IBST",
+    journalName: "Machine Intelligence for Research and Innovations, Springer",
+    yearOfPublication: "2026",
+    issnNumber: null,
+    ugcRecognitionLink: "10.10007/978-3-032-22827-7_3"
+  },
+  {
+    srNo: 226,
+    title: "Waste to wealth: sustainable approach of alchemizing mushroom SMS into bioenergy.",
+    authorName: "Dr. Garima Gupta",
+    department: "IBST",
+    journalName: "Bioresource Technology",
+    yearOfPublication: "2026",
+    issnNumber: null,
+    ugcRecognitionLink: "10.1016/j.biortech.2025.133767"
+  },
+  {
+    srNo: 227,
+    title: "Recent Advancements in Photoactive Nanohybrids for Energy, Environmental, and Biomedical Applications: A Comprehensive Review",
+    authorName: "Dr. Garima Gupta",
+    department: "IBST",
+    journalName: "Asian Journal of Green Chemistry",
+    yearOfPublication: "2025",
+    issnNumber: null,
+    ugcRecognitionLink: "https://doi.org/10.48309/AJGC.2025.531108.1762"
+  },
+  {
+    srNo: 228,
+    title: "Clinical evidence on BCG vaccination and COVID-19 infection: A systematic review",
+    authorName: "Er. Sunil Kumar Verma",
+    department: "IBST",
+    journalName: "Respiratory Investigation",
+    yearOfPublication: "2026",
+    issnNumber: "2212-5353",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/abs/pii/S2212534526000560"
+  },
+  {
+    srNo: 229,
+    title: "Large Language Models (LLMs) and multimodal AI as clinical copilots in allergy clinics: Opportunities, pitfalls, and regulatory horizons",
+    authorName: "Er. Sunil Kumar Verma",
+    department: "IBST",
+    journalName: "Allergy Medicine",
+    yearOfPublication: "2026",
+    issnNumber: "2949-9135",
+    ugcRecognitionLink: "https://www.sciencedirect.com/science/article/pii/S2949913526000303"
+  },
+  {
+    srNo: 230,
+    title: "Autophagy Modulating Potential of Mucuna pruriens in Parkinson’s Disease.",
+    authorName: "Dr. Neeraj Tiwari",
+    department: "IBST",
+    journalName: "Current Traditional Medicine",
+    yearOfPublication: "2025",
+    issnNumber: "2215-0846",
+    ugcRecognitionLink: "10.2174/0122150838346643241211055438"
+  },
+  {
+    srNo: 231,
+    title: "Methylation based predictive biomarkers panel of genes for early detection and chemotherapy response in NSCLC",
+    authorName: "Dr. Neeraj Tiwari",
+    department: "IBST",
+    journalName: "Indian Journal of Clinical Biochemistry",
+    yearOfPublication: "2025",
+    issnNumber: "0974-0422",
+    ugcRecognitionLink: "https://doi.org/10.1007/s12291-025-01373-6"
+  },
+  {
+    srNo: 232,
+    title: "An overview of lead toxicity and its therapeutic strategies",
+    authorName: "Dr. Shalini Singh",
+    department: "IBST",
+    journalName: "Journal of Trace Elements in Medicine and Biology",
+    yearOfPublication: "2026",
+    issnNumber: "1878-3252",
+    ugcRecognitionLink: "https://doi.org/10.1016/j.jtemb.2026.127815"
+  },
+  {
+    srNo: 233,
+    title: "Dinitrogen fixation by Cyanobacteria",
+    authorName: "Dr. Pratibha Gupta",
+    department: "IBST",
+    journalName: "International Journal of Environmental Sciences",
+    yearOfPublication: "2025",
+    issnNumber: "2229-7359",
+    ugcRecognitionLink: "https://theaspd.com/index.php/ijes/article/view/7335/5309"
+  },
+  {
+    srNo: 234,
+    title: "Chitosan-based films and coatings for active and intelligent food packaging: Formulation strategies, sensing mechanisms, and quality monitoring",
+    authorName: "Er. Diksha Singh",
+    department: "IBST",
+    journalName: "Frontiers in Sustainable Food Systems",
+    yearOfPublication: "2026",
+    issnNumber: null,
+    ugcRecognitionLink: "https://doi.org/10.3389/fsufs.2026.1849828"
+  },
+  {
+    srNo: 235,
+    title: "Millet starch digestibility: Structural characteristics, processing strategies, and nutritional implications",
+    authorName: "Er. Diksha Singh",
+    department: "IBST",
+    journalName: "Food and Humanity",
+    yearOfPublication: "2026",
+    issnNumber: null,
+    ugcRecognitionLink: "https://doi.org/10.1016/j.foohum.2026.101221"
+  },
 ];
 
 // books
