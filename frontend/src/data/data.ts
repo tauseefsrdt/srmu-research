@@ -2317,6 +2317,186 @@ export const researchPapers = [
     issnNumber: "2395-4396",
     ugcRecognitionLink: "https://ijariie.com/manuscript/27753"
   },
+  {
+    srNo: 205,
+    title: "DIGITAL SHADOWS: THE ROLE OF TECHNOLOGY IN FACILITATING AND COMBATING HUMAN TRAFFICKING",
+    authorName: "Dr. Prakash Chandra Mishra, Ms Akansha tiwari",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Advance Research and Innovative Ideas in Education",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN: 2395-4396",
+    ugcRecognitionLink: "https://ijariie.com/manuscript/28113"
+  },
+  {
+    srNo: 206,
+    title: "Privacy, Power, and Pedagogy: Addressing Data Exploitation and the Digital Divide in Indian Universities",
+    authorName: "Anand Kumar, Assistant Professor",
+    department: "Institute of Legal Studies",
+    journalName: "Indian Journal of Integrated Research in Law (IJIRL)",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN: 2583-0538",
+    ugcRecognitionLink: "DOI: IJIRL/V6-I2/A15"
+  },
+  {
+    srNo: 207,
+    title: "Impact of Personal Data Protection Regulation on Digital Businesses in India",
+    authorName: "Anand Kumar, Assistant Professor",
+    department: "Institute of Legal Studies",
+    journalName: "Journal of International Law, Politics and Society",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN No. : 3108-0464",
+    ugcRecognitionLink: "https://jilps.in/journal/impact-of-personal-data-protection-regulation-on-digital-businesses-in-india/"
+  },
+  {
+    srNo: 208,
+    title: "CHILD TRAFFICKING AND THE LAW: A COMPARATIVE ANALYSIS OF LEGISLATIVE APPROACHES ACROSS JURISDICTIONS",
+    authorName: "Akanksha Tiwari",
+    department: "Institute of Legal Studies",
+    journalName: "THE LEGALITES LEXSCRIPTA",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN: 3108-2416",
+    ugcRecognitionLink: "https://thelegalites.co.in/volume-ii-issue-i-january-to-march-2026/"
+  },
+  {
+    srNo: 209,
+    title: "Technological Transformation in Warfare and Global Environmental Harm: Assessing the Adequacy of International Humanitarian Law, Environmental Regulations, and Policy Frameworks",
+    authorName: "Akanksha Tiwari, Ram Krishna Tripathi",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Advance Research and Innovative Ideas in Education",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN: 2395-4396",
+    ugcRecognitionLink: "https://ijariie.com/storage/legacy_migration/AdminUploadPdf/Technological_Transformation_in_Warfare_and_Global_Environmental_Harm__Assessing_the_Adequacy_of_International_Humanitarian_Law__Environmental_Regulations__and_Policy_Frameworks_ijariie28436.pdf"
+  },
+  {
+    srNo: 210,
+    title: "NATIONAL ENVIRONMENTAL LEGISLATION IN INDIA: A CRITICAL EVALUATION OF STATUTORY FRAMEWORK AND IMPLEMENTATION CHALLENGES",
+    authorName: "Annapurna Trivedi, Prof. (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Engineering Science And Advanced Technology",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN No:2250-3676",
+    ugcRecognitionLink: "https://www.ijesat.com/archivesa_view.php?pid=1804"
+  },
+  {
+    srNo: 211,
+    title: "Victim Rights Under the Bhartiya Nagrik Suraksha Sanhitya,2003: From Procedural Recognition to Enforceable Participation",
+    authorName: "Ammna Muzaffar, Prof (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Advance Research and Innovative Ideas in Education",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN No-2395-4396",
+    ugcRecognitionLink: "https://www.ijariie.com"
+  },
+  {
+    srNo: 212,
+    title: "Revisiting Victim Compensation in India: Legal Architecture, Judicial Responses, and Presistent Justice Deficits",
+    authorName: "Ammna Muzaffar, Prof (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "Journal of Emerging Technologies and Innovative Research",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN No-2349-5162",
+    ugcRecognitionLink: "https://www.jetir.org"
+  },
+  {
+    srNo: 213,
+    title: "Environmental Jurisprudence and the National Green Tribunal: A critical Study",
+    authorName: "Annapurna Trivedi, Prof. (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "Shodh Drishti (An International Peer Reviewed Refereed Research Journal)",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN : 0976-6650",
+    ugcRecognitionLink: "https://shodhdrishti.com"
+  },
+  {
+    srNo: 214,
+    title: "Digital Evidence in Cyber Crime Investigation: Legal, Technical And Procedural Perspectives",
+    authorName: "Suneeta Rathor, Prof (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "Multidisciplinary Journal of Academic publication",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN: 3107-538x",
+    ugcRecognitionLink: "https://www.mjapjournal.com"
+  },
+  {
+    srNo: 215,
+    title: "An Analytical Assessment of Cyber Investigation Processes and the Admissibility of Digital Evidence",
+    authorName: "Suneeta Rathor, Prof (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "Quest Journal of Education, Arts, Law and Multidisciplinary",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN: 2347-2895",
+    ugcRecognitionLink: "https://www.questjournals.org"
+  },
+  {
+    srNo: 216,
+    title: "Upholding Human Rights of Third Gender in India: Challenges and Opportunities",
+    authorName: "Prof (Dr.) Aryendu Dwivedi",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Multidisciplinary Research",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN-2582-2160",
+    ugcRecognitionLink: "https://www.ijfmr.com"
+  },
+  {
+    srNo: 217,
+    title: "Impact of Cyber Laws in Protection of Women from Cybercrime",
+    authorName: "Archanna Johari, Dr. Shashank Shekhar",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Advance Research and Innovative Ideas In Education",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN-2395-4396",
+    ugcRecognitionLink: "https://www.ijariie.com"
+  },
+  {
+    srNo: 218,
+    title: "Justice for Every Child: Analysing the Role of Special Courts Under POCSO",
+    authorName: "Flori Dwivedi, Dr. Shruti Sharma",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Human Resource & Industrial Research",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN-2349-4816",
+    ugcRecognitionLink: "https://arseam.com/journal"
+  },
+  {
+    srNo: 219,
+    title: "Restorative Justice Principles For Juveniles: A Pathway to Juvenile Social Reintegration",
+    authorName: "Flori Dwivedi, Dr. Shruti Sharma",
+    department: "Institute of Legal Studies",
+    journalName: "IJARIIE",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN-2395-4396",
+    ugcRecognitionLink: "https://ijariie.com"
+  },
+  {
+    srNo: 220,
+    title: "Strengthening Legal Framework for Juvenile Online Safety: Evaluating Cyber Law and Policies",
+    authorName: "Flori Dwivedi, Dr. Shruti Sharma",
+    department: "Institute of Legal Studies",
+    journalName: "THE LEGALITES LEXSCRIPTA",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN-3108-2416",
+    ugcRecognitionLink: "https://thelegalites.co.in"
+  },
+  {
+    srNo: 221,
+    title: "Resignation as an Escape From Judicial Accountability: Reassessing The Constitutional Framework after the Justice Yashwant Varma controversy",
+    authorName: "Neelam Mishra, Dr. Shashank Shekhar",
+    department: "Institute of Legal Studies",
+    journalName: "International Journal of Human Resource & Industrial Research",
+    yearOfPublication: "2025",
+    issnNumber: "ISSN-2349-3593",
+    ugcRecognitionLink: "https://doi.org/10.5281/zenodo.23013"
+  },
+  {
+    srNo: 222,
+    title: "Use of AI as a Counter Measure of Human Trafficking In India: An Analysis",
+    authorName: "Aradhana Tripathi, Dr. Shashank Shekhar",
+    department: "Institute of Legal Studies",
+    journalName: "Asian Journal of Advanced Studies",
+    yearOfPublication: "2026",
+    issnNumber: "ISSN-2395-4965",
+    ugcRecognitionLink: "https://skylarkpublication.in/"
+  }
 ];
 
 // books
