@@ -1123,14 +1123,12 @@ export default function DepartmentPage() {
                         <td className="py-3 px-4 text-center">
                           <span
                             className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${
-                              row.noOfVacant > 0
+                              (row.noOfVacant || 0) > 0
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                : row.noOfVacant === 0
-                                  ? "bg-slate-100 text-slate-600 border-slate-200"
-                                  : "bg-rose-50 text-rose-700 border-rose-200"
+                                : "bg-slate-100 text-slate-600 border-slate-200"
                             }`}
                           >
-                            {row.noOfVacant}
+                            {Math.max(0, row.noOfVacant || 0)}
                           </span>
                         </td>
                       </tr>

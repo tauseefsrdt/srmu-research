@@ -492,14 +492,12 @@ export default function VacantSeatView({
                       <td className="py-3.5 px-4 text-center">
                         <span
                           className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-3 py-1 rounded-full border ${
-                            row.noOfVacant > 0
+                            (row.noOfVacant || 0) > 0
                               ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                              : row.noOfVacant === 0
-                              ? "bg-slate-100 text-slate-600 border-slate-200"
-                              : "bg-rose-50 text-rose-700 border-rose-200"
+                              : "bg-slate-100 text-slate-600 border-slate-200"
                           }`}
                         >
-                          {row.noOfVacant}
+                          {Math.max(0, row.noOfVacant || 0)}
                         </span>
                       </td>
                     </tr>
@@ -559,18 +557,14 @@ export default function VacantSeatView({
                     </span>
                     <span
                       className={`font-mono text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${
-                        row.noOfVacant > 0
+                        (row.noOfVacant || 0) > 0
                           ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                          : row.noOfVacant === 0
-                          ? "bg-slate-100 text-slate-600 border-slate-200"
-                          : "bg-rose-50 text-rose-700 border-rose-200"
+                          : "bg-slate-100 text-slate-600 border-slate-200"
                       }`}
                     >
-                      {row.noOfVacant > 0
+                      {(row.noOfVacant || 0) > 0
                         ? `${row.noOfVacant} Vacant`
-                        : row.noOfVacant === 0
-                        ? "Full (0)"
-                        : `${row.noOfVacant} Balance`}
+                        : "Full (0)"}
                     </span>
                   </div>
 
@@ -611,7 +605,7 @@ export default function VacantSeatView({
                   </div>
                   <div
                     className={`p-2 rounded-xl border ${
-                      row.noOfVacant > 0
+                      (row.noOfVacant || 0) > 0
                         ? "bg-emerald-50/60 border-emerald-100"
                         : "bg-slate-50 border-slate-100"
                     }`}
@@ -619,14 +613,12 @@ export default function VacantSeatView({
                     <span className="text-[10px] font-mono text-slate-400 uppercase block">Vacant</span>
                     <span
                       className={`font-mono text-sm font-extrabold ${
-                        row.noOfVacant > 0
+                        (row.noOfVacant || 0) > 0
                           ? "text-emerald-700"
-                          : row.noOfVacant === 0
-                          ? "text-slate-700"
-                          : "text-rose-700"
+                          : "text-slate-700"
                       }`}
                     >
-                      {row.noOfVacant}
+                      {Math.max(0, row.noOfVacant || 0)}
                     </span>
                   </div>
                 </div>

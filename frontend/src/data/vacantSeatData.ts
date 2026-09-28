@@ -51,7 +51,8 @@ export const VACANT_SEAT_TOTAL: VacantSeatTotal = {
   noOfVacant: 230,
 };
 
-export const VACANT_SEAT_DATA: VacantSeatRow[] = [
+// Ensure vacant seats are never negative (clamp min to 0)
+const RAW_VACANT_SEAT_DATA: VacantSeatRow[] = [
   {
     id: 1,
     rowIndex: 3,
@@ -1804,6 +1805,11 @@ export const VACANT_SEAT_DATA: VacantSeatRow[] = [
     noOfVacant: 3,
   },
 ];
+
+export const VACANT_SEAT_DATA: VacantSeatRow[] = RAW_VACANT_SEAT_DATA.map((row) => ({
+  ...row,
+  noOfVacant: Math.max(0, row.noOfVacant || 0),
+}));
 
 export const getUniqueInstitutes = (): string[] => {
   const set = new Set<string>();
