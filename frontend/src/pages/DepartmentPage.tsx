@@ -18,10 +18,12 @@ import {
   LayoutGrid,
   Table as TableIcon,
   Sparkles,
+  TrendingUp,
+  BarChart3,
 } from "lucide-react";
 import { gsap } from "gsap";
 import { getDepartmentById, DEPARTMENTS_LIST, DepartmentInfo } from "../data/departmentData";
-import { ThesisAwarded } from "../data/thesisAwardedData";
+import { PHD_AWARDED_YEARS, PhDAwardedRecord } from "../data/phdSupervisorYearwiseData";
 import Pagination from "../components/Pagination";
 import PdfModal from "../components/PdfModal";
 
@@ -29,8 +31,11 @@ export default function DepartmentPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<"theses" | "faculty" | "publications" | "patents" | "books">("theses");
+  const [activeTab, setActiveTab] = useState<"theses" | "phdYearwise" | "faculty" | "publications" | "patents" | "books">("theses");
   const [thesisViewMode, setThesisViewMode] = useState<"cards" | "table">("cards");
+  const [phdYearwiseViewMode, setPhdYearwiseViewMode] = useState<"table" | "cards">("table");
+  const [selectedYearFilter, setSelectedYearFilter] = useState<string>("All");
+  const [selectedPhDDeptFilter, setSelectedPhDDeptFilter] = useState<string>("All");
   const [deptInfo, setDeptInfo] = useState<DepartmentInfo | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedThesisDept, setSelectedThesisDept] = useState("All");
@@ -45,6 +50,8 @@ export default function DepartmentPage() {
     setDeptInfo(data);
     setSearchQuery("");
     setSelectedThesisDept("All");
+    setSelectedPhDDeptFilter("All");
+    setSelectedYearFilter("All");
     setCurrentPage(1);
   }, [currentSlug]);
 
@@ -71,13 +78,13 @@ export default function DepartmentPage() {
   }, [deptInfo]);
 
   // Reset page on tab change
-  const handleTabChange = (tab: "theses" | "faculty" | "publications" | "patents" | "books") => {
+  const handleTabChange = (tab: "theses" | "phdYearwise" | "faculty" | "publications" | "patents" | "books") => {
     setActiveTab(tab);
     setSearchQuery("");
     setCurrentPage(1);
   };
 
-  // Filtered Theses Awarded
+  // Filtered Theses Awarded (Individual Defense List)
   const filteredTheses = useMemo(() => {
     if (!deptInfo) return [];
     return deptInfo.thesesAwarded.filter((t) => {
@@ -96,6 +103,48 @@ export default function DepartmentPage() {
       return true;
     });
   }, [deptInfo, searchQuery, selectedThesisDept]);
+
+  // Filtered PhD Yearwise & Supervisorwise Awarded
+  const filteredPhDYearwise = useMemo(() => {
+    if (!deptInfo) return [];
+    return deptInfo.phdYearwiseAwarded.filter((r) => {
+      if (selectedPhDDeptFilter !== "All" && r.departmentCode !== selectedPhDDeptFilter) {
+        return false;
+      }
+      if (selectedYearFilter !== "All") {
+        const yr = parseInt(selectedYearFilter, 10);
+        if (!r.yearly[yr] || r.yearly[yr] === 0) return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchSup = r.supervisor.toLowerCase().includes(q);
+        const matchDept = r.departmentCode.toLowerCase().includes(q) || r.departmentName.toLowerCase().includes(q);
+        return matchSup || matchDept;
+      }
+      return true;
+    });
+  }, [deptInfo, searchQuery, selectedPhDDeptFilter, selectedYearFilter]);
+
+  // PhD Yearwise Totals per Year for column totals
+  const phdYearlyTotals = useMemo(() => {
+    const totals: Record<number, number> = {};
+    PHD_AWARDED_YEARS.forEach((yr) => {
+      totals[yr] = filteredPhDYearwise.reduce((sum, r) => sum + (r.yearly[yr] || 0), 0);
+    });
+    return totals;
+  }, [filteredPhDYearwise]);
+
+  const phdFilteredGrandTotal = useMemo(() => {
+    return filteredPhDYearwise.reduce((sum, r) => sum + r.grandTotal, 0);
+  }, [filteredPhDYearwise]);
+
+  // Unique departments for PhD Yearwise filter dropdown
+  const phdYearwiseDepts = useMemo(() => {
+    if (!deptInfo) return [];
+    const set = new Set<string>();
+    deptInfo.phdYearwiseAwarded.forEach((r) => set.add(r.departmentCode));
+    return Array.from(set);
+  }, [deptInfo]);
 
   // Unique departments for thesis filter dropdown
   const thesisDepartments = useMemo(() => {
@@ -167,16 +216,19 @@ export default function DepartmentPage() {
   const activeListLength =
     activeTab === "theses"
       ? filteredTheses.length
-      : activeTab === "faculty"
-        ? filteredFaculty.length
-        : activeTab === "publications"
-          ? filteredPublications.length
-          : activeTab === "patents"
-            ? filteredPatents.length
-            : filteredBooks.length;
+      : activeTab === "phdYearwise"
+        ? filteredPhDYearwise.length
+        : activeTab === "faculty"
+          ? filteredFaculty.length
+          : activeTab === "publications"
+            ? filteredPublications.length
+            : activeTab === "patents"
+              ? filteredPatents.length
+              : filteredBooks.length;
 
   const totalPages = Math.ceil(activeListLength / itemsPerPage);
   const paginatedTheses = filteredTheses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedPhDYearwise = filteredPhDYearwise.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedFaculty = filteredFaculty.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedPublications = filteredPublications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const paginatedPatents = filteredPatents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -302,28 +354,42 @@ export default function DepartmentPage() {
       </div>
 
       {/* ── KPI METRICS CARDS ──────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 mb-8">
-        {/* Theses Awarded */}
-        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-white to-amber-50/40 backdrop-blur-xl border border-amber-200/80 shadow-sm flex flex-col justify-between">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5 mb-8">
+        {/* PhD Awarded Total (2016-2026) */}
+        <div className="dept-card-reveal p-4 rounded-2xl bg-gradient-to-br from-white to-blue-50/50 backdrop-blur-xl border border-blue-200/90 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#0A4A8F]">
+              Total PhDs Awarded
+            </span>
+            <GraduationCap className="w-4 h-4 text-[#0A4A8F]" />
+          </div>
+          <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0A4A8F]">
+            {deptInfo.totalPhDYearwiseSum}
+          </div>
+          <span className="text-[10px] sm:text-[11px] text-blue-700/80 mt-1 font-medium">2016 – 2026 Archive</span>
+        </div>
+
+        {/* Theses Awarded (Session 25-26) */}
+        <div className="dept-card-reveal p-4 rounded-2xl bg-gradient-to-br from-white to-amber-50/40 backdrop-blur-xl border border-amber-200/80 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-900/80">
-              Theses Awarded
+              Theses (2025-26)
             </span>
             <Award className="w-4 h-4 text-amber-600" />
           </div>
           <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
             {deptInfo.thesesAwarded.length}
           </div>
-          <span className="text-[10px] sm:text-[11px] text-amber-700/80 mt-1 font-medium">Session 2025-26</span>
+          <span className="text-[10px] sm:text-[11px] text-amber-700/80 mt-1 font-medium">Current Session</span>
         </div>
 
         {/* Ph.D. Seats */}
-        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Total Ph.D.
             </span>
-            <GraduationCap className="w-4 h-4 text-[#0A4A8F]" />
+            <Building2 className="w-4 h-4 text-[#0A4A8F]" />
           </div>
           <div className="font-mono text-2xl sm:text-3xl font-extrabold text-[#0A4A8F]">
             {deptInfo.totalPhDSeats}
@@ -332,7 +398,7 @@ export default function DepartmentPage() {
         </div>
 
         {/* Faculty Supervisors */}
-        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Supervisors
@@ -346,7 +412,7 @@ export default function DepartmentPage() {
         </div>
 
         {/* Vacant Seats */}
-        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Vacant Seats
@@ -360,7 +426,7 @@ export default function DepartmentPage() {
         </div>
 
         {/* Research Papers */}
-        <div className="dept-card-reveal p-4 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <div className="dept-card-reveal p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Publications
@@ -379,23 +445,38 @@ export default function DepartmentPage() {
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           <button
             type="button"
-            onClick={() => handleTabChange("theses")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "theses"
+            onClick={() => handleTabChange("phdYearwise")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "phdYearwise"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
+            }`}
+          >
+            <GraduationCap size={14} />
+            <span>PhD Awarded Matrix ({deptInfo.totalPhDYearwiseSum})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleTabChange("theses")}
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "theses"
+                ? "bg-[#0A4A8F] text-white shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }`}
           >
             <Award size={14} />
-            <span>Theses Awarded ({deptInfo.thesesAwarded.length})</span>
+            <span>Theses Defended ({deptInfo.thesesAwarded.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleTabChange("faculty")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "faculty"
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "faculty"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
+            }`}
           >
             <Users size={14} />
             <span>Faculty &amp; Seats ({deptInfo.facultySupervisors.length})</span>
@@ -404,10 +485,11 @@ export default function DepartmentPage() {
           <button
             type="button"
             onClick={() => handleTabChange("publications")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "publications"
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "publications"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
+            }`}
           >
             <FileText size={14} />
             <span>Publications ({deptInfo.researchPublications.length})</span>
@@ -416,10 +498,11 @@ export default function DepartmentPage() {
           <button
             type="button"
             onClick={() => handleTabChange("patents")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "patents"
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "patents"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
+            }`}
           >
             <Lightbulb size={14} />
             <span>Patents ({deptInfo.patents.length})</span>
@@ -428,10 +511,11 @@ export default function DepartmentPage() {
           <button
             type="button"
             onClick={() => handleTabChange("books")}
-            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${activeTab === "books"
+            className={`px-4 py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-2 ${
+              activeTab === "books"
                 ? "bg-[#0A4A8F] text-white shadow-sm"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
+            }`}
           >
             <BookOpen size={14} />
             <span>Books ({deptInfo.books.length})</span>
@@ -463,7 +547,267 @@ export default function DepartmentPage() {
         </div>
       </div>
 
-      {/* ── TAB 0: THESES AWARDED (Exact from Thesis Awarded_List (Academic Session 2025-26).docx) ── */}
+      {/* ── TAB: PHD YEARWISE & SUPERVISORWISE MATRIX (From Excel: Departmentwise Supervisorwise & Yearwise PhD Awarded.xlsx) ── */}
+      {activeTab === "phdYearwise" && (
+        <div className="space-y-6">
+          {/* Header Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-[#0A4A8F]" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#0A4A8F]">
+                  Official PhD Archive (2016 – 2026)
+                </span>
+              </div>
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
+                Departmentwise &amp; Supervisorwise PhDs Awarded ({phdFilteredGrandTotal} Total Degrees)
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Source: <em>Departmentwise Supervisorwise &amp; Yearwise PhD Awarded.xlsx</em>
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Department filter */}
+              {phdYearwiseDepts.length > 1 && (
+                <div className="flex items-center gap-1.5 text-xs">
+                  <Filter size={13} className="text-[#0A4A8F]" />
+                  <select
+                    value={selectedPhDDeptFilter}
+                    onChange={(e) => {
+                      setSelectedPhDDeptFilter(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-xs focus:outline-none focus:border-[#0A4A8F]"
+                  >
+                    <option value="All">All Departments ({phdYearwiseDepts.length})</option>
+                    {phdYearwiseDepts.map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Year filter */}
+              <div className="flex items-center gap-1.5 text-xs">
+                <Calendar size={13} className="text-[#0A4A8F]" />
+                <select
+                  value={selectedYearFilter}
+                  onChange={(e) => {
+                    setSelectedYearFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-xs focus:outline-none focus:border-[#0A4A8F]"
+                >
+                  <option value="All">All Years (2016 - 2026)</option>
+                  {PHD_AWARDED_YEARS.map((yr) => (
+                    <option key={yr} value={String(yr)}>
+                      Year {yr}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* View Toggle */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setPhdYearwiseViewMode("table")}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    phdYearwiseViewMode === "table"
+                      ? "bg-white text-[#0A4A8F] shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <TableIcon size={13} />
+                  <span>Table</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPhdYearwiseViewMode("cards")}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    phdYearwiseViewMode === "cards"
+                      ? "bg-white text-[#0A4A8F] shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <LayoutGrid size={13} />
+                  <span>Cards</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Table View */}
+          {phdYearwiseViewMode === "table" ? (
+            <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse min-w-[1000px]">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200/90 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600">
+                      <th className="py-3.5 px-4">#</th>
+                      <th className="py-3.5 px-4">Department</th>
+                      <th className="py-3.5 px-4 min-w-[200px]">Supervisor</th>
+                      {PHD_AWARDED_YEARS.map((yr) => (
+                        <th key={yr} className="py-3.5 px-2.5 text-center font-mono">
+                          {yr}
+                        </th>
+                      ))}
+                      <th className="py-3.5 px-4 text-center font-mono text-[#0A4A8F]">Grand Total</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-sans">
+                    {filteredPhDYearwise.length === 0 ? (
+                      <tr>
+                        <td colSpan={3 + PHD_AWARDED_YEARS.length + 1} className="py-12 text-center text-slate-500">
+                          No PhD records found matching your filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedPhDYearwise.map((record, idx) => (
+                        <tr key={record.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3 px-4 font-mono text-xs text-slate-400">
+                            {(currentPage - 1) * itemsPerPage + idx + 1}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200">
+                              {record.departmentCode}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 font-semibold text-slate-900 text-xs">
+                            {record.supervisor}
+                          </td>
+                          {PHD_AWARDED_YEARS.map((yr) => {
+                            const val = record.yearly[yr] || 0;
+                            return (
+                              <td key={yr} className="py-3 px-2.5 text-center font-mono text-xs">
+                                {val > 0 ? (
+                                  <span className="font-bold text-[#0A4A8F] px-1.5 py-0.5 rounded-md bg-blue-50/80 border border-blue-100">
+                                    {val}
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-300">—</span>
+                                )}
+                              </td>
+                            );
+                          })}
+                          <td className="py-3 px-4 text-center font-mono text-xs font-extrabold text-[#0A4A8F]">
+                            <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#0A4A8F] border border-blue-200">
+                              {record.grandTotal}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                  <tfoot>
+                    <tr className="bg-slate-900 text-white font-mono font-bold text-xs uppercase tracking-wider border-t-2 border-[#FFB703]">
+                      <td className="py-3.5 px-4">Σ</td>
+                      <td className="py-3.5 px-4" colSpan={2}>
+                        {deptInfo.title} Yearly Totals
+                      </td>
+                      {PHD_AWARDED_YEARS.map((yr) => (
+                        <td key={yr} className="py-3.5 px-2.5 text-center text-[#FFB703]">
+                          {phdYearlyTotals[yr] || 0}
+                        </td>
+                      ))}
+                      <td className="py-3.5 px-4 text-center text-[#FFB703] font-mono text-sm">
+                        {phdFilteredGrandTotal}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <div className="p-4 border-t border-slate-100">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  totalItems={filteredPhDYearwise.length}
+                  itemsPerPage={itemsPerPage}
+                />
+              </div>
+            </div>
+          ) : (
+            /* Cards View */
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPhDYearwise.length === 0 ? (
+                  <div className="col-span-full py-12 text-center bg-white/60 rounded-3xl border border-slate-200 text-slate-500">
+                    <GraduationCap className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                    <p className="font-semibold text-slate-700">No supervisor records found matching your filters.</p>
+                  </div>
+                ) : (
+                  paginatedPhDYearwise.map((record) => (
+                    <div
+                      key={record.id}
+                      className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md hover:shadow-xl hover:border-[#0A4A8F]/30 transition-all duration-300 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
+                            Dept: {record.departmentCode}
+                          </span>
+                          <span className="font-mono text-xs font-extrabold text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200">
+                            {record.grandTotal} {record.grandTotal === 1 ? "PhD Awarded" : "PhDs Awarded"}
+                          </span>
+                        </div>
+
+                        <h3 className="font-serif text-lg font-bold text-[#0F172A] leading-snug mb-1">
+                          {record.supervisor}
+                        </h3>
+                        <p className="text-xs text-slate-500 mb-4">{record.departmentName}</p>
+
+                        <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/70">
+                          <span className="text-[10px] font-mono uppercase text-slate-400 block font-bold mb-2">
+                            Yearwise Breakdown
+                          </span>
+                          <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5 text-center">
+                            {PHD_AWARDED_YEARS.map((yr) => {
+                              const val = record.yearly[yr] || 0;
+                              return (
+                                <div
+                                  key={yr}
+                                  className={`p-1 rounded-lg border text-xs font-mono ${
+                                    val > 0
+                                      ? "bg-blue-50/90 border-blue-200 text-[#0A4A8F] font-bold"
+                                      : "bg-white/50 border-slate-100 text-slate-400"
+                                  }`}
+                                >
+                                  <div className="text-[9px] text-slate-400 leading-none">{yr}</div>
+                                  <div className="mt-0.5 text-[11px]">{val > 0 ? val : "—"}</div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+                        <span className="text-slate-500">Record #{record.id}</span>
+                        <span className="text-[#0A4A8F] font-bold">Total: {record.grandTotal}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredPhDYearwise.length}
+                itemsPerPage={itemsPerPage}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── TAB 1: THESES AWARDED (Open House Defense Records) ── */}
       {activeTab === "theses" && (
         <div className="space-y-6">
           {/* Header Controls */}
@@ -511,10 +855,11 @@ export default function DepartmentPage() {
                 <button
                   type="button"
                   onClick={() => setThesisViewMode("cards")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${thesisViewMode === "cards"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    thesisViewMode === "cards"
                       ? "bg-white text-[#0A4A8F] shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                    }`}
+                  }`}
                 >
                   <LayoutGrid size={13} />
                   <span>Cards</span>
@@ -522,10 +867,11 @@ export default function DepartmentPage() {
                 <button
                   type="button"
                   onClick={() => setThesisViewMode("table")}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${thesisViewMode === "table"
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    thesisViewMode === "table"
                       ? "bg-white text-[#0A4A8F] shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                    }`}
+                  }`}
                 >
                   <TableIcon size={13} />
                   <span>Table</span>
@@ -708,7 +1054,7 @@ export default function DepartmentPage() {
         </div>
       )}
 
-      {/* ── TAB 1: FACULTY & PH.D. SEATS (Exact Vacant Seat Data) ── */}
+      {/* ── TAB 2: FACULTY & PH.D. SEATS (Exact Vacant Seat Data) ── */}
       {activeTab === "faculty" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -776,12 +1122,13 @@ export default function DepartmentPage() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span
-                            className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${row.noOfVacant > 0
+                            className={`inline-flex items-center justify-center font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${
+                              row.noOfVacant > 0
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : row.noOfVacant === 0
                                   ? "bg-slate-100 text-slate-600 border-slate-200"
                                   : "bg-rose-50 text-rose-700 border-rose-200"
-                              }`}
+                            }`}
                           >
                             {row.noOfVacant}
                           </span>
@@ -829,7 +1176,7 @@ export default function DepartmentPage() {
         </div>
       )}
 
-      {/* ── TAB 2: RESEARCH PUBLICATIONS ───────────────────── */}
+      {/* ── TAB 3: RESEARCH PUBLICATIONS ───────────────────── */}
       {activeTab === "publications" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -848,63 +1195,65 @@ export default function DepartmentPage() {
                 <p className="font-semibold text-slate-700">No data available</p>
                 <p className="text-xs text-slate-400 mt-1">No publications are available for this department.</p>
               </div>
-            ) : paginatedPublications.map((paper: any, idx: number) => (
-              <div
-                key={paper.srNo || idx}
-                className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
-                      {paper.department || deptInfo.code}
-                    </span>
-                    <span className="font-mono text-[10px] text-slate-500 font-semibold">
-                      SCOPUS / WOS
-                    </span>
+            ) : (
+              paginatedPublications.map((paper: any, idx: number) => (
+                <div
+                  key={paper.srNo || idx}
+                  className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
+                        {paper.department || deptInfo.code}
+                      </span>
+                      <span className="font-mono text-[10px] text-slate-500 font-semibold">
+                        SCOPUS / WOS
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
+                      {paper.title || "Untitled publication"}
+                    </h3>
+
+                    <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
+                      <Users size={13} className="text-[#FFB703] shrink-0" />
+                      <span className="line-clamp-1">{paper.authorName || "Faculty Author"}</span>
+                    </div>
+
+                    {paper.journalName && (
+                      <div className="text-xs text-slate-500 italic mb-3 line-clamp-2">
+                        {paper.journalName}
+                      </div>
+                    )}
+
+                    {paper.issnNumber && (
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-600 mb-3 flex items-center justify-between">
+                        <span className="text-[10px] text-slate-400 uppercase">ISSN</span>
+                        <span className="font-bold text-[#0A4A8F]">{paper.issnNumber}</span>
+                      </div>
+                    )}
                   </div>
 
-                  <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
-                    {paper.title || "Untitled publication"}
-                  </h3>
-
-                  <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
-                    <Users size={13} className="text-[#FFB703] shrink-0" />
-                    <span className="line-clamp-1">{paper.authorName || "Faculty Author"}</span>
+                  <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 text-xs font-mono text-slate-500">
+                      <Calendar size={12} className="text-[#FFB703]" />
+                      {paper.yearOfPublication || "Year N/A"}
+                    </span>
+                    {paper.ugcRecognitionLink && (
+                      <a
+                        href={paper.ugcRecognitionLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0A4A8F] hover:underline"
+                      >
+                        <span>Link</span>
+                        <ExternalLink size={11} />
+                      </a>
+                    )}
                   </div>
-
-                  {paper.journalName && (
-                    <div className="text-xs text-slate-500 italic mb-3 line-clamp-2">
-                      {paper.journalName}
-                    </div>
-                  )}
-
-                  {paper.issnNumber && (
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-600 mb-3 flex items-center justify-between">
-                      <span className="text-[10px] text-slate-400 uppercase">ISSN</span>
-                      <span className="font-bold text-[#0A4A8F]">{paper.issnNumber}</span>
-                    </div>
-                  )}
                 </div>
-
-                <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1 text-xs font-mono text-slate-500">
-                    <Calendar size={12} className="text-[#FFB703]" />
-                    {paper.yearOfPublication || "Year N/A"}
-                  </span>
-                  {paper.ugcRecognitionLink && (
-                    <a
-                      href={paper.ugcRecognitionLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0A4A8F] hover:underline"
-                    >
-                      <span>Link</span>
-                      <ExternalLink size={11} />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <Pagination
@@ -917,7 +1266,7 @@ export default function DepartmentPage() {
         </div>
       )}
 
-      {/* ── TAB 3: PATENTS ─────────────────────────────────── */}
+      {/* ── TAB 4: PATENTS ─────────────────────────────────── */}
       {activeTab === "patents" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -936,60 +1285,62 @@ export default function DepartmentPage() {
                 <p className="font-semibold text-slate-700">No data available</p>
                 <p className="text-xs text-slate-400 mt-1">No patents are available for this department.</p>
               </div>
-            ) : paginatedPatents.map((pat: any, idx: number) => (
-              <div
-                key={pat.srNo || idx}
-                className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#FFB703] px-2.5 py-0.5 rounded-full bg-[#FFB703]/10 border border-[#FFB703]/20">
-                      PATENT
-                    </span>
-                    <span className="font-mono text-[10px] text-slate-500 font-semibold">
-                      {pat.yearOfAward || "Awarded"}
-                    </span>
-                  </div>
-
-                  <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
-                    {pat.title || "Patent Title"}
-                  </h3>
-
-                  <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
-                    <Users size={13} className="text-[#0A4A8F] shrink-0" />
-                    <span className="line-clamp-2">{pat.patenterName}</span>
-                  </div>
-
-                  {pat.patentNumber && (
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-700 whitespace-pre-line leading-relaxed mb-3">
-                      {pat.patentNumber}
+            ) : (
+              paginatedPatents.map((pat: any, idx: number) => (
+                <div
+                  key={pat.srNo || idx}
+                  className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#FFB703] px-2.5 py-0.5 rounded-full bg-[#FFB703]/10 border border-[#FFB703]/20">
+                        PATENT
+                      </span>
+                      <span className="font-mono text-[10px] text-slate-500 font-semibold">
+                        {pat.yearOfAward || "Awarded"}
+                      </span>
                     </div>
-                  )}
-                </div>
 
-                <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
-                  <span>Patent Record #{pat.srNo || idx + 1}</span>
-                  {(pat.pdf || pat.pdfUrl) ? (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setSelectedPdf({
-                          url: pat.pdf || pat.pdfUrl,
-                          title: pat.title,
-                          subtitle: pat.patentNumber ? `Patent No: ${pat.patentNumber.replace(/\n/g, ' • ')}` : undefined,
-                        })
-                      }
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-xs hover:shadow hover:-translate-y-0.5 cursor-pointer"
-                    >
-                      <FileText size={12} />
-                      <span>View</span>
-                    </button>
-                  ) : (
-                    <span className="text-[#0A4A8F] font-bold">Granted / Published</span>
-                  )}
+                    <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
+                      {pat.title || "Patent Title"}
+                    </h3>
+
+                    <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
+                      <Users size={13} className="text-[#0A4A8F]" />
+                      <span className="line-clamp-2">{pat.patenterName}</span>
+                    </div>
+
+                    {pat.patentNumber && (
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-700 whitespace-pre-line leading-relaxed mb-3">
+                        {pat.patentNumber}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
+                    <span>Patent Record #{pat.srNo || idx + 1}</span>
+                    {pat.pdf || pat.pdfUrl ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelectedPdf({
+                            url: pat.pdf || pat.pdfUrl,
+                            title: pat.title,
+                            subtitle: pat.patentNumber ? `Patent No: ${pat.patentNumber.replace(/\n/g, ' • ')}` : undefined,
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#0A4A8F] hover:bg-[#0C5CA8] text-white font-mono text-xs font-medium transition-all shadow-xs hover:shadow hover:-translate-y-0.5 cursor-pointer"
+                      >
+                        <FileText size={12} />
+                        <span>View</span>
+                      </button>
+                    ) : (
+                      <span className="text-[#0A4A8F] font-bold">Granted / Published</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <Pagination
@@ -1002,7 +1353,7 @@ export default function DepartmentPage() {
         </div>
       )}
 
-      {/* ── TAB 4: BOOKS & CHAPTERS ────────────────────────── */}
+      {/* ── TAB 5: BOOKS & CHAPTERS ────────────────────────── */}
       {activeTab === "books" && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -1021,50 +1372,52 @@ export default function DepartmentPage() {
                 <p className="font-semibold text-slate-700">No data available</p>
                 <p className="text-xs text-slate-400 mt-1">No books or chapters are available for this department.</p>
               </div>
-            ) : paginatedBooks.map((b: any, idx: number) => (
-              <div
-                key={b.slNo || idx}
-                className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
-                      {b.affiliatingInstitute || deptInfo.code}
-                    </span>
-                    <span className="font-mono text-[10px] text-slate-500 font-semibold">
-                      {b.yearOfPublication || "Published"}
-                    </span>
+            ) : (
+              paginatedBooks.map((b: any, idx: number) => (
+                <div
+                  key={b.slNo || idx}
+                  className="p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#0A4A8F] px-2.5 py-0.5 rounded-full bg-[#0A4A8F]/8 border border-[#0A4A8F]/15">
+                        {b.affiliatingInstitute || deptInfo.code}
+                      </span>
+                      <span className="font-mono text-[10px] text-slate-500 font-semibold">
+                        {b.yearOfPublication || "Published"}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
+                      {b.paperTitle || b.bookOrChapterTitle || "Book Title"}
+                    </h3>
+
+                    <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
+                      <Users size={13} className="text-[#FFB703] shrink-0" />
+                      <span className="line-clamp-1">{b.teacherName}</span>
+                    </div>
+
+                    {b.publisherName && (
+                      <div className="text-xs text-slate-500 italic mb-2">
+                        Publisher: {b.publisherName}
+                      </div>
+                    )}
+
+                    {b.isbnIssn && (
+                      <div className="p-2 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-600 flex items-center justify-between">
+                        <span className="text-[10px] text-slate-400 uppercase">ISBN/ISSN</span>
+                        <span className="font-bold text-[#0A4A8F]">{b.isbnIssn}</span>
+                      </div>
+                    )}
                   </div>
 
-                  <h3 className="font-serif text-base font-bold text-[#0F172A] leading-snug mb-2 line-clamp-3">
-                    {b.paperTitle || b.bookOrChapterTitle || "Book Title"}
-                  </h3>
-
-                  <div className="text-xs text-slate-600 mb-2 flex items-center gap-1.5 font-mono">
-                    <Users size={13} className="text-[#FFB703] shrink-0" />
-                    <span className="line-clamp-1">{b.teacherName}</span>
+                  <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
+                    <span>Entry #{b.slNo || idx + 1}</span>
+                    <span className="text-slate-600 font-semibold">{b.scope || "Academic"}</span>
                   </div>
-
-                  {b.publisherName && (
-                    <div className="text-xs text-slate-500 italic mb-2">
-                      Publisher: {b.publisherName}
-                    </div>
-                  )}
-
-                  {b.isbnIssn && (
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-mono text-slate-600 flex items-center justify-between">
-                      <span className="text-[10px] text-slate-400 uppercase">ISBN/ISSN</span>
-                      <span className="font-bold text-[#0A4A8F]">{b.isbnIssn}</span>
-                    </div>
-                  )}
                 </div>
-
-                <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
-                  <span>Entry #{b.slNo || idx + 1}</span>
-                  <span className="text-slate-600 font-semibold">{b.scope || "Academic"}</span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <Pagination

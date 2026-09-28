@@ -1,6 +1,7 @@
 import { patents, researchPapers, books } from "./data";
 import { VACANT_SEAT_DATA, VacantSeatRow } from "./vacantSeatData";
 import { THESIS_AWARDED_DATA, ThesisAwarded } from "./thesisAwardedData";
+import { PHD_AWARDED_DATA, PhDAwardedRecord } from "./phdSupervisorYearwiseData";
 
 export interface DepartmentInfo {
   id: string;
@@ -20,6 +21,8 @@ export interface DepartmentInfo {
   patents: any[];
   books: any[];
   thesesAwarded: ThesisAwarded[];
+  phdYearwiseAwarded: PhDAwardedRecord[];
+  totalPhDYearwiseSum: number;
 }
 
 export const DEPARTMENTS_LIST = [
@@ -41,6 +44,7 @@ export const DEPARTMENTS_LIST = [
       t.rawFacultyInstitute.includes("Computer Science") ||
       t.rawFacultyInstitute.includes("Mechanical") ||
       t.rawFacultyInstitute.includes("Energy Studies"),
+    phdYearwiseDeptCodes: ["CSE", "Civil", "ECE", "EE", "ME"],
     paperCodes: ["DEEE", "DoEEE", "FoME", "DCSE", "FoCE", "FoCS", "FOCS", "CSIS", "DCSIS"],
     patentCodes: [
       "Alkesh Agrawal",
@@ -70,6 +74,7 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "IBST" || row.department.includes("Bio Sciences") || row.department.includes("Bio Technology") || row.department.includes("Biomedical"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Biosciences") || t.rawFacultyInstitute.includes("Biotechnology"),
+    phdYearwiseDeptCodes: ["IBST"],
     paperCodes: ["IBST", "Bio", "Biotechnology", "Biomedical"],
     patentCodes: ["IBST", "Bio", "Biotechnology", "Biomedical", "Biomedical Imaging"],
     bookCodes: ["IBST", "Bio", "Biotechnology", "Biomedical"],
@@ -87,6 +92,7 @@ export const DEPARTMENTS_LIST = [
     vacantMatcher: (row: VacantSeatRow) =>
       row.institute === "IMCE" || row.department.includes("Commerce") || row.department.includes("Management") || row.department.includes("Data Science"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Management") || t.rawFacultyInstitute.includes("Commerce") || t.rawFacultyInstitute.includes("Economics"),
+    phdYearwiseDeptCodes: ["IMCE"],
     paperCodes: ["IMCE", "FoMSS", "Fomss", "fomss"],
     patentCodes: ["IMCE", "Kanupriya", "Vaibhav sharma", "Uma Rajey Shukla", "Khushboo Joshi", "Biometric Device", "Trading Analysis"],
     bookCodes: ["IMCE", "Management", "Commerce", "Economics", "FoMSS"],
@@ -103,6 +109,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["Journalism and Mass Communication", "Media and Film Studies"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "Institute of Media Studies" || row.department.includes("Media Studies"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Media"),
+    phdYearwiseDeptCodes: ["Media"],
     paperCodes: ["IMS", "Media"],
     patentCodes: ["IMS", "Media", "Journalism"],
     bookCodes: ["IMS", "Media", "Journalism"],
@@ -130,6 +137,7 @@ export const DEPARTMENTS_LIST = [
       t.rawFacultyInstitute.includes("Chemical") ||
       t.rawFacultyInstitute.includes("Public Health") ||
       t.rawFacultyInstitute.includes("Sociology"),
+    phdYearwiseDeptCodes: ["Chy", "HSS", "Math", "PHY"],
     paperCodes: ["FoPS", "FOHSS", "FoHSS", "Sociology", "Public Health", "Political Science"],
     patentCodes: ["FoPS", "SACHIN SINGH", "INSH", "Physical Sciences", "Chemical"],
     bookCodes: ["FoPS", "FOHSS", "FoHSS", "INSH", "Humanities", "Sciences"],
@@ -145,6 +153,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["Ph.D in Pharmaceutical Science", "Pharmaceutics & Pharmaceutical Chemistry", "Pharmacology"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "IOP" || row.department.includes("Pharmaceutical Science"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Pharmaceutical"),
+    phdYearwiseDeptCodes: ["IOP"],
     paperCodes: ["IOP", "Pharmaceutical"],
     patentCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
     bookCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
@@ -161,6 +170,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["B.Sc.(Hons.) Agriculture", "Agricultural Sciences and Technology", "Agronomy and Horticulture"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "Institute of Agricultural Sciences and Technology" || row.department.includes("Agricultural"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Agricultural"),
+    phdYearwiseDeptCodes: [],
     paperCodes: ["IAST", "Agriculture", "Agricultural"],
     patentCodes: ["IAST", "Agriculture", "Agricultural"],
     bookCodes: ["IAST", "Agriculture", "Agricultural"],
@@ -177,6 +187,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["LL.B. & Integrated Law", "LL.M. & Ph.D in Law", "Legal Studies and Jurisprudence"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "Institute of Legal Studies" || row.department.includes("Legal Studies"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Legal"),
+    phdYearwiseDeptCodes: ["Law"],
     paperCodes: ["ILS", "Law", "Legal"],
     patentCodes: ["ILS", "Law", "Legal"],
     bookCodes: ["ILS", "Law", "Legal"],
@@ -193,6 +204,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["Bachelor of Pharmacy (B.Pharm)", "Master of Pharmacy (M.Pharm)", "Ph.D in Pharmaceutical Sciences"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "IOP" || row.department.includes("Pharmaceutical Science"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Pharmaceutical"),
+    phdYearwiseDeptCodes: ["IOP"],
     paperCodes: ["IOP", "Pharmaceutical", "Pharmacy"],
     patentCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
     bookCodes: ["IOP", "Pharmacy", "Pharmaceutical"],
@@ -208,6 +220,7 @@ export const DEPARTMENTS_LIST = [
     programs: ["Education & Research", "Ph.D in Advance Educational Studies", "Teacher Education & Pedagogy"],
     vacantMatcher: (row: VacantSeatRow) => row.institute === "IER" || row.department.includes("Education") || row.department.includes("Educational"),
     thesisMatcher: (t: ThesisAwarded) => t.rawFacultyInstitute.includes("Education"),
+    phdYearwiseDeptCodes: ["IER"],
     paperCodes: ["IER", "Education"],
     patentCodes: ["IER", "Education"],
     bookCodes: ["IER", "Education"],
@@ -230,6 +243,7 @@ export const getAllDepartmentsInfo = (): DepartmentInfo => {
   const totalDesignationLimit = VACANT_SEAT_DATA.reduce((acc, r) => acc + (r.designationSeatLimit || 0), 0);
   const totalAllottedSeats = VACANT_SEAT_DATA.reduce((acc, r) => acc + (r.allottedSeat || 0), 0);
   const totalVacantSeats = VACANT_SEAT_DATA.reduce((acc, r) => acc + (r.noOfVacant || 0), 0);
+  const totalPhDYearwiseSum = PHD_AWARDED_DATA.reduce((acc, r) => acc + r.grandTotal, 0);
 
   return {
     id: "all",
@@ -239,7 +253,7 @@ export const getAllDepartmentsInfo = (): DepartmentInfo => {
     departmentCountLabel: "10 INSTITUTES • 29+ DEPARTMENTS",
     image: "/Images/c1.webp",
     description:
-      "Comprehensive research repository uniting all academic institutes, departments, research faculties, supervisor seat matrices, publications, patents, and published books across Shri Ramswaroop Memorial University.",
+      "Comprehensive research repository uniting all academic institutes, departments, research faculties, supervisor seat matrices, publications, patents, published books, and 249 PhD degrees awarded across Shri Ramswaroop Memorial University.",
     programs: allPrograms,
     facultySupervisors: VACANT_SEAT_DATA,
     totalPhDSeats,
@@ -250,6 +264,8 @@ export const getAllDepartmentsInfo = (): DepartmentInfo => {
     patents: patents,
     books: books,
     thesesAwarded: THESIS_AWARDED_DATA,
+    phdYearwiseAwarded: PHD_AWARDED_DATA,
+    totalPhDYearwiseSum,
   };
 };
 
@@ -312,6 +328,12 @@ export const getDepartmentById = (idOrSlug: string): DepartmentInfo | null => {
   // Filter theses awarded
   const matchedTheses = THESIS_AWARDED_DATA.filter(config.thesisMatcher);
 
+  // Filter Yearwise PhD Awarded
+  const matchedPhDYearwise = PHD_AWARDED_DATA.filter((r) =>
+    (config.phdYearwiseDeptCodes as string[]).includes(r.departmentCode)
+  );
+  const totalPhDYearwiseSum = matchedPhDYearwise.reduce((acc, r) => acc + r.grandTotal, 0);
+
   return {
     id: config.id,
     slug: config.slug,
@@ -330,5 +352,7 @@ export const getDepartmentById = (idOrSlug: string): DepartmentInfo | null => {
     patents: matchedPatents,
     books: matchedBooks,
     thesesAwarded: matchedTheses,
+    phdYearwiseAwarded: matchedPhDYearwise,
+    totalPhDYearwiseSum,
   };
 };

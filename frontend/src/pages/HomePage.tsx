@@ -9,23 +9,49 @@ import {
 } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import MorphSlider from "../Effects/Morph-Slider";
 import { getStats } from "../data/researchService";
 import { Stats } from "../types";
+
+import p1 from "../../public/Images/research-paper/P1.webp";
+import p2 from "../../public/Images/research-paper/P2.webp";
+import p3 from "../../public/Images/research-paper/P3.webp";
+import p4 from "../../public/Images/research-paper/P4.webp";
+import p5 from "../../public/Images/research-paper/P5.webp";
+import p6 from "../../public/Images/research-paper/P6.webp";
+import p7 from "../../public/Images/research-paper/P7.webp";
+import p8 from "../../public/Images/research-paper/P8.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const sliderItems = [
   {
-    image: "Images/J1.png",
-    title: "Research Environment",
-    caption: "Research papers.",
+    image: p1,
+
   },
   {
-    image: "Images/J2.png",
-    title: "Biosciences",
-    caption: "Research papers.",
+    image: p2,
+  
+  },
+  {
+    image: p3,
+
+  },
+  {
+    image: p4,
+
+  },
+  {
+    image: p5,
+  },
+  {
+    image: p6,
+  },
+  {
+    image: p7,
+  },
+  {
+    image: p8,
   },
 ];
 
@@ -414,7 +440,7 @@ function HomePage({ onSearchOpen }: HomePageProps) {
           </div>
 
           {/* Right Column: Morph Slider Card */}
-          <div className="lg:col-span-5 flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-slider-reveal">
+          <div className="lg:col-span-5 flex flex-col justify-between p-3 sm:p-4 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl hero-slider-reveal">
             <div>
               {/* Eyebrow badge */}
               {/* <div className="inline-flex items-center gap-2 mb-3">
