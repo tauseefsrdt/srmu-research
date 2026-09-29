@@ -31,7 +31,7 @@ export default function DepartmentPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const pageRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<"theses" | "phdYearwise" | "faculty" | "publications" | "patents" | "books">("theses");
+  const [activeTab, setActiveTab] = useState<"phdYearwise" | "theses" | "faculty" | "publications" | "patents" | "books">("phdYearwise");
   const [thesisViewMode, setThesisViewMode] = useState<"cards" | "table">("cards");
   const [phdYearwiseViewMode, setPhdYearwiseViewMode] = useState<"table" | "cards">("table");
   const [selectedYearFilter, setSelectedYearFilter] = useState<string>("All");
@@ -644,21 +644,21 @@ export default function DepartmentPage() {
           {phdYearwiseViewMode === "table" ? (
             <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm border-collapse min-w-[1000px]">
+                <table className="w-full text-left text-sm border-collapse min-w-[1050px]">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200/90 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600">
-                      <th className="py-3.5 px-4">#</th>
-                      <th className="py-3.5 px-4">Department</th>
-                      <th className="py-3.5 px-4 min-w-[200px]">Supervisor</th>
+                    <tr className="bg-slate-100/80 border-b border-slate-200 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700">
+                      <th className="py-3.5 px-3 text-center w-12 border-r border-slate-200/80">#</th>
+                      <th className="py-3.5 px-3 w-20 text-center border-r border-slate-200/80">Dept</th>
+                      <th className="py-3.5 px-4 min-w-[220px] border-r border-slate-200/80">Supervisor</th>
                       {PHD_AWARDED_YEARS.map((yr) => (
-                        <th key={yr} className="py-3.5 px-2.5 text-center font-mono">
+                        <th key={yr} className="py-3.5 px-2 text-center font-mono w-14 border-r border-slate-200/80">
                           {yr}
                         </th>
                       ))}
-                      <th className="py-3.5 px-4 text-center font-mono text-[#0A4A8F]">Grand Total</th>
+                      <th className="py-3.5 px-4 text-center font-mono text-[#0A4A8F] w-24">Grand Total</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 font-sans">
+                  <tbody className="divide-y divide-slate-100 font-sans text-xs">
                     {filteredPhDYearwise.length === 0 ? (
                       <tr>
                         <td colSpan={3 + PHD_AWARDED_YEARS.length + 1} className="py-12 text-center text-slate-500">
@@ -667,34 +667,34 @@ export default function DepartmentPage() {
                       </tr>
                     ) : (
                       paginatedPhDYearwise.map((record, idx) => (
-                        <tr key={record.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="py-3 px-4 font-mono text-xs text-slate-400">
+                        <tr key={record.id} className="hover:bg-blue-50/40 transition-colors">
+                          <td className="py-2.5 px-3 text-center font-mono text-slate-400 border-r border-slate-100">
                             {(currentPage - 1) * itemsPerPage + idx + 1}
                           </td>
-                          <td className="py-3 px-4">
-                            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200">
+                          <td className="py-2.5 px-3 text-center border-r border-slate-100">
+                            <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-200">
                               {record.departmentCode}
                             </span>
                           </td>
-                          <td className="py-3 px-4 font-semibold text-slate-900 text-xs">
+                          <td className="py-2.5 px-4 font-semibold text-slate-900 border-r border-slate-100">
                             {record.supervisor}
                           </td>
                           {PHD_AWARDED_YEARS.map((yr) => {
                             const val = record.yearly[yr] || 0;
                             return (
-                              <td key={yr} className="py-3 px-2.5 text-center font-mono text-xs">
+                              <td key={yr} className="py-2.5 px-2 text-center font-mono border-r border-slate-100">
                                 {val > 0 ? (
-                                  <span className="font-bold text-[#0A4A8F] px-1.5 py-0.5 rounded-md bg-blue-50/80 border border-blue-100">
+                                  <span className="inline-block min-w-[24px] font-extrabold text-[#0A4A8F] px-1.5 py-0.5 rounded-md bg-blue-100/70 border border-blue-200">
                                     {val}
                                   </span>
                                 ) : (
-                                  <span className="text-slate-300">—</span>
+                                  <span className="text-slate-300 select-none">—</span>
                                 )}
                               </td>
                             );
                           })}
-                          <td className="py-3 px-4 text-center font-mono text-xs font-extrabold text-[#0A4A8F]">
-                            <span className="px-2.5 py-1 rounded-full bg-blue-50 text-[#0A4A8F] border border-blue-200">
+                          <td className="py-2.5 px-4 text-center font-mono font-extrabold text-[#0A4A8F]">
+                            <span className="inline-block min-w-[28px] px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0A4A8F] border border-blue-200 font-bold">
                               {record.grandTotal}
                             </span>
                           </td>
@@ -704,12 +704,12 @@ export default function DepartmentPage() {
                   </tbody>
                   <tfoot>
                     <tr className="bg-slate-900 text-white font-mono font-bold text-xs uppercase tracking-wider border-t-2 border-[#FFB703]">
-                      <td className="py-3.5 px-4">Σ</td>
-                      <td className="py-3.5 px-4" colSpan={2}>
+                      <td className="py-3.5 px-3 text-center border-r border-slate-800">Σ</td>
+                      <td className="py-3.5 px-4 border-r border-slate-800" colSpan={2}>
                         {deptInfo.title} Yearly Totals
                       </td>
                       {PHD_AWARDED_YEARS.map((yr) => (
-                        <td key={yr} className="py-3.5 px-2.5 text-center text-[#FFB703]">
+                        <td key={yr} className="py-3.5 px-2 text-center text-[#FFB703] border-r border-slate-800">
                           {phdYearlyTotals[yr] || 0}
                         </td>
                       ))}
